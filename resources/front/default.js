@@ -1,0 +1,12 @@
+import '../js/bootstrap';
+import '../../public/pronia/assets/js/vendor/bootstrap.bundle.min.js'
+import '../../public/pronia/assets/js/vendor/jquery-3.6.0.min.js'
+import '../../public/pronia/assets/js/vendor/jquery-migrate-3.3.2.min.js'
+import '../../public/pronia/assets/js/vendor/modernizr-3.11.2.min.js'
+import '../../public/pronia/assets/js/plugins/wow.min.js'
+import '../../public/pronia/assets/js/plugins/swiper-bundle.min.js'
+import '../../public/pronia/assets/js/plugins/parallax.min.js'
+import '../../public/pronia/assets/js/plugins/jquery.magnific-popup.min.js'
+import '../../public/pronia/assets/js/plugins/tippy.min.js'
+import '../../public/pronia/assets/js/plugins/ion.rangeSlider.min.js'
+import '../../public/pronia/assets/js/main.js'

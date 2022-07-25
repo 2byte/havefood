@@ -15,6 +15,14 @@ class HandleInertiaRequests extends Middleware
      */
     protected $rootView = 'app';
 
+    public function handle(Request $request, \Closure $next)
+    {
+        if($request->route()->getPrefix() == 'gov') { 
+            $this->rootView = 'admin.admin_app'; 
+        } 
+        
+        return parent::handle($request, $next);
+    }
     /**
      * Determine the current asset version.
      *

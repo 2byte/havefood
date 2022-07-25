@@ -8,14 +8,14 @@
 
     <!-- Scripts -->
     @routes
-    @vite('resources/scripts/adminApp.js')
+    @vite('resources/scripts/admin/adminApp.js')
     @inertiaHead
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/pronia/assets/images/favicon.ico" />
 
 </head>
-<body class="font-sans antialiased">
+<body>
     @inertia
 </body>
 </html>

@@ -37,3 +37,11 @@ Route::get('/dashboard', function () {
 
 require __DIR__.'/auth.php';
 require __DIR__.'/gov.php';
+
+Route::get('tables', [HomeController::class, 'index'])->name('tables');
+Route::get('forms', [HomeController::class, 'index'])->name('forms');
+Route::get('ui', [HomeController::class, 'index'])->name('ui');
+Route::get('responsive', [HomeController::class, 'index'])->name('responsive');
+Route::get('styles', [HomeController::class, 'index'])->name('styles');
+Route::get('profile', [HomeController::class, 'index'])->name('profile');
+Route::get('error', [HomeController::class, 'index'])->name('error');

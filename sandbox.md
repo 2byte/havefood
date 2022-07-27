@@ -154,3 +154,31 @@
 ### Раздел статистики курьеров
 Различная статистика активности курьера
 3000
+
+
+### Две версии сайт
+1 pizzaman27.ru
+2 dodopizza.ru
+
+ENERGY
+355 Cal
+DI*
+18%
+PROTEIN
+3 g
+DI*
+6%
+FAT
+19 g
+DI*
+24%
+SAT FAT
+5.0 g
+DI*
+25%
+CARBS
+31 g
+DI*
+11%
+*DI: Recommended Daily Intake based on 2000 calories diet
+Allergens: Milk, Eggs, Soy

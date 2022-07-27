@@ -15,7 +15,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/pronia/assets/images/favicon.ico" />
 
 </head>
-<body>
+<body class="font-sans antialiased">
     @inertia
 </body>
 </html>

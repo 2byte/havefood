@@ -15,6 +15,7 @@
 - name
 - count_photos
 - count_goods
+- sortpos
 - created_at
 - updated_at
 

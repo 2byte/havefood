@@ -31,7 +31,7 @@ return new class extends Migration
             $table->unsignedBigInteger('own_user_id');
             $table->unsignedBigInteger('set_user_id');
             $table->unsignedInteger('sortpos')->default(0);
-            $table->enum('goods_type', GoodsType::names())->default(GoodsType::Common->name);
+            $table->enum('goods_type', GoodsType::values())->default(GoodsType::Common->value);
             $table->timestamps();
         });
     }

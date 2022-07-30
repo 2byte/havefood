@@ -2,35 +2,43 @@
 
 namespace App\Shop\Goods\Enums;
 
-enum GoodsType
+enum GoodsType: string
 {
+    use HelperTrait;
+    
     /**
      * It is the common goods
      * */
-    case Common;
+    case Common = 'common';
     /**
      * Pizza
      **/
-    case Pizza;
+    case Pizza = 'pizza';
     /**
      * Half a pizza 
      **/
-    case Halfpizza;
+    case Halfpizza = 'halfpizza';
     /**
      * The burger 
      **/
-    case Burger;
+    case Burger = 'burger';
     /**
      * The drink
      **/
-    case Drink;
+    case Drink = 'drink';
     /**
      * The pie
      **/
-    case Pie;
+    case Pie = 'pie';
     
-    public static function names()
+    public static function nameForHumans()
     {
-        return array_map('strtolower', array_column(self::cases(), 'name'));
+        $namesRu = [];
+        /*$namesRu = [
+            self::Common->value => 'общий',
+            self::Pizza->value => 'пицца',
+        ];*/
+        
+        return static::valuesStringReplaced($namesRu);
     }
 }

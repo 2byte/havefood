@@ -15,20 +15,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('goods', function (Blueprint $table) {
+            
             $table->id();
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained()
                 ->onUpdateCascade()
                 ->nullOnDelete();
-                
             $table->unsignedInteger('category_id');
             $table->string('name', 255);
             $table->string('description', 6000);
             $table->decimal('price')->default(0);
             $table->string('sticker')->nullable();
             $table->integer('count_photos')->default(0);
-            $table->enum('goods_type', GoodsType::names());
+            $table->enum('goods_type', GoodsType::values());
             $table->boolean('hidden')->default(0);
             $table->timestamps();
             

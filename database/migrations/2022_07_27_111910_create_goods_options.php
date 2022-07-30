@@ -31,7 +31,8 @@ return new class extends Migration
             $table->enum('group_variant', ['checkbox', 'radio'])->default('checkbox');
             $table->string('name', 255);
             $table->string('description', 5000)->nullable();
-            $table->enum('goods_type', GoodsType::names())->default(GoodsType::Common->name);
+            $table->string('note', 2000)->nullable();
+            $table->enum('goods_type', GoodsType::values())->default(GoodsType::Common->value);
             $table->decimal('price')->default(0);
             $table->enum('price_type', ['goods', 'single'])->default('single');
             $table->unsignedInteger('sortpos')->default(0);

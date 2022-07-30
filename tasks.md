@@ -16,6 +16,7 @@
 - count_photos
 - count_goods
 - sortpos
+- goods_type
 - created_at
 - updated_at
 
@@ -37,6 +38,7 @@
 - group_variant - enum(checkbox, radio) тип опций в группе выбор одного или нескольких вариантов сразу.
 - name - (имя опции / группы)
 - description - (Описание)
+- note - примечание для админов
 - goods_type (common, pizza, halfpizza, burger) тип товара
 - price - decimal - цена
 - price_type - enum(goods, single) - тип цены, goods первоначальная цена товара, single + к стоимости товара

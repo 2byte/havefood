@@ -1,5 +1,9 @@
 <?php
 
+use Database\Seeders\GoodsCategoriesSeeder;
+use Database\Seeders\GoodsOptionSeeder;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -39,7 +43,13 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
-{
-    // ..
+function seedsForGoods() {
+    $user = User::factory()->create();
+    
+    test()->seed([
+        GoodsCategoriesSeeder::class,
+        GoodsOptionSeeder::class
+    ]);
+    
+    return $user;
 }

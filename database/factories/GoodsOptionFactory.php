@@ -30,4 +30,14 @@ class GoodsOptionFactory extends Factory
             'price_type' => GoodsOptionPriceType::Single
         ];
     }
+    
+    public function group()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'group' => 1,
+                'price' => 0,
+            ];
+        });
+    }
 }

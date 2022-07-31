@@ -100,5 +100,15 @@ class GoodsOptionSeeder extends Seeder
                 fn ($sequence) => self::TEST_OPTIONS[$sequence->index]
             ))*/
             ->create();
+        
+        foreach (self::TEST_OPTIONS_GROUPS as $index => $item) {
+            $optionParentId = $index == 0 
+            ? GoodsOption::factory()->create()->id
+            : null;
+            
+            if ($index > 0) {
+                GoodsOption::factory()->create(['parent_id' => $optionParentId]);
+            }
+        }
     }
 }

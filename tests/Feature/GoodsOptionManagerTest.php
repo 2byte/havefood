@@ -10,6 +10,9 @@ use App\Models\Goods;
 use App\Models\GoodsOption as GoodsOptionModel;
 use App\Shop\V1\Goods\GoodsOption;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Facades\DB;
 
 // Uses the given trait in the current file
 uses(RefreshDatabase::class);
@@ -88,9 +91,52 @@ test('Attach a option to goods',  function () {
     $goods->refresh();
     
     expect($goods->options->last()->pivot->sortpos)->toBe(1);
-})->only();
-
-test('Find option', function () {
-    $user = seedsForGoods();
-    
 });
+
+test('Creating an options of singletons and group', function () {
+    $user = seedsForGoods(except: 'options');
+    
+    $goods = Goods::factory()->create();
+    
+    $groups = GoodsOptionModel::factory(2)->group()->create();
+    
+    $groups->each(function ($option) {
+        GoodsOptionModel::factory(2)
+            ->state(new Sequence(function ($sequence) {
+                return ['sortpos' => ($sequence->index + 2) - 1];
+            }))
+            ->create([
+                'parent_id' => $option->id
+            ]);
+    });
+    
+    $options = [
+        ...GoodsOptionModel::factory(3)->create(),
+        ...$groups
+    ];
+    
+    foreach ($options as $i => $option) {
+        DB::table('goods_ref_options')->insert([
+            'goods_id' => $goods->id,
+            'option_id' => $option->id,
+            'own_user_id' => $user->id,
+            'set_user_id' => $user->id,
+            'sortpos' => (count($options) - 1) - $i,
+        ]);
+    }
+    
+    $options = $goods->getOptionsWithGroups();
+
+    foreach ($options as $index => $option) {
+        expect($option->sortpos)->toBe($index);
+        
+        if ($option->group) {
+            $option->childs->reduce(function ($prev, $current) {
+                if (is_numeric($prev) && $prev == -1) return $current;
+                
+                expect($current->sortpos)->toBeGreaterThan($prev->sortpos);
+                return $current;
+            }, -1);
+        }
+    }
+})->only();

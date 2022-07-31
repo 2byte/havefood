@@ -16,7 +16,7 @@ class GoodsOption
     )
     {
         if (is_numeric($modelOrId)) {
-            $this->model = GoodsOptionModel::findOrFail($model);
+            $this->model = GoodsOptionModel::findOrFail($modelOrId);
         } elseif ($modelOrId instanceof GoodsOptionModel) {
             $this->model = $modelOrId;
         } else {

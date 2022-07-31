@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Shop\Goods\Enums\GoodsType;
 use Illuminate\Support\Facades\DB;
+use App\Shop\V1\Goods\GoodsManager;
 
 class Goods extends Model
 {
@@ -37,10 +38,17 @@ class Goods extends Model
     {
         $option = GoodsOption::findOrFail($optionId);
         
+        $sortpos = DB::table('goods_ref_options')->selectRaw('COUNT(*) as count')->whereGoodsId($this->id)->value('count');
+        
         $this->options()->attach($optionId, [
-            'sortpos' => DB::table('goods_ref_options')->selectRaw('COUNT(*) as count')->whereGoodsId($this->id)->value('count'),
+            'sortpos' => $sortpos,
             'own_user_id' => $option->user_id,
             'set_user_id' => $userId
         ]); 
+    }
+    
+    public function getOptionsWithGroups()
+    {
+        return (new GoodsManager($this))->makeOptionGroups();
     }
 }

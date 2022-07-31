@@ -28,7 +28,9 @@ class Goods extends Model
     
     public function options()
     {
-        return $this->belongsToMany(GoodsOption::class, 'goods_ref_options', 'goods_id', 'option_id')->withTimestamps();
+        return $this->belongsToMany(GoodsOption::class, 'goods_ref_options', 'goods_id', 'option_id')
+            ->withTimestamps()
+            ->withPivot('own_user_id', 'set_user_id', 'sortpos');
     }
     
     public function attachOption(int $optionId,  int $userId)
@@ -36,7 +38,7 @@ class Goods extends Model
         $option = GoodsOption::findOrFail($optionId);
         
         $this->options()->attach($optionId, [
-            'sortpos' => DB::select('SELECT COUNT(*) as count FROM goods_ref_options WHERE goods_id=?', [$this->id])->value('count'),
+            'sortpos' => DB::table('goods_ref_options')->selectRaw('COUNT(*) as count')->whereGoodsId($this->id)->value('count'),
             'own_user_id' => $option->user_id,
             'set_user_id' => $userId
         ]); 

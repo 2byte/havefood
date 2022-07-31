@@ -6,6 +6,7 @@ use App\Shop\V1\Goods\GoodsOptionGroup;
 use App\Shop\Goods\Enums\GoodsType;
 use App\Shop\Goods\Enums\GoodsOptionPriceType;
 use App\Models\User;
+use App\Models\Goods;
 use App\Models\GoodsOption as GoodsOptionModel;
 use App\Shop\V1\Goods\GoodsOption;
 use Illuminate\Validation\ValidationException;
@@ -51,7 +52,7 @@ test('Creating a group for options', function () {
         ]);
     })->toThrow(ValidationException::class);
 
-})->only();
+});
 
 test('Creating a option', function () {
     $user = seedsForGoods();
@@ -68,22 +69,26 @@ test('Creating a option', function () {
     
 });
 
-test('Attach a option to goods', function () {
+test('Attach a option to goods',  function () {
     $user = seedsForGoods();
     
     $this->seed(\Database\Seeders\GoodsSeeder::class);
     
-    $attach = \App\Models\Goods::first()->options()->attach(
-        GoodsOptionModel::first()->id,
-        ['own_user_id' => $user->id, 'set_user_id' => $user->id]
-    );
+    $option = GoodsOptionModel::first();
+    $goods = Goods::first();
+
+    $goods->attachOption($option->id, $user->id);
     
-    dump($attach);
+    expect($goods->options->first()->id)->toBe($option->id);
     
-    $option = \App\Models\Goods::first()->options->first();
+    // checking sorting
+    $option = GoodsOptionModel::factory()->create();
     
-    dump($option->goods);
-});
+    $goods->attachOption($option->id, $user->id);
+    $goods->refresh();
+    
+    expect($goods->options->last()->pivot->sortpos)->toBe(1);
+})->only();
 
 test('Find option', function () {
     $user = seedsForGoods();

@@ -11,7 +11,6 @@ class AdminIndexController extends AdminBaseController
     //
     public function index(Request $request)
     {
-        
         return Inertia::render('HomeView');
     }
 }

@@ -60,7 +60,7 @@
 
                                         <div class="col-md-6 col-12">
                                             <BreezeLabel for="email" value="Email" />
-                                            <BreezeInput id="email" type="email" v-model="form.email" required autocomplete="username" />
+                                            <BreezeInput id="email" type="email" v-model="form.email" autocomplete="username" />
                                         </div>
 
                                         <div class="col-md-6 col-12">

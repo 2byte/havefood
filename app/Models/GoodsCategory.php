@@ -15,8 +15,8 @@ class GoodsCategory extends Model
     
     protected $casts = [ 'goods_type' => GoodsType::class ];
     
-    public function getList($categoryId)
+    public static function getList()
     {
-        
+        return static::query()->orderyBy('sortpos', 'asc')->get();
     }
 }

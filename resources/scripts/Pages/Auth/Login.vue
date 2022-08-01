@@ -65,7 +65,7 @@
 
                                     <div class="col-lg-8">
                                         <div class="check-box">
-                                            <BreezeCheckbox name="remember" id="remember_me" v-model:checked="form.remember" :checkedDefault="true" class="me-1"/>
+                                            <BreezeCheckbox name="remember" id="remember_me" v-model:checked="form.remember" :checkedDefault="true" class="me-1" />
                                             <BreezeLabel for="remember_me" value="Запомнить меня" />
                                         </div>
                                     </div>
@@ -77,9 +77,14 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-12 pt-5">
-                                        <BreezeButton class="btn btn-custom-size lg-size btn-pronia-primary" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                            Вход
-                                        </BreezeButton>
+                                        <div class="d-flex">
+                                            <BreezeButton class="btn btn-custom-size lg-size btn-pronia-primary" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                                Вход
+                                            </BreezeButton>
+                                            <Link class="btn btn-custom-size lg-size btn-pronia-primary ms-1" :href="route('register')">
+                                                Регистрация
+                                            </Link>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

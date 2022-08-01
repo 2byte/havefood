@@ -93,7 +93,7 @@ test('Attach a option to goods',  function () {
     expect($goods->options->last()->pivot->sortpos)->toBe(1);
 });
 
-test('Creating an options of singletons and group', function () {
+test('Getting sorted list of options and groups', function () {
     $user = seedsForGoods(except: 'options');
     
     $goods = Goods::factory()->create();
@@ -139,4 +139,77 @@ test('Creating an options of singletons and group', function () {
             }, -1);
         }
     }
-})->only();
+});
+
+test('Sorting an options', function () {
+    $user = seedsForGoods(except: 'option');
+    
+    $goods = Goods::factory()->create();
+    
+    $options = GoodsOptionModel::factory(3)->create();
+    
+    $options->each(function ($option) use ($user, $goods) {
+        $goods->attachOption($option->id, $user->id);
+    });
+    
+    expect($goods->makeOptionSortUp($options[1]->id))->toBeTrue();
+    
+    $goods->refresh();
+    
+    expect(
+        $goods->options->map(fn ($opt) => $opt->pivot->sortpos)
+            ->values()->toArray()
+    )->toEqual([1, 0, 2]);
+    
+    // sort down
+    expect($goods->makeOptionSortDown($options[1]->id))->toBeTrue();
+    
+    $goods->refresh();
+    
+    expect(
+        $goods->options->map(fn ($opt) => $opt->pivot->sortpos)
+            ->values()->toArray()
+    )->toEqual([0, 1, 2]);
+});
+
+test('Sorting an options in group', function () {
+    $user = seedsForGoods(except: 'option');
+    
+    $goods = Goods::factory()->create();
+    
+    $optionGroup = GoodsOptionModel::factory()->group()->create();
+    
+    $goods->attachOption($optionGroup->id, $user->id);
+    
+    $options = GoodsOptionModel::factory(3)->make([
+        'parent_id' => $optionGroup->id
+    ]);
+    
+    $optionIds = [];
+    $options->each(function ($option) use($user, &$optionIds) {
+        $manager = GoodsOptionManager::createOption($option->getAttributes(), $user);
+        $optionIds[] = $manager->getModel()->id;
+    });
+    
+    // sort up
+    expect($goods->makeOptionSortUp($optionIds[1]))->toBeTrue();
+    
+    expect(
+        GoodsOptionModel::whereParentId($optionGroup->id)
+        ->get()
+        ->pluck('sortpos')
+        ->values()
+        ->toArray()
+    )->toEqual([1, 0, 2]);
+    
+    // sort down
+    expect($goods->makeOptionSortDown($optionIds[1]))->toBeTrue();
+    
+    expect(
+        GoodsOptionModel::whereParentId($optionGroup->id)
+        ->get()
+        ->pluck('sortpos')
+        ->values()
+        ->toArray()
+    )->toEqual([0, 1, 2]);
+});

@@ -41,4 +41,9 @@ class GoodsOption extends Model
     {
         return $this->belongsToMany(Goods::class, 'goods_ref_options', 'option_id', 'goods_id')->withTimestamps();
     }
+    
+    public function optionChilds()
+    {
+        return $this->hasMany(self::class, 'parent_id', 'id');
+    }
 }

@@ -74,8 +74,8 @@ class GoodsOptionManager
         }
         
         // auto sorting for option of group
-        if (isset($attributes['parent_id']) && !isset($attributes['sortpos']) || $attributes['sortpos'] == 0) {
-            $optionCount = GoodsOptionModel::whereId($attributes['parent_id'])->count();
+        if (isset($attributes['parent_id']) && (!isset($attributes['sortpos']) || $attributes['sortpos'] == 0)) {
+            $optionCount = GoodsOptionModel::whereParentId($attributes['parent_id'])->count();
             
             if ($optionCount > 0) {
                 $attributes['sortpos'] = $optionCount;

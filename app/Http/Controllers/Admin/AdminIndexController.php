@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use App\Models\GoodsCategory;
+use App\Models\Goods;
 
 class AdminIndexController extends AdminBaseController
 {
@@ -17,15 +18,23 @@ class AdminIndexController extends AdminBaseController
     
     public function listGoods(Request $request, $categoryId = null)
     {
-        $category = GoodsCategory::find($categoryId)
+        $category = GoodsCategory::find($categoryId);
         
         if (!is_null($category)) {
-            $goods = $category->goods->
+            $goods = $category->goods()->sortByFresh()->paginate(10);
         }
         
         return Inertia::render('ListGoods', [
-            'category' => $category
+            'category' => $category, 
+            'goods' => $goods
         ]);
+    }
+    
+    public function goodsItem()
+    {
+        $goods = Goods::first();
+        
+        return Inertia::render('GoodsItemTest', compact('goods'));
     }
     
 }

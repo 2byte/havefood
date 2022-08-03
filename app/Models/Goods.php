@@ -27,6 +27,18 @@ class Goods extends Model
     
     protected $casts = [ 'goods_type' => GoodsType::class ];
     
+    public static function getList($categoryId = null)
+    {
+        //$query = static::query();
+        
+        //$query->when($categoryId, fn () => $query->whereCategory)
+    }
+    
+    public function scopeSortByFresh($query)
+    {
+        return $query->orderBy('id', 'desc');
+    }
+    
     public function options()
     {
         return $this->belongsToMany(GoodsOption::class, 'goods_ref_options', 'goods_id', 'option_id')

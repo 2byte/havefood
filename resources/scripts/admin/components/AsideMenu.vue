@@ -1,18 +1,23 @@
 <script setup>
+import { watch, reactive } from 'vue'
 import { useStyleStore } from '@/admin/stores/style.js'
 import { useLayoutStore } from '@/admin/stores/layout.js'
-import { mdiMenu } from '@mdi/js'
+import { useCategoriesStore } from '@/admin/stores/categories.js'
+import { storeToRefs } from 'pinia'
+import { mdiMenu, mdiFolder } from '@mdi/js'
 import AsideMenuList from '@/admin/components/AsideMenuList.vue'
 import NavBarItem from '@/admin/components/NavBarItem.vue'
 import BaseIcon from '@/admin/components/BaseIcon.vue'
 
-defineProps({
+const props = defineProps({
   menu: {
     type: Array,
-    default: () => []
+    //default: () => []
+    default: reactive([])
   }
 })
 
+const menuItems = reactive(props.menu)
 const styleStore = useStyleStore()
 
 const layoutStore = useLayoutStore()
@@ -20,6 +25,22 @@ const layoutStore = useLayoutStore()
 const menuClick = () => {
   //
 }
+
+const { fetchAllCategories } = useCategoriesStore()
+const { listCategories } = storeToRefs(useCategoriesStore())
+
+fetchAllCategories()
+
+watch(listCategories, (categories) => {
+    menuItems[3][0].menu.push(...categories.map((category) => {
+        return {
+            label: `${category.name} (${category.count_goods})`,
+            icon: mdiFolder,
+            //route: 'admin.list-goods',
+            route: ['admin.list-goods', [category.id]],
+        }
+    }));
+})
 </script>
 
 <template>
@@ -46,11 +67,11 @@ const menuClick = () => {
         />
       </NavBarItem>
       <div class="flex-1 px-3">
-        <span>Admin</span> <b class="font-black">One</b>
+        <span>Меню</span> <b class="font-black">Админ</b>
       </div>
     </div>
     <div>
-      <template v-for="(menuGroup, index) in menu">
+      <template v-for="(menuGroup, index) in menuItems">
         <p
           v-if="typeof menuGroup === 'string'"
           :key="`a-${index}`"

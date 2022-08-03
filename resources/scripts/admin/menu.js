@@ -1,28 +1,40 @@
 import {
-  mdiAccountCircle,
-  mdiMonitor,
-  mdiGithub,
-  mdiLock,
-  mdiAlertCircle,
-  mdiMonitorShimmer,
-  mdiSquareEditOutline,
-  mdiTable,
-  mdiViewList,
-  mdiTelevisionGuide,
-  mdiResponsive,
-  mdiPalette
+    mdiAccountCircle,
+    mdiMonitor,
+    mdiGithub,
+    mdiLock,
+    mdiAlertCircle,
+    mdiMonitorShimmer,
+    mdiSquareEditOutline,
+    mdiTable,
+    mdiViewList,
+    mdiTelevisionGuide,
+    mdiResponsive,
+    mdiPalette,
+    mdiAllInclusive
 } from '@mdi/js'
 
 export default [
-  'General',
-  [
-    {
-      route: 'dashboard',
-      icon: mdiMonitor,
-      label: 'Dashboard'
-    }
-  ],
-  'Examples',
+    'Главное',
+    [{
+        route: 'admin.index',
+        icon: mdiMonitor,
+        label: 'Лобби'
+    }],
+    'Магазин',
+    [{
+        label: 'Категории товаров',
+        icon: mdiViewList,
+        expanded: true,
+        menu: [{
+            icon: mdiAllInclusive,
+            label: 'Все товары'
+        },
+            {
+                label: 'Категория 1'
+            }]
+    }],
+    /*'Examples',
   [
     {
       route: 'tables',
@@ -91,5 +103,5 @@ export default [
       icon: mdiGithub,
       target: '_blank'
     }
-  ]
+  ]*/
 ]

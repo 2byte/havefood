@@ -1,8 +1,8 @@
 <script setup>
 import { Link } from '@inertiajs/inertia-vue3' 
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useStyleStore } from '@/admin/stores/style.js'
-import { mdiMinus, mdiPlus } from '@mdi/js'
+import { mdiMinus, mdiPlus  } from '@mdi/js'
 import BaseIcon from '@/admin/components/BaseIcon.vue'
 import AsideMenuList from '@/admin/components/AsideMenuList.vue'
 
@@ -18,7 +18,7 @@ const emit = defineEmits(['menu-click'])
 
 const styleStore = useStyleStore()
 
-const isDropdownActive = ref(false)
+const isDropdownActive = ref(props.item.expanded || false)
 
 const hasDropdown = computed(() => !!props.item.menu)
 
@@ -30,15 +30,17 @@ const menuClick = event => {
   }
 }
 
+const routeArray = computed(() => Array.isArray(props.item.route) ? props.item.route : [props.item.route])
 // Add itemHref
-const itemHref = computed(() => props.item.route ? route(props.item.route) : props.item.href)
+const itemHref = computed(() => props.item.route ? route(...routeArray.value) : props.item.href)
 
 // Add activeInactiveStyle
 const activeInactiveStyle = computed(
-  () => props.item.route && route().current(props.item.route)
+  () => props.item.route && route().current(...routeArray.value)
     ? styleStore.asideMenuItemActiveStyle
     : styleStore.asideMenuItemInactiveStyle
 )
+
 </script>
 
 <template>

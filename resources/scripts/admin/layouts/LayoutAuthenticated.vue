@@ -7,6 +7,7 @@ import NavBar from '@/admin/components/NavBar.vue'
 import AsideMenu from '@/admin/components/AsideMenu.vue'
 import FooterBar from '@/admin/components/FooterBar.vue'
 import OverlayLayer from '@/admin/components/OverlayLayer.vue'
+import { usePage } from '@inertiajs/inertia-vue3'
 
 const styleStore = useStyleStore()
 

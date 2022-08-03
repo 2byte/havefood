@@ -45,12 +45,16 @@ const clientBarItems = computed(() => mainStore.clients.slice(0, 3))
 
 const transactionBarItems = computed(() => mainStore.history.slice(0, 3))
 </script>
+<script>
+    export default {
+        layout: LayoutAuthenticated
+    }
+</script>
 
 <template>
-  <LayoutAuthenticated>
-      <Head title="Dashboard" />
+    <Head title="Админ панель" />
     <SectionTitleBar :title-stack="titleStack" />
-    <SectionHeroBar>Dashboard</SectionHeroBar>
+    <SectionHeroBar>Админ панель</SectionHeroBar>
     <SectionMain>
       <NotificationBar
         color="info"
@@ -166,5 +170,4 @@ const transactionBarItems = computed(() => mainStore.history.slice(0, 3))
         <TableSampleClients />
       </CardBox>
     </SectionMain>
-  </LayoutAuthenticated>
 </template>

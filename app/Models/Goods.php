@@ -27,6 +27,11 @@ class Goods extends Model
     
     protected $casts = [ 'goods_type' => GoodsType::class ];
     
+    public function category()
+    {
+        return $this->belongsTo(GoodsCategory::class);
+    }
+    
     public static function getList($categoryId = null)
     {
         //$query = static::query();

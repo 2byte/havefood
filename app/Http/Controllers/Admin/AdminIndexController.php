@@ -33,8 +33,9 @@ class AdminIndexController extends AdminBaseController
     public function goodsItem()
     {
         $goods = Goods::first();
+        $goodsCategories = GoodsCategory::all();
         
-        return Inertia::render('GoodsItemTest', compact('goods'));
+        return Inertia::render('GoodsItemTest', compact('goods', 'goodsCategories'));
     }
     
 }

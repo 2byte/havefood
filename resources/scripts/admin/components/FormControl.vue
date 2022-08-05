@@ -131,7 +131,7 @@ if (props.ctrlKFocus) {
       <option
         v-for="option in options"
         :key="option.id ?? option"
-        :value="option"
+        :value="option.value"
       >
         {{ option.label ?? option }}
       </option>
@@ -141,6 +141,7 @@ if (props.ctrlKFocus) {
       :id="id"
       v-model="computedValue"
       :class="inputElClass"
+      class="resize"
       :name="name"
       :placeholder="placeholder"
       :required="required"

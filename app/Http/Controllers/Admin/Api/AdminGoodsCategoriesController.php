@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\AdminBaseController;
 use Illuminate\Http\Request;
 use App\Models\GoodsCategory;
 
-class AdminGoodsCategories extends AdminBaseController
+class AdminGoodsCategoriesController extends AdminBaseController
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class AdminGoodsCategories extends AdminBaseController
     {
         //
         return responseApi()->success(
-            GoodsCategory::all()
+            GoodsCategory::orderBy('sortpos', 'asc')->get()
         );
     }
 

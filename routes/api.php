@@ -2,7 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\Api\AdminGoodsCategories;
+use App\Http\Controllers\Admin\Api\{
+    AdminGoodsCategoriesController,
+    AdminDifferentController,
+    AdminGoodsController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +20,15 @@ use App\Http\Controllers\Admin\Api\AdminGoodsCategories;
 */
 
 Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
-    ->resource('/gov/categories', AdminGoodsCategories::class);
+    ->prefix('gov')
+    ->name('gov.api.')
+    ->group(function () {
+        Route::resource('categories', AdminGoodsCategoriesController::class);
+        Route::resource('goods', AdminGoodsController::class);
+        
+        Route::controller(AdminDifferentController::class)
+            ->prefix('different')
+            ->group(function () {
+                Route::get('get-goods-types', 'getGoodsTypes');
+            });
+    });

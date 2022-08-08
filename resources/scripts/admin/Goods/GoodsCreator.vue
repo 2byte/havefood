@@ -8,7 +8,6 @@ import BaseIcon from "@/admin/components/BaseIcon.vue";
 import BaseDivider from "@/admin/components/BaseDivider.vue";
 import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 import NotificationBar from "@/admin/components/NotificationBar.vue";
-//import { useForm } from "@inertiajs/inertia-vue3";
 import FormCheckRadioPicker from "@/admin/components/FormCheckRadioPicker.vue";
 import { useCategoriesStore } from "@/admin/stores/categories.js";
 import { useGoodsTypeStore } from "@/admin/stores/goodsTypeStore.js";

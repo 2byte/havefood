@@ -21,13 +21,21 @@ class Tgen extends Command
   protected $description = 'Generator templates';
 
   public $vueComponents = [
-    'Common.vue'
+    'admin.component' => [
+      'Common.vue'
+    ],
+    'admin.store' => [
+      'commonStore.js'
+    ]
   ];
 
   public $templates = [
     'admin.component' => [
       'scripts/admin/components',
       'scripts/admin/Goods'
+    ],
+    'admin.store' => [
+      'scripts/admin/stores'
     ]
   ];
 
@@ -56,11 +64,11 @@ class Tgen extends Command
 
   public function interactiveMode() {
     $item = $this->choice('Do what create?', array_keys($this->templates), 0);
-
+    
     $destination = $this->choice('Please do select a directory: ', $this->templates[$item], 0);
 
-    $templateName = $this->choice('Select the template a component', $this->vueComponents, 0);
-    $name = $this->ask('Type a name (CompName.vue)');
+    $templateName = $this->choice('Select the template a component', $this->vueComponents[$item], 0);
+    $name = $this->ask('Type a name (CompName.vue|js)');
     
     $checkCopy = copy($this->pathTemplates .'/'. $templateName, resource_path($destination) .'/'. $name);
 

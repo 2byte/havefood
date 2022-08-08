@@ -11,4 +11,6 @@
 ## /api/gov/goods - работа с товарами
 - /api/gov/goods/store
 - /api/gov/goods/get
-  - get {id}
+  - get param {id}
+- /api/gov/goods/options/get
+  - get param {goods_id}

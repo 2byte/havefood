@@ -76,9 +76,9 @@ export class Api {
                 return true
               }
               
-              if (err.reaponse) {
+              if (err.response) {
                 this.failCallback(
-                    new Error(`Invalid response for request ${axiosParams.url} method ${axiosParams.method} params ${axiosParams.params ?? '[]'}, response ${JSON.stringify(err.response?.data ?? [])} code: ${err.response.status}`)
+                    new Error(`Invalid response for request ${axiosParams.url} method ${axiosParams.method} params ${JSON.stringify(axiosParams.params) ?? '[]'}, response ${JSON.stringify(err.response?.data ?? [])} code: ${err.response.status}`)
                 )
               } else {
                 throw err;

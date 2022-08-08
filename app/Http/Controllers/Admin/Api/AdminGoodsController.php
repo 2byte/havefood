@@ -50,9 +50,7 @@ class AdminGoodsController extends Controller
     $return = [];
     
     if ($request->mode == 'create') {
-      $goods = Goods::create(
-        $fields
-      );
+      $goods = Goods::create($fields);
       
       $return['goods_id'] = $goods->id;
     } else {

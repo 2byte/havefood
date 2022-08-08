@@ -41,15 +41,25 @@ class AdminGoodsController extends Controller
 
     $request->validate(...$goodsValidation->getRulesStore());
 
-    $fields = $request->only($goodsValidation->getFields()) + ['user_id' => $request->user()->id];
+    $fields = $request->only($goodsValidation->getFields());
     
-    $goods = Goods::create(
-      $fields
-    );
+    if ($request->mode == 'create') {
+      $fields['user_id'] = $request->user()->id;
+    }
+    
+    $return = [];
+    
+    if ($request->mode == 'create') {
+      $goods = Goods::create(
+        $fields
+      );
+      
+      $return['goods_id'] = $goods->id;
+    } else {
+      Goods::findOrFail($request->id)->update($fields);
+    }
 
-    return responseApi()->success([
-      'goods_id' => $goods->id
-    ]);
+    return responseApi()->success($return);
   }
   
   public function get(Request $request)

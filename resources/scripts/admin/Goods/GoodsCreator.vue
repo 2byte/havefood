@@ -19,6 +19,7 @@ import {
   mdiFolder,
   mdiBookInformationVariant,
 } from "@mdi/js";
+import GoodsOptionRelationships from "@/admin/Goods/GoodsOptionRelationships.vue";
 import Api from "@/admin/libs/Api.js";
 
 const props = defineProps({
@@ -30,7 +31,7 @@ const props = defineProps({
   },
   goodsId: {
     type: Number,
-    default: null
+    default: null,
   },
   goodsLoad: {
     type: Boolean,
@@ -39,14 +40,19 @@ const props = defineProps({
 });
 
 const componentMode = ref(props.mode);
+const goodsId = ref(props.goodsId);
 
 const titleCardBox = computed(() => {
-  return componentMode.value == "create" ? "Создание товара" : "Редактирование товара";
+  return componentMode.value == "create"
+    ? "Создание товара"
+    : "Редактирование товара";
 });
 
 // load a goods types
 const { fetchAllGoodsTypes } = useGoodsTypeStore();
-const { listGoodsTypes, loading: loadingGoodsTypes } = storeToRefs(useGoodsTypeStore());
+const { listGoodsTypes, loading: loadingGoodsTypes } = storeToRefs(
+  useGoodsTypeStore()
+);
 
 fetchAllGoodsTypes();
 
@@ -62,7 +68,9 @@ const goodsTypeOptions = computed(() => {
 
 // Load categories a goods
 const { fetchAllCategories } = useCategoriesStore();
-const { listCategories, loading: loadingCategories } = storeToRefs(useCategoriesStore());
+const { listCategories, loading: loadingCategories } = storeToRefs(
+  useCategoriesStore()
+);
 
 fetchAllCategories();
 
@@ -78,10 +86,8 @@ const categoryIdSelected = ref(0);
 const goodsTypeSelected = ref(0);
 
 const goodsTypeValueForm = computed(() => {
-  return (
-    listCategories.value.find(({ id }) => id == categoryIdSelected.value)
-      ?.goods_type ?? 0
-  );
+  return listCategories.value.find(({ id }) => id == categoryIdSelected.value)
+    ?.goods_type;
 });
 
 const stickerOptions = {
@@ -94,13 +100,15 @@ const stickerOptions = {
 const switchHidden = { 1: "Да" };
 
 const form = reactive({
+  id: goodsId.value,
   name: null,
   category_id: categoryIdSelected,
   description: null,
   price: 1.0,
   sticker: "none",
-  goods_type: goodsTypeValueForm,
+  goods_type: goodsTypeValueForm.value,
   hidden: 1,
+  mode: componentMode,
 });
 
 const switchHiddenValue = computed({
@@ -109,8 +117,6 @@ const switchHiddenValue = computed({
     form.hidden = val[0];
   },
 });
-
-const goodsId = ref(props.goodsId);
 
 const switchMode = (mode, goodsIdVal) => {
   if (mode == "update") {
@@ -127,39 +133,48 @@ const switchMode = (mode, goodsIdVal) => {
 };
 
 const errorsFromApi = ref(null);
-const notify = reactive({
-  created: false,
-});
+const notificationSave = ref(null);
 
 const loaderSubmit = ref(false);
 
 const submit = () => {
-  loaderSubmit.value = true
+  loaderSubmit.value = true;
+  notificationSave.value = null;
   
   Api("goods/store", "post", form)
     .setErrors(errorsFromApi)
     .setLoader(loaderSubmit)
     .success((payload) => {
-      notify.created = true;
+      notificationSave.value = payload?.goods_id
+        ? "Товар успешно создан"
+        : "Товар успешно сохранен";
 
-      switchMode("update", payload.goods_id);
+      switchMode("update", payload?.goods_id);
     });
 };
 
 // Load goods by id from prop
-const errorsGoodsLoad = ref(null)
+const errorsGoodsLoad = ref(null);
 const statusGoodsLoad = ref(false);
 
 if (props.goodsLoad) {
   statusGoodsLoad.value = true;
-  
-  Api('goods/get', 'get', {id: props.goodsId})
+
+  Api("goods/get", "get", { id: props.goodsId })
     .setErrors(errorsGoodsLoad)
     .setLoader(statusGoodsLoad)
     .success((data) => {
-      console.log(data)
-    })
+      switchMode("update", data.id);
+
+      for (const nameField of Object.keys(form)) {
+        form[nameField] = data[nameField];
+      }
+    });
 }
+
+const buttonSubmitLabel = computed(() => {
+  return componentMode == "create" ? "Создать" : "Сохранить";
+});
 </script>
 
 <template>
@@ -170,7 +185,11 @@ if (props.goodsLoad) {
     class="shadow-sm"
     :loader="statusGoodsLoad"
   >
-    <DisplayErrors v-if="errorsGoodsLoad" :errors="errorsGoodsLoad" class="-mt-6" />
+    <DisplayErrors
+      v-if="errorsGoodsLoad"
+      :errors="errorsGoodsLoad"
+      class="-mt-6"
+    />
 
     <FormField label="Имя товара">
       <FormControl
@@ -187,7 +206,11 @@ if (props.goodsLoad) {
       />
     </FormField>
     <FormField label="Тип товара">
-      <FormControl v-model="form.goods_type" :options="goodsTypeOptions" :loader="loadingGoodsTypes"/>
+      <FormControl
+        v-model="form.goods_type"
+        :options="goodsTypeOptions"
+        :loader="loadingGoodsTypes"
+      />
     </FormField>
     <FormField label="Описание товара">
       <FormControl
@@ -222,18 +245,29 @@ if (props.goodsLoad) {
     </FormField>
 
     <BaseDivider />
-    
-    <h3 class="text-md font-medium text-slate-500 mb-2">Опции товара</h3>
-    <div v-if="mode == 'create'" class="text-slate-400 mb-2">
+
+    <h3 class="text-md font-medium text-slate-500 mb-4">Опции товара</h3>
+    <div v-if="componentMode == 'create'" class="text-slate-400 mb-2">
       Для создания опций к товару, вначале создайте товар
     </div>
+    <component
+      v-else
+      :is="GoodsOptionRelationships"
+      class="mb-2 -mx-6"
+    ></component>
 
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />
 
-    <NotificationBar color="success" timeout="5000" v-if="notify.created">
-      Товар успешно создан
+    <NotificationBar color="success" timeout="5000" v-if="notificationSave">
+      {{ notificationSave }}
     </NotificationBar>
 
-    <BaseButton type="submit" color="info" label="Создать" :loader="loaderSubmit" loader-type="circle2"/>
+    <BaseButton
+      type="submit"
+      color="info"
+      :label="buttonSubmitLabel"
+      :loader="loaderSubmit"
+      loader-type="circle2"
+    />
   </CardBox>
 </template>

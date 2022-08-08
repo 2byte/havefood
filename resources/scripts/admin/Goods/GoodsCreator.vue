@@ -148,10 +148,14 @@ const submit = () => {
 
 // Load goods by id from prop
 const errorsGoodsLoad = ref(null)
+const statusGoodsLoad = ref(false);
 
 if (props.goodsLoad) {
+  statusGoodsLoad.value = true;
+  
   Api('goods/get', 'get', {id: props.goodsId})
     .setErrors(errorsGoodsLoad)
+    .setLoader(statusGoodsLoad)
     .success((data) => {
       console.log(data)
     })
@@ -164,6 +168,7 @@ if (props.goodsLoad) {
     form
     @submit.prevent="submit"
     class="shadow-sm"
+    :loader="statusGoodsLoad"
   >
     <DisplayErrors v-if="errorsGoodsLoad" :errors="errorsGoodsLoad" class="-mt-6" />
 

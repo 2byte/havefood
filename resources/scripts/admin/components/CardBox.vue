@@ -2,6 +2,7 @@
 import { mdiCog } from '@mdi/js'
 import { computed } from 'vue'
 import BaseIcon from '@/admin/components/BaseIcon.vue'
+import Loader from '@/admin/components/Loader.vue'
 
 const props = defineProps({
   title: {
@@ -24,7 +25,8 @@ const props = defineProps({
   empty: Boolean,
   form: Boolean,
   hoverable: Boolean,
-  modal: Boolean
+  modal: Boolean,
+  loader: Boolean
 })
 
 const emit = defineEmits(['header-icon-click', 'submit'])
@@ -59,7 +61,7 @@ const submit = e => {
   <component
     :is="is"
     :class="componentClass"
-    class="bg-white border border-gray-100 dark:border-gray-800"
+    class="relative bg-white border border-gray-100 dark:border-gray-800"
     @submit="submit"
   >
     <header
@@ -98,6 +100,9 @@ const submit = e => {
       :class="{'p-6':!hasTable}"
     >
       <slot />
+    </div>
+    <div v-if="loader" class="absolute bg-slate-400/70 inset-0 flex justify-center items-center">
+      <Loader size="72" w="24" type="circle2" />
     </div>
   </component>
 </template>

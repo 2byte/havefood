@@ -2,6 +2,7 @@
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue'
 import { useMainStore } from '@/admin/stores/main'
 import FormControlIcon from '@/admin/components/FormControlIcon.vue'
+import Loader from '@/admin/components/Loader.vue'
 
 const props = defineProps({
   name: {
@@ -43,7 +44,12 @@ const props = defineProps({
   required: Boolean,
   borderless: Boolean,
   transparent: Boolean,
-  ctrlKFocus: Boolean
+  ctrlKFocus: Boolean,
+  loader: Boolean,
+  loaderType: {
+    type: String,
+    default: 'line'
+  }
 })
 
 const emit = defineEmits(['update:modelValue', 'setRef'])
@@ -164,5 +170,6 @@ if (props.ctrlKFocus) {
       :icon="icon"
       :h="controlIconH"
     />
+    <Loader v-if="loader" :type="loaderType" class="absolute right-2" size="32" w="8"/>
   </div>
 </template>

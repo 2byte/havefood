@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { Link } from '@inertiajs/inertia-vue3' 
 import { getButtonColor } from '@/admin/colors.js'
 import BaseIcon from '@/admin/components/BaseIcon.vue'
+import Loader from '@/admin/components/Loader.vue'
 
 const props = defineProps({
   label: {
@@ -39,7 +40,12 @@ const props = defineProps({
   small: Boolean,
   outline: Boolean,
   active: Boolean,
-  disabled: Boolean
+  disabled: Boolean,
+  loader: Boolean,
+  loaderType: {
+    type: String,
+    default: 'circle'
+  }
 })
 
 const is = computed(() => {
@@ -111,5 +117,6 @@ const componentClass = computed(() => {
       v-if="label"
       :class="labelClass"
     >{{ label }}</span>
+    <Loader v-if="loader" :type="loaderType" />
   </component>
 </template>

@@ -30,12 +30,12 @@ class AdminIndexController extends AdminBaseController
         ]);
     }
     
-    public function goodsItem()
+    public function goodsItem(Request $request)
     {
-        $goods = Goods::first();
-        $goodsCategories = GoodsCategory::all();
-        
-        return Inertia::render('GoodsItemTest', compact('goods', 'goodsCategories'));
+        return Inertia::render('GoodsItemTest', [
+          'goods-id' => (int)$request->goods_id,
+          'goods-load' => true
+        ]);
     }
     
 }

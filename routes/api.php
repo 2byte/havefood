@@ -24,7 +24,15 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
     ->name('gov.api.')
     ->group(function () {
         Route::resource('categories', AdminGoodsCategoriesController::class);
-        Route::resource('goods', AdminGoodsController::class);
+        //Route::resource('goods', AdminGoodsController::class);
+        
+        Route::prefix('goods')
+          ->controller(AdminGoodsController::class)
+          ->name('goods.')
+          ->group(function () {
+            Route::post('store', 'store')->name('store');
+            Route::get('get', 'get')->name('get');
+          });
         
         Route::controller(AdminDifferentController::class)
             ->prefix('different')

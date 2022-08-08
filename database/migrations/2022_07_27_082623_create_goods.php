@@ -24,7 +24,7 @@ return new class extends Migration
                 ->nullOnDelete();
             $table->unsignedInteger('category_id');
             $table->string('name', 255);
-            $table->string('description', 6000);
+            $table->string('description', 6000)->nullable();
             $table->decimal('price')->default(0);
             $table->string('sticker')->nullable();
             $table->integer('count_photos')->default(0);

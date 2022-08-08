@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Shop\V1\Goods\GoodsOptionValidationRules;
+use App\Shop\V1\Goods\GoodsValidationRules;
 
 class ShopServiceProvider extends ServiceProvider
 {
@@ -17,6 +18,9 @@ class ShopServiceProvider extends ServiceProvider
         //
         $this->app->singleton(GoodsOptionValidationRules::class, function ($app) {
             return new GoodsOptionValidationRules();
+        });
+        $this->app->singleton(GoodsValidationRules::class, function ($app) {
+            return new GoodsValidationRules();
         });
     }
 
@@ -32,6 +36,9 @@ class ShopServiceProvider extends ServiceProvider
     
     public function provides()
     {
-        return [GoodsOptionValidationRules::class];
+        return [
+          GoodsOptionValidationRules::class,
+          GoodsOValidationRules::class,
+        ];
     }
 }

@@ -7,7 +7,7 @@ function parsePhone($raw) {
     return false;
 }
 
-function responseApi(array $payload = []) {
+function responseApi(mixed $payload = null) {
     return new class($payload) {
         
         public $responseData = [
@@ -16,8 +16,16 @@ function responseApi(array $payload = []) {
             'data' => []
         ];
         
-        function __construct(array $payload = [])
+        function __construct($payload)
         {
+            if (
+              $payload instanceof Illuminate\Database\Eloquent\Model
+              ||
+              $payload instanceof \Illuminate\Database\Eloquent\Collection
+            ) {
+              $payload = $payload->toArray();
+            }
+            
             $this->responseData['data'] = $payload;
         }
         

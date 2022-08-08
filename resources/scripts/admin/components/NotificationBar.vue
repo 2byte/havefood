@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, useSlots } from 'vue'
+import { ref, computed, useSlots, onMounted } from 'vue'
 import { mdiClose } from '@mdi/js'
 import { colorsBg, colorsBorders, colorsOutline } from '@/admin/colors.js'
 import BaseLevel from '@/admin/components/BaseLevel.vue'
@@ -15,7 +15,8 @@ const props = defineProps({
   color: {
     type: String,
     required: true
-  }
+  },
+  timeout: false
 })
 
 const componentClass = computed(() => props.outline
@@ -31,13 +32,19 @@ const dismiss = () => {
 const slots = useSlots()
 
 const hasRightSlot = computed(() => slots.right)
+
+onMounted(() => {
+  if (props.timeout) {
+    setTimeout(() => { dismiss() }, props.timeout)
+  }
+})
 </script>
 
 <template>
   <div
     v-if="!isDismissed"
     :class="componentClass"
-    class="px-3 py-6 md:py-3 mx-6 md:mx-0 mb-6 last:mb-0 border rounded transition-colors duration-150"
+    class="px-3 py-6 md:py-3 mx-6 md:mx-0 mb-6 last:mb-0 border rounded transition-colors duration-500"
   >
     <BaseLevel>
       <div class="flex flex-col md:flex-row items-center">

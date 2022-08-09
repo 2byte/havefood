@@ -20,6 +20,7 @@ import {
 } from "@mdi/js";
 import GoodsOptionRelationships from "@/admin/Goods/GoodsOptionRelationships.vue";
 import Api from "@/admin/libs/Api.js";
+import { listGoodsTypes, loadingGoodsTypes, goodsTypeOptions } from '@/admin/Goods/Repositories/goodsTypeRepository.js'
 
 const props = defineProps({
   category: {
@@ -45,24 +46,6 @@ const titleCardBox = computed(() => {
   return componentMode.value == "create"
     ? "Создание товара"
     : "Редактирование товара";
-});
-
-// load a goods types
-const { fetchAllGoodsTypes } = useGoodsTypeStore();
-const { listGoodsTypes, loading: loadingGoodsTypes } = storeToRefs(
-  useGoodsTypeStore()
-);
-
-fetchAllGoodsTypes();
-
-const goodsTypeOptions = computed(() => {
-  const options = listGoodsTypes.value.map((data) => {
-    const nameEn = Object.keys(data)[0];
-    return { value: nameEn, label: data[nameEn] };
-  });
-  options.unshift({ value: 0, label: "Выберите тип товара" });
-
-  return options;
 });
 
 // Load categories a goods
@@ -252,7 +235,7 @@ const buttonSubmitLabel = computed(() => {
     <GoodsOptionRelationships
       v-else
       class="mb-2 -mx-6"
-      goods-id="goodsId"
+      :goods-id="goodsId"
     />
 
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />

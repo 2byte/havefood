@@ -41,7 +41,8 @@ const isCreateOption = ref(false)
       <div class="snap-center w-full flex-none">option2</div>
     </div>
 
-    <GoodsOptionCreator v-if="isCreateOption" :goods-id="goodsId" class="mb-2" />
+    <GoodsOptionCreator v-if="isCreateOption" :goods-id="goodsId" />
+    
     <BaseButton
       color="success"
       label="Создать опцию"

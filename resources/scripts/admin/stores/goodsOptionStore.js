@@ -11,6 +11,7 @@ export const useGoodsOptionStore = defineStore("goodsOption", {
   }),
   actions: {
     async load(goodsId, forceLoad = true) {
+      
       if (!forceLoad && this.list.length > 0) {
         if (this.loading) this.loading.false;
 

@@ -22,9 +22,13 @@ const props = defineProps({
     <!--
     <GoodsItem :goods="goods" class="flex-1"/>
     -->
+    
     <!--
     <GoodsCreator class="flex-1" :goods-id="goodsId" :goods-load="goodsLoad" />
     -->
+    
+    
     <GoodsOptionRelationships class="flex-1" :goods-id="goodsId"/>
+    
   </div>
 </template>

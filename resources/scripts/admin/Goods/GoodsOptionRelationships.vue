@@ -23,7 +23,7 @@ const { load } = useGoodsOptionStore();
 
 load(props.goodsId);
 
-const isCreateOption = ref(null);
+const isCreateOption = ref(false)
 </script>
 
 <template>
@@ -41,12 +41,12 @@ const isCreateOption = ref(null);
       <div class="snap-center w-full flex-none">option2</div>
     </div>
 
-    <component :is="isCreateOption" :goods-id="goodsId" class="mb-2" />
+    <GoodsOptionCreator v-if="isCreateOption" :goods-id="goodsId" class="mb-2" />
     <BaseButton
       color="success"
       label="Создать опцию"
       :icon="mdiPlus"
-      @click="isCreateOption = GoodsOptionCreator"
+      @click="isCreateOption = true"
     />
   </CardBox>
 </template>

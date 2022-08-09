@@ -249,11 +249,11 @@ const buttonSubmitLabel = computed(() => {
     <div v-if="componentMode == 'create'" class="text-slate-400 mb-2">
       Для создания опций к товару, вначале создайте товар
     </div>
-    <component
+    <GoodsOptionRelationships
       v-else
-      :is="GoodsOptionRelationships"
       class="mb-2 -mx-6"
-    ></component>
+      goods-id="goodsId"
+    />
 
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />
 

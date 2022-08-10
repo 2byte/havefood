@@ -38,6 +38,7 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
     ->name('option.')
     ->group(function () {
       Route::get('get', 'getGoodsOptions')->name('get');
+      Route::post('store', 'store')->name('store');
     });
   });
 

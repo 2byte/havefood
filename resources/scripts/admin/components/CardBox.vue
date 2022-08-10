@@ -46,7 +46,8 @@ const componentClass = computed(() => {
   return base
 })
 
-const computedHeaderIcon = computed(() => props.headerIcon ?? mdiCog)
+//const computedHeaderIcon = computed(() => props.headerIcon ?? mdiCog)
+const computedHeaderIcon = computed(() => props.headerIcon ?? false)
 
 const headerIconClick = () => {
   emit('header-icon-click')

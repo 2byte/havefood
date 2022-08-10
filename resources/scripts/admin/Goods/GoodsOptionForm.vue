@@ -1,33 +1,67 @@
 <script setup>
-import { computed, watch, ref, reactive } from "vue";
+import { computed, ref, reactive } from "vue";
 import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 import CardBox from "@/admin/components/CardBox.vue";
 import FormField from "@/admin/components/FormField.vue";
 import FormControl from "@/admin/components/FormControl.vue";
 import FormCheckRadioPicker from "@/admin/components/FormCheckRadioPicker.vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
-import { loadingGoodsTypes, goodsTypeOptions } from '@/admin/Goods/Repositories/goodsTypeRepository.js'
+import DisplayErrors from "@/admin/components/DisplayErrors.vue";
+import NotificationBar from "@/admin/components/NotificationBar.vue";
+import {
+  loadingGoodsTypes,
+  goodsTypeOptions,
+} from "@/admin/Goods/Repositories/goodsTypeRepository.js";
+import Api from "@/admin/libs/Api.js";
 
 const props = defineProps({
+  goodsId: {
+    default: 0,
+  },
+  optionId: {
+    default: 0,
+  },
   type: {
-    default: 'option'
+    default: "option",
   },
   mode: {
-    default: 'create'
-  }
+    default: "create",
+  },
 });
 
+const emit = defineEmits(["created"]);
+
+const typeOption = ref(props.type);
+const componentMode = ref(props.mode);
+const refGoodsId = ref(props.goodsId);
+const refOptionId = ref(props.optionId);
+
+const switchMode = (newMode, newType) => {
+  componentMode.value = newMode;
+  if (newType) {
+    typeOption.value = newType;
+  }
+};
+
 const form = reactive({
-  optionId: 0,
+  goods_id: refGoodsId,
+  option_id: refOptionId,
+  mode: componentMode,
   group: 0,
-  group_type: "checkbox",
+  group_variant: "checkbox",
   name: null,
   description: null,
   price_type: "single",
   price: 0,
   note: null,
-  goods_type: 0
+  goods_type: "common",
 });
+
+const groupOptions = { 0: "Одиночная", 1: "Группа опций" };
+const groupVariantOptions = {
+  checkbox: "Множественный выбор",
+  radio: "Вариативный выбор",
+};
 
 const priceTypeOptions = {
   goods: "Цена товара",
@@ -35,37 +69,105 @@ const priceTypeOptions = {
 };
 
 const isOptionGroup = computed(() => {
-  return props.type == 'group'
-})
-
-const submit = () =>  {}
+  return form.group == 1;
+});
 
 const labelButton = computed(() => {
-  return props.mode == 'create' ? 'Создать' : 'Сохранить'
-})
+  return componentMode.value == "create" ? "Создать" : "Сохранить";
+});
 
-const placeholderName = computed(() => {
-  return props.type == 'option' ? 'Имя опции' : 'Имя группы'
-})
+// ---------------- placeholder --------------//
+const typeToNames = {
+  option: "опции",
+  group: "группы",
+};
 
-const placeholderDescription = computed(() => {
-  return props.type == 'option' ? 'Описание опции' : ' Описание группы'
-})
+const placeholders = reactive({
+  name: computed(() => `Имя ${typeToNames[typeOption.value]}`),
+  description: computed(() => `Описание ${typeToNames[typeOption.value]}`),
+});
 
+// ---------------- end placeholder ---------------//
+
+// ---------------- submit --------------//
+const errorsFromApi = ref(null);
+const loaderSubmit = ref(false);
+const notificationSave = ref(null);
+
+const submit = () => {
+  loaderSubmit.value = true;
+
+  Api("goods/option/store", "post", form)
+    .setLoader(loaderSubmit)
+    .setErrors(errorsFromApi)
+    .success((data) => {
+      notificationSave.value = data?.option_id
+        ? "Опция успешно создана"
+        : "Опция успешно сохранена";
+      
+      if (data?.option_id) {
+        refOptionId.value = data.option_id
+      }
+      
+      switchMode('update')
+      emit("created");
+    });
+};
+// ---------------- end submit --------------//
+
+const titleCardBox = computed(() => {
+  const pieces = {
+    create: "Создание",
+    update: "Редактирование",
+    option: "опции",
+    group: "группы",
+  };
+
+  return `${pieces[componentMode.value]} ${pieces[typeOption.value]}`;
+});
+
+const formGroupModelComputed = computed({
+  get: () => Number(form.group),
+  set: (val) => {
+    form.group = Number(val);
+
+    if (form.group == 1) {
+      switchMode("create", "group");
+    } else {
+      switchMode("create", "option");
+    }
+  },
+});
 </script>
 
 <template>
-  <CardBox form @submit.prevent="submit">
-    <FormField :label="placeholderName">
-      <FormControl :placeholder="placeholderName" v-model="form.name" />
+  <CardBox :title="titleCardBox" form @submit.prevent="submit">
+    <FormField label="Тип опции">
+      <FormCheckRadioPicker
+        v-model="formGroupModelComputed"
+        name="group"
+        type="radio"
+        :options="groupOptions"
+      />
+    </FormField>
+    <FormField label="Тип опций в группе" v-if="isOptionGroup">
+      <FormCheckRadioPicker
+        v-model="form.group_variant"
+        name="group_variant"
+        type="radio"
+        :options="groupVariantOptions"
+      />
+    </FormField>
+    <FormField :label="placeholders.name">
+      <FormControl :placeholder="placeholders.name" v-model="form.name" />
     </FormField>
     <FormField label="Внутринняя заметка">
       <FormControl placeholder="Заметка для админов" v-model="form.note" />
     </FormField>
-    <FormField :label="placeholderDescription">
+    <FormField :label="placeholders.description">
       <FormControl
         type="textarea"
-        :placeholder="placeholderDescription"
+        :placeholder="placeholders.description"
         v-model="form.description"
         class="resize"
       />
@@ -88,9 +190,18 @@ const placeholderDescription = computed(() => {
         :loader="loadingGoodsTypes"
       />
     </FormField>
+
+    <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />
+
+    <NotificationBar color="success" timeout="5000" v-if="notificationSave">
+      {{ notificationSave }}
+    </NotificationBar>
+
     <BaseButton
+      type="submit"
       color="success"
       :label="labelButton"
+      :loader="loaderSubmit"
     />
   </CardBox>
 </template>

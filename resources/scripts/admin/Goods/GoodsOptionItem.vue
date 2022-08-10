@@ -3,13 +3,7 @@ import { computed, watch, ref } from "vue";
 import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 import CardBox from "@/admin/components/CardBox.vue";
 
-defineProps({
-  'source': {
-    default: 'request'
-  }
-});
+defineProps({});
 </script>
 
-<template>
-  
-</template>
+<template></template>

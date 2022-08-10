@@ -13,6 +13,7 @@ class GoodsOptionValidationRules
     
     protected array $rules = [];
     protected array $rulesMessages = [];
+    protected array $rulesAttributes = [];
     
     function __construct()
     {
@@ -27,8 +28,8 @@ class GoodsOptionValidationRules
             'group' => 'in:1,0',
             'group_variant' => 'required_if:group,1|in:'. GoodsOptionGroupType::enumStringValues(),
             'name' => 'required|min:3|max:255',
-            'description' => 'min:3|max:5000',
-            'note' => 'min:3|max:2000',
+            'description' => 'nullable|min:3|max:5000',
+            'note' => 'nullable|min:3|max:2000',
             'goods_type' => 'in:'. GoodsType::enumStringValues(),
             'price' => 'required|numeric',
             'price_type' => 'in:'. GoodsOptionPriceType::enumStringValues(),
@@ -38,11 +39,17 @@ class GoodsOptionValidationRules
         ];
         
         $this->rulesMessaages = [
+            'name.required' => 'имя опции обязательно для заполнения',
             'group_variant.in' => 'Тип группы должен быть из вариантов '. GoodsOptionGroupType::enumStringValues(),
             'goods_type.in' => 'Неверный тип товара, возможные значения '. GoodsType::enumStringValues(),
             'parent_id.exists' => 'Группа не найдена',
             'group.required' => 'Нет атрибута group',
             'group.required_if' => 'Требуется указание типа группы group_variant, возможные значения'. GoodsOptionGroupType::enumStringValues()
+        ];
+        
+        $this->rulesAttributes = [
+          'name' => 'имя опции',
+          'description' => 'описание опции',
         ];
     }
     
@@ -62,7 +69,28 @@ class GoodsOptionValidationRules
                 'note',
                 'goods_type',
             ]),
-            $this->rulesMessaages
+            $this->rulesMessaages,
+            $this->rulesAttributes
+        ];
+    }
+    
+    /**
+     * 
+     * @return [[rules], [messages]]
+     **/
+    public function getRulesForUpdateOptionGroup(): array
+    {
+        return [
+            Arr::only($this->rules, [
+                'group',
+                'group_variant',
+                'name',
+                'description',
+                'note',
+                'goods_type',
+            ]),
+            $this->rulesMessaages,
+            $this->rulesAttributes
         ];
     }
     
@@ -82,7 +110,8 @@ class GoodsOptionValidationRules
                 'default',
                 'hidden',
             ]),
-            $this->rulesMessaages
+            $this->rulesMessaages,
+            $this->rulesAttributes
         ];
     }
 }

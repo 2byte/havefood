@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\GoodsOption as GoodsOptionModel;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class GoodsOptionManager 
 {
@@ -57,6 +58,31 @@ class GoodsOptionManager
                 )
             )
         );
+    }
+    
+    public static function updateOptionGroup($request)
+    {
+      $option = $request->user()
+        ->options()
+        ->whereId($request->option_id)
+        ->first();
+        
+        if (is_null($option)) {
+          throw ValidationException::withMessages([
+            'message' => 'Опция не найдена, либо вам не принадлежит' 
+          ]);
+        }
+        
+        $option->update(
+          $request->only(
+            static::validateOptionAttributes(
+                $request->all(), 
+                ...app(GoodsOptionValidationRules::class)->getRulesForUpdateOptionGroup()
+            )
+          )
+        );
+        
+      return true;
     }
     
     public static function createOption(Request|array $attributes, ?User $user = null): GoodsOption

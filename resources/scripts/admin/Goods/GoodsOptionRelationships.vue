@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 import CardBox from "@/admin/components/CardBox.vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
-import GoodsOptionCreator from "@/admin/Goods/GoodsOptionCreator.vue";
+import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
 import { useGoodsOptionStore } from "@/admin/stores/goodsOptionStore.js";
 import { mdiPlus } from "@mdi/js";
 
@@ -41,7 +41,7 @@ const isCreateOption = ref(false)
       <div class="snap-center w-full flex-none">option2</div>
     </div>
 
-    <GoodsOptionCreator v-if="isCreateOption" :goods-id="goodsId" />
+    <GoodsOptionForm v-if="isCreateOption" :goods-id="goodsId" class="mb-2"/>
     
     <BaseButton
       color="success"

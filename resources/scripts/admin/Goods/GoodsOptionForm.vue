@@ -132,9 +132,9 @@ const formGroupModelComputed = computed({
     form.group = Number(val);
 
     if (form.group == 1) {
-      switchMode("create", "group");
+      switchMode(componentMode.value, "group");
     } else {
-      switchMode("create", "option");
+      switchMode(componentMode.value, "option");
     }
   },
 });

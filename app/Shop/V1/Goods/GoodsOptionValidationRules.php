@@ -114,4 +114,23 @@ class GoodsOptionValidationRules
             $this->rulesAttributes
         ];
     }
+    
+    public function getRulesForUpdateOption()
+    {
+        return [
+            Arr::only($this->rules, [
+                'name',
+                'description',
+                'note',
+                'goods_type',
+                'price',
+                'price_type',
+                'sortpos',
+                'default',
+                'hidden',
+            ]),
+            $this->rulesMessaages,
+            $this->rulesAttributes
+        ];
+    }
 }

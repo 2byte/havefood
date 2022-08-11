@@ -118,6 +118,31 @@ class GoodsOptionManager
         );
     }
     
+    public static function updateOption($request)
+    {
+      $option = $request->user()
+        ->options()
+        ->whereId($request->option_id)
+        ->first();
+        
+        if (is_null($option)) {
+          throw ValidationException::withMessages([
+            'message' => 'Опция не найдена, либо вам не принадлежит' 
+          ]);
+        }
+        
+        $option->update(
+          $request->only(
+            static::validateOptionAttributes(
+                $request->all(), 
+                ...app(GoodsOptionValidationRules::class)->getRulesForUpdateOption()
+            )
+          )
+        );
+        
+      return true;
+    }
+    
     public function getModel()
     {
         return $this->model;

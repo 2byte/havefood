@@ -1,7 +1,8 @@
 <script setup>
 //import GoodsItem from '@/admin/Goods/GoodsItem.vue'
 //import GoodsCreator from "@/admin/Goods/GoodsCreator.vue";
-import GoodsOptionRelationships from "@/admin/Goods/GoodsOptionRelationships.vue";
+//import GoodsOptionRelationships from "@/admin/Goods/GoodsOptionRelationships.vue";
+import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 
 const props = defineProps({
   goods: Object,
@@ -27,8 +28,10 @@ const props = defineProps({
     <GoodsCreator class="flex-1" :goods-id="goodsId" :goods-load="goodsLoad" />
     -->
     
-    
+    <!--
     <GoodsOptionRelationships class="flex-1" :goods-id="goodsId"/>
+    -->
     
+    <GoodsOptionList :goods-id="goodsId" class="flex-1"/>
   </div>
 </template>

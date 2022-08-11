@@ -103,7 +103,7 @@ const submit = e => {
       <slot />
     </div>
     <div v-if="loader" class="absolute bg-slate-400/70 inset-0 flex justify-center items-center">
-      <Loader size="72" w="24" type="circle2" />
+      <Loader size="72" w="auto" h="auto" type="circle2"/>
     </div>
   </component>
 </template>

@@ -74,11 +74,9 @@ class GoodsOptionManager
         }
         
         $option->update(
-          $request->only(
-            static::validateOptionAttributes(
-                $request->all(), 
-                ...app(GoodsOptionValidationRules::class)->getRulesForUpdateOptionGroup()
-            )
+          static::validateOptionAttributes(
+              $request->all(), 
+              ...app(GoodsOptionValidationRules::class)->getRulesForUpdateOptionGroup()
           )
         );
         
@@ -132,14 +130,12 @@ class GoodsOptionManager
         }
         
         $option->update(
-          $request->only(
-            static::validateOptionAttributes(
-                $request->all(), 
-                ...app(GoodsOptionValidationRules::class)->getRulesForUpdateOption()
-            )
+          static::validateOptionAttributes(
+              $request->all(), 
+              ...app(GoodsOptionValidationRules::class)->getRulesForUpdateOption()
           )
         );
-        
+      
       return true;
     }
     

@@ -5,6 +5,7 @@ import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionItem from "@/admin/Goods/GoodsOptionItem.vue";
 import Api from "@/admin/libs/Api.js";
 import {
+  goodsData,
   list,
   tree,
   loading,
@@ -26,16 +27,29 @@ const props = defineProps({
 });
 
 const loader = ref(false)
+const title = ref('')
+
+const sourceOptions = computed(() => {
+  if (props.goodsId) {
+    return tree;
+  } else if (props.dataOptions) {
+    return props.dataOptions
+  }
+})
 
 if (props.goodsId) {
-  //Api('goods/option/get')
   load(props.goodsId)
 }
+
+watch(goodsData, (data) => {
+  title.value = ` ${data.name}`;
+})
 
 </script>
 
 <template>
-  <CardBox :empty="!list.length" :loader="loading">
-    <GoodsOptionItem v-for="option in list" :key="option.id" :option="option" class="-mx-6" />
+  <CardBox :empty="!list.length" :loader="loading" :title="title">
+    <h3 class="text-lg mb-6 text-gray-600 font-semibold">Список опций</h3>
+    <GoodsOptionItem v-for="option in tree" :key="option.id" :option="option" class="-mx-6" />
   </CardBox>
 </template>

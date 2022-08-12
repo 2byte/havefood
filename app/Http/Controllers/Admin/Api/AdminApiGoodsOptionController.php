@@ -19,7 +19,7 @@ class AdminApiGoodsOptionController extends AdminBaseController
       $options = $goods->options;
       $treeOptions = $goods->getOptionsWithGroups();
       
-      return responseApi(compact('options', 'treeOptions'))->success();
+      return responseApi(compact('goods', 'options', 'treeOptions'))->success();
     }
     
     public function store(Request $request)

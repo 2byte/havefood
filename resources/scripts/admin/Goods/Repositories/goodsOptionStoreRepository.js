@@ -3,6 +3,7 @@ import { storeToRefs } from "pinia";
 
 // load an options
 export const {
+  goodsData,
   list,
   tree,
   loading,

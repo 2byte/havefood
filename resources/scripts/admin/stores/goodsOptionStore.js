@@ -6,6 +6,7 @@ export const useGoodsOptionStore = defineStore("goodsOption", {
     list: [],
     tree: [],
     goodsId: null,
+    goodsData: null,
     loading: true,
     error: null,
   }),
@@ -24,6 +25,7 @@ export const useGoodsOptionStore = defineStore("goodsOption", {
           if (ok) {
             this.list = data.options;
             this.tree = data.treeOptions;
+            this.goodsData = data.goods;
             this.goodsId = goodsId
           }
         })

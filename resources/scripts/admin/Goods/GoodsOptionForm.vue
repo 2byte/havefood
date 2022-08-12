@@ -21,6 +21,7 @@ const props = defineProps({
   optionId: {
     default: 0,
   },
+  optionData: Object,
   type: {
     default: "option",
   },
@@ -56,6 +57,24 @@ const form = reactive({
   note: null,
   goods_type: "common",
 });
+
+// Apples data from property optionData
+if (props.optionData) {
+  refOptionId.value = props.optionData.id;
+
+  const paramsForUpdate = [
+    "name",
+    "description",
+    "price_type",
+    "price",
+    "note",
+    "goods_type",
+  ];
+
+  paramsForUpdate.forEach((attribute) => {
+    form[attribute] = props.optionData[attribute];
+  });
+}
 
 const groupOptions = { 0: "Одиночная", 1: "Группа опций" };
 const groupVariantOptions = {
@@ -104,12 +123,12 @@ const submit = () => {
       notificationSave.value = data?.option_id
         ? "Опция успешно создана"
         : "Опция успешно сохранена";
-      
+
       if (data?.option_id) {
-        refOptionId.value = data.option_id
+        refOptionId.value = data.option_id;
       }
-      
-      switchMode('update')
+
+      switchMode("update");
       emit("created");
     });
 };

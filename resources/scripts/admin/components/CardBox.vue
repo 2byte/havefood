@@ -1,6 +1,6 @@
 <script setup>
 import { mdiCog } from '@mdi/js'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import BaseIcon from '@/admin/components/BaseIcon.vue'
 import Loader from '@/admin/components/Loader.vue'
 
@@ -49,8 +49,17 @@ const componentClass = computed(() => {
 //const computedHeaderIcon = computed(() => props.headerIcon ?? mdiCog)
 const computedHeaderIcon = computed(() => props.headerIcon ?? false)
 
+let headerIconFocus = false
+const headerIconLink = ref(null)
+
 const headerIconClick = () => {
   emit('header-icon-click')
+  
+  if (headerIconFocus) {
+    headerIconLink.value.blur()
+  }
+  
+  headerIconFocus = !headerIconFocus
 }
 
 const submit = e => {
@@ -86,6 +95,7 @@ const submit = e => {
         class="flex items-center py-3 px-4 justify-center ring-blue-700 focus:ring"
         aria-label="more options"
         @click.prevent="headerIconClick"
+        ref="headerIconLink"
       >
         <BaseIcon :path="computedHeaderIcon" />
       </a>

@@ -69,6 +69,9 @@ if (props.optionData) {
     "price",
     "note",
     "goods_type",
+    "group_variant",
+    'note',
+    'hidden'
   ];
 
   paramsForUpdate.forEach((attribute) => {

@@ -74,3 +74,18 @@
 - hidden - скрыт (допустим нет в наличии пока)
 - created_at
 - updated_at
+
+# Файлы, изображения 
+## files
+- id
+- user_id
+- relate_id
+- relate_type
+- filename
+- type
+- sizes_img (json)
+- size
+- created_at
+- updated_at
+
+Размер изображение 300х300 600х600

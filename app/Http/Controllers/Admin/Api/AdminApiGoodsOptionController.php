@@ -35,7 +35,7 @@ class AdminApiGoodsOptionController extends AdminBaseController
         return responseApi()->success();
       }
       
-      // --------------------------------- //
+      // ---------------- creating ----------------- //
       
       if ($request->group) {
         $option = GoodsOptionManager::createGroup($request, $request->user());

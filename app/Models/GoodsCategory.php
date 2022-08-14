@@ -15,6 +15,8 @@ class GoodsCategory extends Model
     
     protected $casts = [ 'goods_type' => GoodsType::class ];
     
+    const MORPH = 'goodscategory';
+    
     public function goods()
     {
         return $this->hasMany(Goods::class, 'category_id');

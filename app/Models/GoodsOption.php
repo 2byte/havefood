@@ -37,6 +37,8 @@ class GoodsOption extends Model
         'group_type' => GoodsOptionGroupType::class,
     ];
     
+    const MORPH = 'goodsoption';
+    
     public function goods()
     {
         return $this->belongsToMany(Goods::class, 'goods_ref_options', 'option_id', 'goods_id')->withTimestamps();
@@ -45,5 +47,10 @@ class GoodsOption extends Model
     public function optionChilds()
     {
         return $this->hasMany(self::class, 'parent_id', 'id');
+    }
+    
+    public function files() 
+    {
+      return $this->morphMany(File::class, 'relate_type', 'relate_id');
     }
 }

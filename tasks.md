@@ -82,9 +82,10 @@
 - relate_id
 - relate_type
 - filename
-- type
-- sizes_img (json)
-- size
+- type - enum(img, file)
+- size_img
+- filesize
+- sortpos
 - created_at
 - updated_at
 

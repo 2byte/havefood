@@ -63,3 +63,12 @@ function responseApi(mixed $payload = null) {
         }
     };
 }
+
+function queryLogEnabled() {
+  return Illuminate\Support\Facades\DB::enableQueryLog();
+}
+function queryLogDump($exit = false) {
+  if (!$exit) {
+    dump(Illuminate\Support\Facades\DB::getQueryLog());
+  }
+}

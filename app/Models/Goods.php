@@ -27,6 +27,8 @@ class Goods extends Model
 
   protected $casts = ['goods_type' => GoodsType::class];
 
+  const MORPH = 'goods';
+  
   public function category() {
     return $this->belongsTo(GoodsCategory::class);
   }

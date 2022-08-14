@@ -17,10 +17,15 @@ import {
   goodsTypeOptions,
 } from "@/admin/Goods/Repositories/goodsTypeRepository.js";
 
-
 const props = defineProps({});
 
-const title = "Заголовок карточки"
+const title = "Заголовок карточки";
+
+// Данные формы привязывает по модели формы
+const form = reactive({
+  name: null,
+  description: null,
+});
 
 // ---------------- submit --------------//
 // Ошибки от api
@@ -47,7 +52,7 @@ const submit = () => {
       if (data?.option_id) {
         refOptionId.value = data.option_id;
       }
-      
+
       // Режим компонента, перкключаем в режим редактирования
       //switchMode("update");
       // Генерируем событие о создании
@@ -55,7 +60,6 @@ const submit = () => {
     });
 };
 // ---------------- end submit --------------//
-
 </script>
 
 <template>
@@ -63,17 +67,66 @@ const submit = () => {
   <!-- так как у нас будет форма передаем form свойство компоненту -->
   <!-- свойство loader показывает картинку загрузчик -->
   <CardBox :title="title" form @submit="submit" :loader="loaderSubmit">
-    
     <!-- ошибки от апи выброшенные валидатором -->
-    <DisplayErrors
-      v-if="errorsFromApi"
-      :errors="errorsFromApi"
-      class="-mt-6"
-    />
+    <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" class="-mt-6" />
     <!-- 
     Тут мы используем компоненты создания формы
     можно посмотреть resources/scripts/admin/Goods/GoodsCreator.vue
     -->
-    
+    <!--
+    Создание форм с помощью компонентов
+      <FormField label="Имя товара">
+      <FormControl
+        v-model="form.name"
+        :icon="mdiShoppingOutline"
+        placeholder="Бургер"
+      />
+      <FormControl
+        v-model="form.category_id"
+        :icon="mdiFolder"
+        :options="categoryOptions"
+        placeholder="Выберите категорию"
+        :loader="loadingCategories"
+      />
+    </FormField>
+    <FormField label="Тип товара">
+      <FormControl
+        v-model="form.goods_type"
+        :options="goodsTypeOptions"
+        :loader="loadingGoodsTypes"
+      />
+    </FormField>
+    <FormField label="Описание товара">
+      <FormControl
+        v-model="form.description"
+        :icon="mdiBookInformationVariant"
+        type="textarea"
+        placeholder="Описание товара"
+      />
+    </FormField>
+    <FormField label="Цена">
+      <FormControl
+        v-model="form.price"
+        :icon="mdiCashMultiple"
+        placeholder="100.00"
+      />
+    </FormField>
+    <FormField label="Стикер">
+      <FormCheckRadioPicker
+        v-model="form.sticker"
+        name="sticker"
+        type="radio"
+        :options="stickerOptions"
+      />
+    </FormField>
+    <FormField label="Скрыт">
+      <FormCheckRadioPicker
+        v-model="switchHiddenValue"
+        name="sample-switch"
+        type="switch"
+        :options="switchHidden"
+      />
+    </FormField>
+    -->
   </CardBox>
 </template>

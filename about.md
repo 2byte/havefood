@@ -59,9 +59,9 @@ Api('different/get-goods-types')
 ```
 
 Я уже создал по адресу /gov/category-test
-App\Http\Controllers\Admin\AdminIndexController::categoryTest
-resources/scripts/admin/Pages/CategoryTest.vue
-resources/scripts/admin/Goods/GoodsCategoryForm.vue
+App\Http\Controllers\Admin\AdminIndexController::categoryTest метод контроллера
+resources/scripts/admin/Pages/CategoryTest.vue тестовая страница с запуском компонента
+resources/scripts/admin/Goods/GoodsCategoryForm.vue Сам компонент формы создания и редактирования категорий
 с примерами и комментами
  
 можно также посмотреть /gov/goods-item-test и /gov/goods-item-test?goods_id=16 при редактировании формы

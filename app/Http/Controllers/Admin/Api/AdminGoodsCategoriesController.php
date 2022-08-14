@@ -40,6 +40,7 @@ class AdminGoodsCategoriesController extends AdminBaseController
     public function store(Request $request)
     {
         //
+        return responseApi()->success();
     }
 
     /**

@@ -9,8 +9,8 @@
 - /api/gov/different/get-goods-types Возвращает типы товаров
 
 ## /api/gov/goods - работа с товарами
-- /api/gov/goods/store
-- /api/gov/goods/get
+- /api/gov/goods/store - создание, редактирование товара POST
+- /api/gov/goods/get - получение товара
   - get param {id}
-- /api/gov/goods/options/get
+- /api/gov/goods/options/get получение опций товара
   - get param {goods_id}

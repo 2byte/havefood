@@ -38,4 +38,8 @@ class AdminIndexController extends AdminBaseController
         ]);
     }
     
+    public function categoryTest(Request $request)
+    {
+        return Inertia::render('CategoryTest', []);
+    }
 }

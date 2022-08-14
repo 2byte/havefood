@@ -11,5 +11,6 @@ Route::middleware(['auth', 'auth.role:boss,admin,manager'])
             Route::get('/', 'index')->name('index');
             Route::get('/list-goods/{category_id?}', 'listGoods')->name('list-goods');
             Route::get('goods-item-test', 'goodsItem')->name('goods-item-test');
+            Route::get('category-test', 'categoryTest')->name('category-test');
         });
     });

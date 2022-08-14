@@ -34,7 +34,7 @@ const submit = () => {
   // Устанавливаем статус отправки формы
   loaderSubmit.value = true;
 
-  Api("goods/option/store", "post", form)
+  Api("categories/store", "post", form)
     // передаем ссылку классу, когда заыершится запрос ей будет присвоено false
     .setLoader(loaderSubmit)
     // Передаем ссылку куда будут загружен массив с ошибками из апи
@@ -49,9 +49,9 @@ const submit = () => {
       }
       
       // Режим компонента, перкключаем в режим редактирования
-      switchMode("update");
+      //switchMode("update");
       // Генерируем событие о создании
-      emit("created");
+      //emit("created");
     });
 };
 // ---------------- end submit --------------//

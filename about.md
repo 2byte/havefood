@@ -57,3 +57,11 @@ Api('different/get-goods-types')
   .success((data) => {})
   .complete((ok, data) => {})
 ```
+
+Я уже создал по адресу /gov/category-test
+App\Http\Controllers\Admin\AdminIndexController::categoryTest
+resources/scripts/admin/Pages/CategoryTest.vue
+resources/scripts/admin/Goods/GoodsCategoryForm.vue
+ с примерами и комментами
+ 
+ можно также посмотреть /gov/goods-item-test и /gov/goods-item-test?goods_id=16 при редактировании формы

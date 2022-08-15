@@ -75,7 +75,7 @@
 - created_at
 - updated_at
 
-# Файлы, изображения (Срздана только миграция)
+# Файлы, изображения (Создана только миграция)
 ## files
 - id
 - user_id
@@ -83,10 +83,36 @@
 - relate_type
 - filename
 - type - enum(img, file)
-- size_img
+- size_img_x
+- size_img_y
 - filesize
 - sortpos
 - created_at
 - updated_at
 
 Размер изображение 300х300 600х600
+
+Хранение файлов, изображений. Каждая модель может иметь файл, связь один ко многим полиморфная. 
+Имеется UploadTrait trait использующихся в моделях которые могут иметь файлы.
+
+Имя файла
+$filename = uniqid('', true) .'.ext'
+
+хранение файлов
+/static/files/{$model->uploadDir}/{user_id}/{$namefile}
+
+Загрузка файлов осуществляется с помощью ajax. Файлы отправляется по api /api/gov/file/upload.
+
+Обработка изображения: вырезания белого фона, создание размеров 300x300 и 600x600. Далее в базу пишутся поля user_id, filename, size_img_x, size_img_y, relate_type все больше ничего. 
+filename в бд составляется {user_id}_$filename
+relate_type имя модели в данном случаи определенный алиас Model::MORPH
+relate_id = 0
+
+Удаление загруженных файлов по апи /api/gov/file/delete?id={id} (проверка на владельца user_id)
+
+helper реализации пути к файлу для шаблона assetModel($modelItem)
+```
+function assetModel($modelItem) {
+  return assets('static/files/'. $modelItem->uploadDir .'/'. $modelItem->user_id .'/'. str_replac('_', '/', $modelItem->filename);
+}
+```

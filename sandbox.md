@@ -1,6 +1,20 @@
 Сайт аналог https://o5.city/
 Инфа по статистике https://vc.ru/tribuna/229019-o5-eda-programmnoe-obespechenie-dlya-sluzhb-dostavok-edy
 
+Типа такая админка нужна
+https://quickresto.ru/back-office/#systemicApproach
+
+# Первая версия сайта
+dodopizza.ru
+
+# Вторая версия сайта
+версии ветрины pizzaman27.ru
+
+категория
+https://pizzaman27.ru/menu/kombo/ 
+товар
+https://pizzaman27.ru/menu/piczcza/di-fungi.html 
+
 # Сборка приложения
 ## Бэкенд 
 - Рвзворачиввние Laravel

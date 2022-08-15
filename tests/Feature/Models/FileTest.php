@@ -27,3 +27,7 @@ test('Test 1', function () {
     
     queryLogDump();
 });
+
+test('t1', function () {
+  dump(strlen(uniqid('', true)));
+});

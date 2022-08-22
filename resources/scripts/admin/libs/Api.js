@@ -127,4 +127,15 @@ function createRequestApi(method, methodRequest, params) {
     return instApi.run();
 }
 
+export const sendFile = function createRequestApiSendFile(apiMethod, fields) {
+  
+  const instApi = new Api({
+    method: apiMethod,
+    methodRequest: 'post',
+    params: fields
+  })
+  
+  return instApi.run()
+}
+
 export default createRequestApi

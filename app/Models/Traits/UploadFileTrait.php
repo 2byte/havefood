@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 trait UploadFileTrait {
 
@@ -16,6 +17,15 @@ trait UploadFileTrait {
     }
     if (!empty($this->uploadMaxFilesizeKb)) {
       $validationRules[] = 'between:20,'. $this->uploadMaxFilesizeKb;
+    }
+    
+    // checking image sizes and ratio
+    $ruleImageDimensions = Rule::dimensions()
+      ->minWidth($this->uploadImageDimensions[0] ?? 0)
+      ->minHeight($this->uploadImageDimensions[1] ?? 0);
+    
+    if (!is_null($this->uploadImageRatio)) {
+      $ruleImageDimensions->ratio($this->uploadImageRatio);
     }
     
     $request->validate([

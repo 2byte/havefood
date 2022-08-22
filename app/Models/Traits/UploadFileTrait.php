@@ -12,19 +12,22 @@ trait UploadFileTrait {
     $validationRules = ['required', 'file'];
     
     if (!empty($this->uploadAccessibleExtensions)) {
-      $validationRules[] = ['mimes:'. implode(',', $this->uploadAccessibleExtensions)];
+      $validationRules[] = 'mimes:'. implode(',', $this->uploadAccessibleExtensions);
     }
     if (!empty($this->uploadMaxFilesizeKb)) {
-      $validationRules[] = ['size:'. $this->uploadMaxFilesizeKb];
+      $validationRules[] = 'between:20,'. $this->uploadMaxFilesizeKb;
     }
     
     $request->validate([
-      'files' => $validationRules,
+      'files' => 'required',
       'files.*' => $validationRules,
       'model' => 'required',
+    ], [
+      'files.required' => 'Файлы не получены'
     ]);
     
-    $files = is_array($request->files) ? $request->files : [$request->file('files')];
+    $files = is_array($request->file('files')) ? $request->file('files') : [$request->file('files')];
+    
     $aliasModel = $request->model;
     $userId = $request->user()->id;
     
@@ -34,7 +37,9 @@ trait UploadFileTrait {
       
       return [
         'path' => $path, 
-        'filename' => basename($path)
+        'filename' => basename($path),
+        'is_img' => str_contains($file->getClientMimeType(), 'image'),
+        'size' => $file->getSize(),
       ];
     }, $files);
     

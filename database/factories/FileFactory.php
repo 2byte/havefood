@@ -19,9 +19,7 @@ class FileFactory extends Factory
         return [
             //
             'filename' => uniqid('', true) .'.jpg',
-            'type' => 'img',
-            'size_img_x' => 300,
-            'size_img_y' => 300,
+            'type' => 'img'
             'filesize' => mt_rand(300, 1024) * 1024,
         ];
     }

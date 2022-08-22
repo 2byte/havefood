@@ -196,3 +196,9 @@ DI*
 11%
 *DI: Recommended Daily Intake based on 2000 calories diet
 Allergens: Milk, Eggs, Soy
+
+use Illuminate\Database\Eloquent\Relations\Relation;
+
+$alias = $post->getMorphClass();
+
+$class = Relation::getMorphedModel($alias);

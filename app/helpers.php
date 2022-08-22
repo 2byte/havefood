@@ -57,6 +57,15 @@ function responseApi(mixed $payload = null) {
             }
         }
         
+        public function errorMessage($message) 
+        {
+          $this->responseData['error'] = true;
+          $this->responseData['success'] = false;
+          $this->responseData['data']['message'] = $message;
+          
+          return $this->makeResponse($this->responseData);
+        }
+        
         public function makeResponse($data)
         {
             return response()->json($data);

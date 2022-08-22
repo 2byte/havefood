@@ -6,7 +6,8 @@ use App\Http\Controllers\Admin\Api\ {
   AdminGoodsCategoriesController,
   AdminDifferentController,
   AdminGoodsController,
-  AdminApiGoodsOptionController
+  AdminApiGoodsOptionController,
+  AdminApiFileController
 };
 
 /*
@@ -47,6 +48,14 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
       Route::get('get', 'getGoodsOptions')->name('get');
       Route::post('store', 'store')->name('store');
     });
+  });
+  
+  Route::prefix('file')
+  ->controller(AdminApiFileController::class)
+  ->name('file.')
+  ->group(function () {
+    Route::post('upload', 'upload')->name('upload');
+    //Route::get('get', 'get')->name('get');
   });
 
   Route::controller(AdminDifferentController::class)

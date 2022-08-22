@@ -16,8 +16,6 @@ class File extends Model
       'relate_type',
       'filename',
       'type',
-      'size_img_x',
-      'size_img_y',
       'filesize',
       'sortpos',
     ];

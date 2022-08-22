@@ -9,6 +9,7 @@ import BaseDivider from "@/admin/components/BaseDivider.vue";
 import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 import NotificationBar from "@/admin/components/NotificationBar.vue";
 import FormCheckRadioPicker from "@/admin/components/FormCheckRadioPicker.vue";
+import FormFilePicker from "@/admin/components/FormFilePicker.vue";
 import { useCategoriesStore } from "@/admin/stores/categories.js";
 import { useGoodsTypeStore } from "@/admin/stores/goodsTypeStore.js";
 import { storeToRefs } from "pinia";
@@ -228,6 +229,9 @@ const buttonSubmitLabel = computed(() => {
 
     <BaseDivider />
 
+    <h3 class="text-md font-medium text-slate-500 mb-4">Изображения</h3>
+    <FormFilePicker label="Загрузить изображение"/>
+    
     <h3 class="text-md font-medium text-slate-500 mb-4">Опции товара</h3>
     <div v-if="componentMode == 'create'" class="text-slate-400 mb-2">
       Для создания опций к товару, вначале создайте товар

@@ -1,53 +1,79 @@
 <script setup>
-import { mdiUpload } from '@mdi/js'
-import { computed, ref, watch } from 'vue'
-import BaseButton from '@/components/BaseButton.vue'
+import { mdiUpload } from "@mdi/js";
+import { computed, ref, watch } from "vue";
+import BaseButton from "@/admin/components/BaseButton.vue";
+import PreviewImages from "@/admin/components/PreviewImages.vue";
 
 const props = defineProps({
   modelValue: {
     type: [Object, File, Array],
-    default: null
+    default: null,
   },
   label: {
     type: String,
-    default: 'Upload'
+    default: "Upload",
   },
   icon: {
     type: String,
-    default: mdiUpload
+    default: mdiUpload,
   },
   accept: {
     type: String,
-    default: null
+    default: null,
   },
   color: {
     type: String,
-    default: 'info'
-  }
-})
+    default: "info",
+  },
+  dropZone: {
+    default: true,
+  },
+});
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue", "dropPreview"]);
 
-const root = ref(null)
+const root = ref(null);
 
-const file = ref(props.modelValue)
+const files = ref(props.modelValue);
 
-const modelValueProp = computed(() => props.modelValue)
+const modelValueProp = computed(() => props.modelValue);
 
-watch(modelValueProp, value => {
-  file.value = value
+watch(modelValueProp, (value) => {
+  files.value = value;
 
   if (!value) {
-    root.value.input.value = null
+    root.value.input.value = null;
   }
-})
+});
 
-const upload = event => {
-  const value = event.target.files || event.dataTransfer.files
+const readerImages = (file, cb) => {
+  /*if (!file.type.startsWith('images/')) {
+    return;
+  }*/
+  
+  const reader = new FileReader();
+  
+  reader.addEventListener("load", (event) => {
+    cb(event.target.result);
+  });
+  
+  reader.readAsDataURL(file);
+};
 
-  file.value = value[0]
+const previewImageItems = ref([])
 
-  emit('update:modelValue', file.value)
+const upload = (event) => {
+  const value = event.target.files || event.dataTransfer.files;
+
+  files.value = value;
+
+  emit("update:modelValue", files.value);
+  
+  for (let i = 0; i<files.value.length; i++) {
+    readerImages(files.value[i], (fileSourceUrl) => {
+      previewImageItems.value.push(fileSourceUrl)
+    })
+  }
 
   // Use this as an example for handling file uploads
   // let formData = new FormData()
@@ -68,7 +94,7 @@ const upload = event => {
   //   .catch(err => {
   //
   //   })
-}
+};
 
 // const uploadPercent = ref(0)
 //
@@ -80,29 +106,40 @@ const upload = event => {
 </script>
 
 <template>
-  <div class="flex items-stretch justify-start relative">
-    <label class="inline-flex">
-      <BaseButton
-        as="a"
-        :label="label"
-        :icon="icon"
-        :color="color"
-        :class="{ 'rounded-r-none': file }"
-      />
-      <input
-        ref="root"
-        type="file"
-        class="absolute top-0 left-0 w-full h-full opacity-0 outline-none cursor-pointer -z-1"
-        :accept="accept"
-        @input="upload"
-      >
-    </label>
-    <div v-if="file">
-      <span
-        class="inline-flex px-4 py-2 justify-center bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 border rounded-r"
-      >
-        {{ file.name }}
-      </span>
+  <PreviewImages v-if="previewImageItems.length" :images="previewImageItems"/>
+  
+  <div
+    v-if="dropZone"
+    class="w-full p-4 border-slate-400 border-2 border-dashed text-slate-500 mb-2"
+  >
+    <div class="mb-2 font-semibold w-full text-center">
+      Зона для перетаскивания файлов
+    </div>
+    <div class="flex items-stretch justify-start relative">
+      <label class="inline-flex">
+        <BaseButton
+          as="a"
+          :label="label"
+          :icon="icon"
+          :color="color"
+          :class="{ 'rounded-r-none': files }"
+        />
+        <input
+          ref="root"
+          type="file"
+          class="absolute top-0 left-0 w-full h-full opacity-0 outline-none cursor-pointer -z-1"
+          :accept="accept"
+          @input="upload"
+          multiple
+        />
+      </label>
+      <div v-if="files">
+        <span
+          class="inline-flex px-4 py-2 justify-center bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 border rounded-r"
+        >
+          {{ files }}
+        </span>
+      </div>
     </div>
   </div>
 </template>

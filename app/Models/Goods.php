@@ -10,9 +10,10 @@ use App\Shop\V1\Goods\GoodsManager;
 
 class Goods extends Model
 {
-  use HasFactory;
+  use HasFactory, Traits\UploadFileTrait;
 
   public $table = 'goods';
+  
   public $fillable = [
     'user_id',
     'category_id',
@@ -28,6 +29,10 @@ class Goods extends Model
   protected $casts = ['goods_type' => GoodsType::class];
 
   const MORPH = 'goods';
+  
+  public $uploadDir = 'public/static/uploads/goods';
+  public $uploadAccessibleExtensions = [];
+  public $uploadMaxFilesizeKb = 20000;
   
   public function category() {
     return $this->belongsTo(GoodsCategory::class);

@@ -27,9 +27,6 @@ return new class extends Migration
             $table->string('relate_type', 255)->nullable();
             $table->string('filename', 255)->nullable();
             $table->enum('type', FiletypeEnum::values())->default(FiletypeEnum::File->value);
-            $table->unsignedInteger('size_img')->default(0);
-            $table->unsignedInteger('size_img_x')->default(0);
-            $table->unsignedInteger('size_img_y')->default(0);
             $table->unsignedInteger('filesize')->default(0);
             $table->smallInteger('sortpos')->default(0);
             $table->timestamps();

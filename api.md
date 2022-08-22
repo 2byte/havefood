@@ -14,3 +14,7 @@
   - get param {id}
 - /api/gov/goods/options/get получение опций товара
   - get param {goods_id}
+
+## /api/gov/file
+- POST /api/gov/file/upload
+  - {files[]}

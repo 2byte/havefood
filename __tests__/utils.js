@@ -1,3 +1,4 @@
+
 export const mockFile = function (name, size, mimeType) {
     name = name || "mock.txt";
     size = size || 1024;

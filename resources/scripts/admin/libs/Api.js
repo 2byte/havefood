@@ -2,11 +2,13 @@ import axios from 'axios'
 
 export class Api {
     
+    apiTestServer = 'http://127.0.0.1:8005'
     apiBaseUrl = '/api/gov'
     request = Promise.resolve()
     methodRequest = 'get'
     method = null
     requestData = null
+    axiosParams = {}
     completeCallback = null
     successCallback = null
     failCallback = null
@@ -25,6 +27,9 @@ export class Api {
       this.methodRequest = methodRequest;
       this.requestData = params
       
+      if (process.env?.TEST == 'true') {
+        this.axiosParams = {baseURL: this.apiTestServer}
+      }
     }
     
     run() {
@@ -46,6 +51,10 @@ export class Api {
             method: methodRequest,
             url: this.makeUrl(method),
             [propSend]: params,
+        }
+        
+        if (this.axiosParams) {
+          Object.assign(axiosParams, this.axiosParams)
         }
         
         this.request = axios(axiosParams)
@@ -87,6 +96,11 @@ export class Api {
             })
     }
     
+    setAxiosParams(dataObj) {
+      Object.assign(this.axiosParams, dataObj)
+      return this
+    }
+    
     setErrors(refObject) {
       this.refObjectErrors = refObject
       return this
@@ -106,9 +120,18 @@ export class Api {
         this.completeCallback = cb
         return this
     }
+    
     fail(cb) {
         this.failCallback = cb
         return this
+    }
+    
+    getPromise() {
+      return this.request
+    }
+    
+    authenticated() {
+      
     }
 }
 
@@ -133,6 +156,11 @@ export const sendFile = function createRequestApiSendFile(apiMethod, fields) {
     method: apiMethod,
     methodRequest: 'post',
     params: fields
+  })
+  
+  instApi.setAxiosParams({
+    headers: { 'Content-Type': 'multipart/form-data' },
+    onUploadProgress: (ev) => {}
   })
   
   return instApi.run()

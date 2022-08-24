@@ -1,30 +1,14 @@
 import axios from 'axios'
-import { config } from 'dotenv'
-
-config();
 
 export class Api {
     
-    apiTestServer = null
-    apiAdminRoutes = [
-      '/api/gov/different/get-goods-types',
-      '/api/gov/file/upload',
-      '/api/gov/categories/index',
-      '/api/gov/categories/store',
-      '/api/gov/goods/store',
-      '/api/gov/goods/get',
-      '/api/gov/goods/option/get',
-      '/api/gov/goods/option/store',
-      '/api/local/auth-boss',
-      '/sanctum/csrf-cookie',
-    ]
+    apiTestServer = 'http://127.0.0.1:8005'
+    apiBaseUrl = '/api/gov'
     request = Promise.resolve()
-    requestUrl = null
     methodRequest = 'get'
-    methodApi = null
-    requetSendForm = null
+    method = null
+    requestData = null
     axiosParams = {}
-    axiosInstance = null
     completeCallback = null
     successCallback = null
     failCallback = null
@@ -33,50 +17,31 @@ export class Api {
     refLoader = null
     
     constructor({
-        url = null,
+        run = false,
+        method = null,
         methodRequest = 'get',
-        formParams = null,
-        axiosParams = {},
-        axiosInstance = null
+        params = null
     }) {
       
-      this.requestUrl = url
+      this.method = method
       this.methodRequest = methodRequest;
-      this.requestSendForm = formParams
-      this.axiosParams = axiosParams
+      this.requestData = params
       
-      if (process?.env?.TEST == 'true') {
-        this.apiTestServer = process.env.APP_URL
-        this.axiosParams.baseURL = this.apiTestServer.replace('localhost', '127.0.0.1')
-      } else {
-        this.axiosParams.baseURL = '/'
+      if (process.env?.TEST == 'true') {
+        this.axiosParams = {baseURL: this.apiTestServer}
       }
-      
-      if (Object.keys(axiosParams).length) {
-        Object.assign(this.axiosParams, axiosParams)
-      }
-      
-      this.axiosInstance = axiosInstance || axios.create(this.axiosParams)
-    }
-    
-    setAxiosInstance(inst) {
-      return this.axiosInstance = inst
     }
     
     run() {
-      this.makeRequest({
-        url: this.requestUrl, 
-        methodRequest: this.methodRequest, 
-        formParams: this.requestSendForm
-      })
+      this.makeRequest(this.method, this.methodRequest, this.requestData)
       return this
     }
     
-    makeUrl(url) {
-      return this.apiAdminRoutes.find((route) => route.includes(url))
+    makeUrl(method) {
+        return `${this.apiBaseUrl}/${method}`
     }
     
-    makeRequest({url, methodRequest, formParams = null}) {
+    makeRequest(method, methodRequest, params) {
       
         const propSend = this.methodRequest.toLowerCase() == 'get'
           ? 'params' 
@@ -84,14 +49,15 @@ export class Api {
       
         let axiosParams = {
             method: methodRequest,
-            url: this.makeUrl(url),
-            [propSend]: formParams,
+            url: this.makeUrl(method),
+            [propSend]: params,
         }
-        if (Object.keys(this.axiosParams).length) {
+        
+        if (this.axiosParams) {
           Object.assign(axiosParams, this.axiosParams)
         }
         
-        this.request = this.axiosInstance.request(axiosParams)
+        this.request = axios(axiosParams)
             .then((response) => {
                 if (response.data.success && this.successCallback) {
                   this.successCallback(response.data.data)
@@ -128,12 +94,11 @@ export class Api {
               }
               
             })
-      
-        return this
     }
     
-    getAxiosInstance() {
-      return this.axiosInstance
+    setAxiosParams(dataObj) {
+      Object.assign(this.axiosParams, dataObj)
+      return this
     }
     
     setErrors(refObject) {
@@ -165,60 +130,37 @@ export class Api {
       return this.request
     }
     
-    static async authenticatedBoss() {
-
-      const api = new Api({
-        url: '/sanctum/csrf-cookie', 
-        methodRequest: 'get', 
-        axiosParams: { withCredentials: true, timeout: 2000 }
-      })
+    static authenticatedBoss() {
       
-      await api.run().getPromise()
-      
-      await api.makeRequest({url: '/api/local/auth-boss'}).getPromise()
-      
-      createRequestApi.axiosInstance = api.getAxiosInstance()
-      
-      return createRequestApi
     }
 }
 
-function createRequestApi(url, methodRequest, formParams) {
-    if (!createRequestApi.axiosInstance) {
-      createRequestApi.axiosInstance = null
-    }
+function createRequestApi(method, methodRequest, params) {
     
     const instApi = new Api({
-        url,
+        method,
         methodRequest,
-        formParams,
-        axiosInstance: createRequestApi.axiosInstance
+        params
     })
     
     instApi.fail((err) => {
-      
-      if (process?.env?.TEST != 'true') {
-        alert(err);
-      } else {
-        if (process?.env?.APP_DEBUG) {
-          console.log('error request api', err)
-        }
-      }
+      alert(err);
     });
     
     return instApi.run();
 }
 
-export const sendFile = function createRequestApiSendFile(url, fields) {
+export const sendFile = function createRequestApiSendFile(apiMethod, fields) {
   
   const instApi = new Api({
-    url: url,
+    method: apiMethod,
     methodRequest: 'post',
-    formParams: fields,
-    axiosParams: {
-      headers: { 'Content-Type': 'multipart/form-data' },
-      onUploadProgress: (ev) => {}
-    }
+    params: fields
+  })
+  
+  instApi.setAxiosParams({
+    headers: { 'Content-Type': 'multipart/form-data' },
+    onUploadProgress: (ev) => {}
   })
   
   return instApi.run()

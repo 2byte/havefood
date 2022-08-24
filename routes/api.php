@@ -67,9 +67,9 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
 });
 
 if (app()->isLocal()) {
-  Route::controller()
+  Route::controller(LocalController::class)
     ->prefix('local')
     ->group(function () {
-      Route::post('get-token', 'getToken');
+      Route::get('/auth-boss', 'authenticationBoss');
     });
 }

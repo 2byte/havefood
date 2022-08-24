@@ -1,4 +1,4 @@
-import { sendFile } from "@/admin/libs/Api.js";
+import { Api, sendFile, urlAdminApi, default as createRequestApi } from "@/admin/libs/Api.js";
 import { mockFile } from "../utils.js";
 import axios from 'axios'
 
@@ -6,14 +6,20 @@ describe("Testing class resources/scripts/libs/Api.js", function () {
   
   it.only('Api authenticatation user', async () => {
     
-    const req = axios({
-      baseURL: 'http://127.0.0.1:8005'
+    const apiBoss = await Api.authenticatedBoss()
+    
+    expect(apiBoss).toBe(createRequestApi)
+    
+    const reqGoodsTypes = apiBoss('/different/get-goods-types')
+    
+    reqGoodsTypes.success((data) => {
+      expect(data.length).toBeGreaterThan(0)
     })
     
-    req.get('sanctum/csrf-cookie').then((res) => {
-      console.log(res)
-    });
-  }, 3000)
+    await reqGoodsTypes.getPromise()
+    
+    expect.assertions(2)
+  }, 10000)
   
   it("send file", async () => {
     const files = new FormData();

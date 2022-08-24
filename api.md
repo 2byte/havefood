@@ -18,3 +18,6 @@
 ## /api/gov/file
 - POST /api/gov/file/upload
   - {files[]}
+
+## /api/local/auth-boss
+  Авторизация api боссом

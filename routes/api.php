@@ -71,5 +71,6 @@ if (app()->isLocal()) {
     ->prefix('local')
     ->group(function () {
       Route::get('/auth-boss', 'authenticationBoss');
+      Route::post('/test-upload', 'testUpload');
     });
 }

@@ -14,4 +14,14 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         //
     ];
+    
+    public function handle($request, \Closure $next) 
+    {
+      
+      if (app()->isLocal()) {
+        return $next($request);
+      }
+      
+      return parent::handle($request, $next);
+    }
 }

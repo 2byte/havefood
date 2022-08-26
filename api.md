@@ -17,7 +17,8 @@
 
 ## /api/gov/file
 - POST /api/gov/file/upload
-  - {files[]}
+  - model
+  - files[]
 
 ## /api/local/auth-boss
   Авторизация api боссом

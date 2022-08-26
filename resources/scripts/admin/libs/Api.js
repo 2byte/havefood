@@ -18,16 +18,22 @@ export class Api {
       '/api/local/auth-boss',
       '/sanctum/csrf-cookie',
     ]
-    request = Promise.resolve()
+    request = null
     requestUrl = null
     methodRequest = 'get'
     methodApi = null
     requetSendForm = null
-    axiosParams = {}
+    axiosParams = {
+      env: { FormData: window.FormData }
+    }
     axiosInstance = null
     completeCallback = null
     successCallback = null
     failCallback = null
+    uploadProgressCallback = null
+    
+    setWithRightBoss = false
+    isAuthBoss = false
     
     refObjectErrors = null
     refLoader = null
@@ -37,11 +43,11 @@ export class Api {
         methodRequest = 'get',
         formParams = null,
         axiosParams = {},
-        axiosInstance = null
+        axiosInstance = null,
     }) {
       
       this.requestUrl = url
-      this.methodRequest = methodRequest;
+      this.methodRequest = methodRequest
       this.requestSendForm = formParams
       this.axiosParams = axiosParams
       
@@ -63,13 +69,32 @@ export class Api {
       return this.axiosInstance = inst
     }
     
+    middlewareRunnerRequest() {
+      if (this.setWithRightBoss && !this.isAuthBoss) {
+        return Api.makeAuthBoss().then((apiBoss) => {
+          
+          this.setIsAuthBoss();
+          this.axiosInstance = apiBoss.getAxiosInstance();
+          
+          return apiBoss
+        }).catch((err) => {
+          console.dir(err)
+          console.error('Error request with the right boss', err)
+        })
+      } else {
+        return Promise.resolve()
+      }
+    }
+    
     run() {
-      this.makeRequest({
-        url: this.requestUrl, 
-        methodRequest: this.methodRequest, 
-        formParams: this.requestSendForm
+      return this.middlewareRunnerRequest().then(() => {
+        
+        return this.makeRequest({
+          url: this.requestUrl, 
+          methodRequest: this.methodRequest, 
+          formParams: this.requestSendForm
+        })
       })
-      return this
     }
     
     makeUrl(url) {
@@ -87,6 +112,7 @@ export class Api {
             url: this.makeUrl(url),
             [propSend]: formParams,
         }
+        
         if (Object.keys(this.axiosParams).length) {
           Object.assign(axiosParams, this.axiosParams)
         }
@@ -102,6 +128,7 @@ export class Api {
                 if (this.refLoader) {
                   this.refLoader.value = false;
                 }
+              return response
             })
             .catch((err) => {
               if (err?.response?.status == 422) {
@@ -124,12 +151,12 @@ export class Api {
                     new Error(`Invalid response for request ${axiosParams.url} method ${axiosParams.method} params ${JSON.stringify(axiosParams.params) ?? '[]'}, response ${JSON.stringify(err.response?.data ?? [])} code: ${err.response.status}`)
                 )
               } else {
-                throw err;
+                throw new Error('Error Api.makeRequest with ' + JSON.stringify(axiosParams) + ' err: ' + err.message);
               }
               
             })
       
-        return this
+        return this.request
     }
     
     getAxiosInstance() {
@@ -161,42 +188,76 @@ export class Api {
         return this
     }
     
+    onUploadProgress(cb) {
+      this.axiosParams.onUploadProgress = cb
+      return this
+    }
+    
     getPromise() {
       return this.request
     }
     
+    withRightBoss(flag = true) {
+      this.setWithRightBoss = flag
+      return this
+    }
+    
+    setIsAuthBoss(flag = true) {
+      this.isAuthBoss = flag
+      return this
+    }
+    
+    static async makeAuthBoss() {
+      try {
+        const api = new Api({
+          url: '/sanctum/csrf-cookie', 
+          methodRequest: 'get', 
+          axiosParams: { withCredentials: true }
+        })
+        
+        await api.run()
+        
+        await api.makeRequest({methodRequest: 'get', url: '/api/local/auth-boss'})
+        
+        return api
+      } catch (err) {
+        console.error('Error getting the right a boss', err)
+      }
+    }
+    
     static async authenticatedBoss() {
-
-      const api = new Api({
-        url: '/sanctum/csrf-cookie', 
-        methodRequest: 'get', 
-        axiosParams: { withCredentials: true, timeout: 2000 }
-      })
+      const apiInst = await Api.makeAuthBoss()
       
-      await api.run().getPromise()
-      
-      await api.makeRequest({url: '/api/local/auth-boss'}).getPromise()
-      
-      createRequestApi.axiosInstance = api.getAxiosInstance()
+      createRequestApi.axiosInstance = apiInst.getAxiosInstance()
       
       return createRequestApi
     }
 }
 
-function createRequestApi(url, methodRequest, formParams) {
+function createRequestApi(url, methodRequest, formParams, axiosParams) {
     if (!createRequestApi.axiosInstance) {
       createRequestApi.axiosInstance = null
+    }
+    if (!createRequestApi.withoutRun) {
+      createRequestApi.withoutRun = false
+    }
+    if (!createRequestApi.withRightBoss) {
+      createRequestApi.withRightBoss = false
     }
     
     const instApi = new Api({
         url,
         methodRequest,
         formParams,
-        axiosInstance: createRequestApi.axiosInstance
+        axiosInstance: createRequestApi.axiosInstance,
+        axiosParams
     })
     
+    if (createRequestApi.withRightBoss) {
+      instApi.withRightBoss()
+    }
+    
     instApi.fail((err) => {
-      
       if (process?.env?.TEST != 'true') {
         alert(err);
       } else {
@@ -206,22 +267,33 @@ function createRequestApi(url, methodRequest, formParams) {
       }
     });
     
-    return instApi.run();
+    if (createRequestApi.withoutRun) {
+      return instApi
+    } else {
+      return instApi.run()
+    }
 }
 
 export const sendFile = function createRequestApiSendFile(url, fields) {
   
-  const instApi = new Api({
-    url: url,
-    methodRequest: 'post',
-    formParams: fields,
-    axiosParams: {
+  const createRequestApiArgs = [
+    url,
+    'post',
+    fields,
+    {
       headers: { 'Content-Type': 'multipart/form-data' },
-      onUploadProgress: (ev) => {}
     }
-  })
+  ]
   
-  return instApi.run()
+  createRequestApi.withoutRun = true
+  
+  const instApi = createRequestApi(...createRequestApiArgs)
+  
+  if (process?.env?.TEST == 'true') {
+    instApi.withRightBoss()
+  }
+  
+  return instApi
 }
 
 export default createRequestApi

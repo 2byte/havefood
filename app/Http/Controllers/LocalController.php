@@ -21,4 +21,16 @@ class LocalController extends Controller
       
       return responseApi()->success();
     }
+    
+    public function testUpload(Request $request) 
+    {
+      
+      $file = $request->file('files');
+      
+      return responseApi([
+        'filename' => $file->path(),
+        'size' => $file->getSize(),
+        'name' => $file->getClientOriginalName(),
+      ])->success();
+    }
 }

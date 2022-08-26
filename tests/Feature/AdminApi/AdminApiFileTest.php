@@ -7,7 +7,7 @@ use App\Models\Goods;
 
 uses(RefreshDatabase::class);
 
-test('Api upload', function () {
+test('Api upload single', function () {
   $user = seedsForGoods();
   $user->update(['role' => 'boss']);
 

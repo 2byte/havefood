@@ -36,6 +36,10 @@ class Goods extends Model
   public $uploadImageDimensions = [300, 300];
   // 1/1, 2/1, 3/4
   public $uploadImageRatio = null;
+  public $uploadImageResizeSizes = [
+    [600, 600],
+    [300, 300]
+  ];
   
   public function category() {
     return $this->belongsTo(GoodsCategory::class);

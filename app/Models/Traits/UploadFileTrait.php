@@ -5,9 +5,27 @@ namespace App\Models\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Image;
+use Storage;
 
 trait UploadFileTrait {
 
+  /**
+   * 
+   * @return [
+   *   [
+   *    'path' => '/path', 
+   *    'path_destination' => '/path', 
+        'filename' => 'filename.jpg',
+        'is_img' => true,
+        'size' => 123,
+        ?'resized_images' => [
+          [300] => '/path',
+          [600] => '/path',
+        ]
+   *   ]
+   * ]
+   **/
   public function uploadFile(Request $request) {
     
     $validationRules = ['required', 'file'];
@@ -43,14 +61,38 @@ trait UploadFileTrait {
     
     $uploadedFiles = array_map(function ($file) use ($aliasModel, $userId) {
       
-      $path = $file->store($this->uploadDir .'/'. $userId);
+      $isImage = str_contains($file->getClientMimeType(), 'image');
       
-      return [
-        'path' => $path, 
+      $path = $file->store($this->uploadDir .'/'. $userId);
+      $pathDestination = storage_path('app/'. $path);
+      
+      $returnData = [
+        'path' => $path,
+        'path_destination' => $path,
         'filename' => basename($path),
-        'is_img' => str_contains($file->getClientMimeType(), 'image'),
+        'is_img' => $isImage,
         'size' => $file->getSize(),
       ];
+      
+      // Resizing images
+      if (
+        $isImage 
+        && isset($this->uploadImageResizeSizes) 
+        && is_array($this->uploadImageResizeSizes)
+        && !empty($this->uploadImageResizeSizes)
+        ) {
+        foreach ($this->uploadImageResizeSizes as $sizes) {
+          
+          $im = Image::make($pathDestination);
+          $im->resize($sizes[0], $sizes[1]);
+          $pathResizedImage = preg_replace('/^(.+)(\..+)$/i', '$1_'. $sizes[0] .'x'. $sizes[1] .'$2', $pathDestination);
+          $im->save($pathResizedImage);
+          
+          $returnData['resized_images'][$sizes[0]] = $pathResizedImage;
+        }
+      }
+      
+      return $returnData; 
     }, $files);
     
     return $uploadedFiles;

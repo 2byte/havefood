@@ -12,6 +12,14 @@ use App\Shop\Enums\FiletypeEnum;
 class AdminApiFileController extends AdminBaseController
 {
 
+  /**
+   * 
+   * @return [
+   *   [
+   *     
+   *   ]
+   * ]
+   **/
   public function upload(Request $request) {
 
     $aliasModel = $request->model;

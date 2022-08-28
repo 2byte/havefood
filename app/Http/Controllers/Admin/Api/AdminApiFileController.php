@@ -21,7 +21,7 @@ class AdminApiFileController extends AdminBaseController
    * ]
    **/
   public function upload(Request $request) {
-
+    
     $aliasModel = $request->model;
 
     $model = Relation::getMorphedModel($aliasModel)::getModel();

@@ -84,7 +84,7 @@ trait UploadFileTrait {
         foreach ($this->uploadImageResizeSizes as $sizes) {
           
           $im = Image::make($pathDestination);
-          $im->resize($sizes[0], $sizes[1]);
+          $im->resize($sizes[0], null, function ($constraint) { $constraint->aspectRatio(); });
           $pathResizedImage = preg_replace('/^(.+)(\..+)$/i', '$1_'. $sizes[0] .'x'. $sizes[1] .'$2', $pathDestination);
           $im->save($pathResizedImage);
           

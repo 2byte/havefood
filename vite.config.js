@@ -34,4 +34,7 @@ export default defineConfig({
             '@': '/resources/scripts',
         },
     },
+    define: {
+      'process.env': process.env
+    }
 });

@@ -28,7 +28,7 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
 ->group(function () {
 
   Route::prefix('categories')
-  ->controller(AdminGoodsController::class)
+  ->controller(AdminGoodsCategoriesController::class)
   ->name('categories.')
   ->group(function () {
     Route::get('/', 'index')->name('all');

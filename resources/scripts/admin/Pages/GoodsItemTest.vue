@@ -1,9 +1,9 @@
 <script setup>
 //import GoodsItem from '@/admin/Goods/GoodsItem.vue'
-//import GoodsCreator from "@/admin/Goods/GoodsCreator.vue";
+import GoodsCreator from "@/admin/Goods/GoodsCreator.vue";
 //import GoodsOptionRelationships from "@/admin/Goods/GoodsOptionRelationships.vue";
 //import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
-import FormFilePicker from "@/admin/components/FormFilePicker.vue";
+//import FormFilePicker from "@/admin/components/FormFilePicker.vue";
 
 const props = defineProps({
   goods: Object,
@@ -25,9 +25,7 @@ const props = defineProps({
     <GoodsItem :goods="goods" class="flex-1"/>
     -->
     
-    <!--
     <GoodsCreator class="flex-1" :goods-id="goodsId" :goods-load="goodsLoad" />
-    -->
     
     <!--
     <GoodsOptionRelationships class="flex-1" :goods-id="goodsId"/>
@@ -37,6 +35,8 @@ const props = defineProps({
     <GoodsOptionList :goods-id="goodsId" class="flex-1"/>
     -->
     
+    <!--
     <FormFilePicker label="Загрузить изображение"/>
+    -->
   </div>
 </template>

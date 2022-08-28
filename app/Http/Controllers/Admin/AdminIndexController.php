@@ -30,11 +30,20 @@ class AdminIndexController extends AdminBaseController
         ]);
     }
     
+    /**
+     * Test page for goods components
+     * */
     public function goodsItem(Request $request)
     {
-        return Inertia::render('GoodsItemTest', [
-          'goods-id' => (int)$request->goods_id,
-          'goods-load' => true
+        return Inertia::render('FormFilePickerTest', [
+          'goods-id' => (int)$request->goods_id
+        ]);
+    }
+    
+    public function formFilePickerTest(Request $request)
+    {
+        return Inertia::render('TestPages/FormFilePickerTest', [
+          'goods-id' => (int)$request->goods_id
         ]);
     }
     

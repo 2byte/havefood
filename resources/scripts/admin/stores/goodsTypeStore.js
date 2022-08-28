@@ -26,7 +26,8 @@ export const useGoodsTypeStore = defineStore('goodsType', {
                 .fail((err) => {
                     this.error = err
                     alert(err)
-                });
+                })
+                .run();
         }
     }
 })

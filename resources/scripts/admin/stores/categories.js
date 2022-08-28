@@ -26,7 +26,8 @@ export const useCategoriesStore = defineStore("categories", {
         .fail((err) => {
           this.error = err;
           alert(err);
-        });
+        })
+        .run();
     },
   },
 });

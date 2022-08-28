@@ -1,8 +1,9 @@
 <script setup>
 import { mdiUpload } from "@mdi/js";
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, reactive } from "vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
 import PreviewImages from "@/admin/components/PreviewImages.vue";
+import { sendFile } from "@/admin/libs/Api.js"
 
 const props = defineProps({
   modelValue: {
@@ -28,7 +29,15 @@ const props = defineProps({
   dropZone: {
     default: true,
   },
+  fileModel: {
+    default: 'goods'
+  },
+  enablePreview: {
+    default: true
+  }
 });
+
+const test = ref(true)
 
 const emit = defineEmits(["update:modelValue", "dropPreview"]);
 
@@ -47,9 +56,9 @@ watch(modelValueProp, (value) => {
 });
 
 const readerImages = (file, cb) => {
-  /*if (!file.type.startsWith('images/')) {
-    return;
-  }*/
+  if (!file.type.startsWith('image/')) {
+    return alert('Выберите изображения');
+  }
   
   const reader = new FileReader();
   
@@ -59,6 +68,20 @@ const readerImages = (file, cb) => {
   
   reader.readAsDataURL(file);
 };
+
+const simulatorProgress = (cb) => {
+  let amount = 0;
+  const rand = Math.floor(Math.random() * 30)
+  const timer = setInterval(() => {
+    amount += rand
+    if (amount >= 100) {
+      clearInterval(timer)
+      cb(100, true)
+    } else {
+      cb(amount)
+    }
+  }, 1000)
+}
 
 const previewImageItems = ref([])
 
@@ -71,7 +94,36 @@ const upload = (event) => {
   
   for (let i = 0; i<files.value.length; i++) {
     readerImages(files.value[i], (fileSourceUrl) => {
-      previewImageItems.value.push(fileSourceUrl)
+      
+      const previewData = reactive({
+        imageObj: fileSourceUrl,
+        uploadPercent: 0,
+        complete: false,
+        error: null
+      })
+      
+      previewImageItems.value.push(previewData)
+      
+      if (test.value) {
+        setTimeout(function () {
+          previewData.complete = false
+          simulatorProgress((percent, complete) => {
+            previewData.uploadPercent = percent
+            if (complete) previewData.complete = true
+          })
+        }, 2000)
+      }
+      
+      sendFile('file/upload', {
+        model: props.fileModel, 
+        files: files.value[i]
+      }).onUploadProgress((ev) => {
+        previewImageItems.value[i].uploadPercent = (ev.loaded * 100) / ev.total
+      }).complete((ok, data) => {
+        previewImageItems.value[i].complete = true
+        
+        Object.assign(previewImageItems.value[i], data)
+      }).run()
     })
   }
 
@@ -106,7 +158,7 @@ const upload = (event) => {
 </script>
 
 <template>
-  <PreviewImages v-if="previewImageItems.length" :images="previewImageItems"/>
+  <PreviewImages v-if="previewImageItems.length && enablePreview" :images="previewImageItems"/>
   
   <div
     v-if="dropZone"

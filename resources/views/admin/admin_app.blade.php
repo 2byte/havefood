@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title inertia>{{ config('app.name', 'Есть еда') }}</title>
-
+    
+    <script src="/assets/registerSw.js"></script>
     <!-- Scripts -->
     @routes
     @vite('resources/scripts/admin/adminApp.js')

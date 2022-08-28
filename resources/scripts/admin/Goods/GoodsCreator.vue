@@ -152,7 +152,8 @@ if (props.goodsLoad) {
       for (const nameField of Object.keys(form)) {
         form[nameField] = data[nameField];
       }
-    });
+    })
+    .run();
 }
 
 const buttonSubmitLabel = computed(() => {
@@ -230,7 +231,7 @@ const buttonSubmitLabel = computed(() => {
     <BaseDivider />
 
     <h3 class="text-md font-medium text-slate-500 mb-4">Изображения</h3>
-    <FormFilePicker label="Загрузить изображение"/>
+    <FormFilePicker fileModel="goods" label="Загрузить изображение"/>
     
     <h3 class="text-md font-medium text-slate-500 mb-4">Опции товара</h3>
     <div v-if="componentMode == 'create'" class="text-slate-400 mb-2">
@@ -241,7 +242,7 @@ const buttonSubmitLabel = computed(() => {
       class="mb-2 -mx-6"
       :goods-id="goodsId"
     />
-
+    
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />
 
     <NotificationBar color="success" timeout="5000" v-if="notificationSave">

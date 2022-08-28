@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Есть еда</title>
+    <script src="/assets/registerSw.js"></script>
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/pronia/assets/images/favicon.ico" />
 

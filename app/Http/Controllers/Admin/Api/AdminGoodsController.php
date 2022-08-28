@@ -8,6 +8,7 @@ use App\Shop\V1\Goods\GoodsValidationRules;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use App\Models\Goods;
+use App\Models\File;
 
 class AdminGoodsController extends Controller
 {
@@ -54,8 +55,13 @@ class AdminGoodsController extends Controller
       
       $return['goods_id'] = $goods->id;
     } else {
-      Goods::findOrFail($request->id)->update($fields);
+      $goods = Goods::findOrFail($request->id)->update($fields);
     }
+    
+    File::whereRelateType(Goods::MORPH)
+      ->whereUserId($request->user()->id)
+      ->whereRelateId(0)
+      ->update(['relate_id' => $goods->id]);
 
     return responseApi()->success($return);
   }

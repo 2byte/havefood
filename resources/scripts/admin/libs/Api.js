@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { config } from 'dotenv'
 
-config();
+if (process.env.TEST == 'true') {
+  config();
+}
 
 export class Api {
     
@@ -9,7 +11,7 @@ export class Api {
     apiAdminRoutes = [
       '/api/gov/different/get-goods-types',
       '/api/gov/file/upload',
-      '/api/gov/categories/index',
+      '/api/gov/categories',
       '/api/gov/categories/store',
       '/api/gov/goods/store',
       '/api/gov/goods/get',
@@ -239,7 +241,7 @@ function createRequestApi(url, methodRequest, formParams, axiosParams) {
       createRequestApi.axiosInstance = null
     }
     if (!createRequestApi.withoutRun) {
-      createRequestApi.withoutRun = false
+      createRequestApi.withoutRun = true
     }
     if (!createRequestApi.withRightBoss) {
       createRequestApi.withRightBoss = false

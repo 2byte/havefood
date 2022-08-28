@@ -32,7 +32,8 @@ export const useGoodsOptionStore = defineStore("goodsOption", {
         .fail((err) => {
           this.error = err;
           alert(err);
-        });
+        })
+        .run();
     },
   },
 });

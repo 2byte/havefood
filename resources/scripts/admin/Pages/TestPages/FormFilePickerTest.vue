@@ -20,6 +20,7 @@ const formSettings = [
     <FormTestSetting :settings="formSettings"/>
     
     <PreviewImages />
+    
     <FormFilePicker label="Загрузить изображение" :enable-preview="false"/>
   </div>
 </template>

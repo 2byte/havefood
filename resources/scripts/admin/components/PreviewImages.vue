@@ -4,9 +4,34 @@ import BaseIcon  from '@/admin/components/BaseIcon.vue'
 import { mdiClose } from '@mdi/js'
 
 const props = defineProps({
+  /**
+   * 
+   * [
+   *   reactive({
+        imageObj: {DOMString}, - file URL.createObjectURL()
+        uploadPercent: 0,
+        complete: false, - status upload true or false
+        error: null - error from api
+        
+        // if complete == true will be added with merges
+          {
+            'path' => '/path', 
+            'path_destination' => '/path', 
+            'filename' => 'filename.jpg',
+            'is_img' => true,
+            'size' => 123,
+            ?'resized_images' => [
+              [300] => '/path',
+              [600] => '/path',
+            ]
+          }
+        }
+        })
+   * ]
+   * */
   images: {
     type: [Array, Object],
-    default: [],
+    default() => [] 
   },
 });
 
@@ -23,7 +48,7 @@ const remove = () => {
       <div class="absolute inset-0 text-4xl font-bold text-black/80 flex justify-center items-center" v-if="!image.complete">
         {{ image.uploadPercent }}%
       </div>
-      <button v-if="image.complete" class="absolute top-0 right-0 text-sm" @click="remove">
+      <button v-if="image.complete" class="absolute top-0 right-0 text-sm" @click="remove(image.id)">
         <BaseIcon :path="mdiClose"/>
       </button>
       <img

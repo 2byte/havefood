@@ -31,7 +31,7 @@ const props = defineProps({
    * */
   images: {
     type: [Array, Object],
-    default() => [] 
+    default: () => [] 
   },
 });
 
@@ -55,7 +55,7 @@ const remove = () => {
       :src="image.imageObj"
       :data-upload-percent="image.uploadPercent"
       alt=""
-      class="h-60 ring-4 ring-gray-300 shadow-md"
+      class="w-auto ring-4 ring-gray-300 shadow-md"
       />
     </div>
   </div>

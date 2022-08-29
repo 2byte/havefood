@@ -18,6 +18,7 @@ export class Api {
       '/api/gov/goods/option/get',
       '/api/gov/goods/option/store',
       '/api/local/auth-boss',
+      '/api/local/get-samples-images',
       '/sanctum/csrf-cookie',
     ]
     request = null
@@ -100,7 +101,7 @@ export class Api {
     }
     
     makeUrl(url) {
-      return this.apiAdminRoutes.find((route) => route.includes(url))
+      return this.apiAdminRoutes.find((route) => route.includes(url)) ?? url
     }
     
     makeRequest({url, methodRequest, formParams = null}) {
@@ -125,7 +126,15 @@ export class Api {
                   this.successCallback(response.data.data)
                 }
                 if (this.completeCallback) {
-                  this.completeCallback(response.data.success, response.data.data)
+                  let returnData = []
+                  
+                  if (response.data.success && response.data.data) {
+                    returnData = [response.data.success, response.data.data]
+                  } else if (response.data instanceof Blob) {
+                    returnData = [true, response.data]
+                  } 
+                  
+                  this.completeCallback(...returnData)
                 }
                 if (this.refLoader) {
                   this.refLoader.value = false;

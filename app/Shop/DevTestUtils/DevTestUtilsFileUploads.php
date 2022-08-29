@@ -2,7 +2,8 @@
 
 namespace App\Shop\DevTestUtils;
 
-use App\Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Finder\Finder; 
 
 class DevTestUtilsFileUploads 
 {
@@ -16,8 +17,4 @@ class DevTestUtilsFileUploads
     Storage::deleteDirectory('static/uploads');
   }
   
-  public function getPathTestImages()
-  {
-    
-  }
 }

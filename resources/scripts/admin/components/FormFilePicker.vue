@@ -3,7 +3,7 @@ import { mdiUpload } from "@mdi/js";
 import { computed, ref, watch, reactive } from "vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
 import PreviewImages from "@/admin/components/PreviewImages.vue";
-import { sendFile } from "@/admin/libs/Api.js"
+import { sendFile } from "@/admin/libs/Api.js";
 
 const props = defineProps({
   modelValue: {
@@ -30,14 +30,18 @@ const props = defineProps({
     default: true,
   },
   fileModel: {
-    default: 'goods'
+    default: "goods",
   },
   enablePreview: {
-    default: true
-  }
+    default: true,
+  },
+  test: {
+    type: [Object],
+    default: null,
+  },
 });
 
-const test = ref(true)
+const test = props.test;
 
 const emit = defineEmits(["update:modelValue", "dropPreview"]);
 
@@ -56,75 +60,78 @@ watch(modelValueProp, (value) => {
 });
 
 const readerImages = (file, cb) => {
-  if (!file.type.startsWith('image/')) {
-    return alert('Выберите изображения');
+  if (!file.type.startsWith("image/")) {
+    return alert("Выберите изображения");
   }
-  
+
   const reader = new FileReader();
-  
+
   reader.addEventListener("load", (event) => {
     cb(event.target.result);
   });
-  
+
   reader.readAsDataURL(file);
 };
 
 const simulatorProgress = (cb) => {
   let amount = 0;
-  const rand = Math.floor(Math.random() * 30)
+  const rand = Math.floor(Math.random() * 30);
   const timer = setInterval(() => {
-    amount += rand
+    amount += rand;
     if (amount >= 100) {
-      clearInterval(timer)
-      cb(100, true)
+      clearInterval(timer);
+      cb(100, true);
     } else {
-      cb(amount)
+      cb(amount);
     }
-  }, 1000)
-}
+  }, 1000);
+};
 
-const previewImageItems = ref([])
+const previewImageItems = ref([]);
 
 const upload = (event) => {
   const value = event.target.files || event.dataTransfer.files;
 
   files.value = value;
 
-  emit("update:modelValue", files.value);
+  emit("update:modelValue", files.value.length);
   
-  for (let i = 0; i<files.value.length; i++) {
+  for (let i = 0; i < files.value.length; i++) {
     readerImages(files.value[i], (fileSourceUrl) => {
-      
       const previewData = reactive({
         imageObj: fileSourceUrl,
         uploadPercent: 0,
         complete: false,
-        error: null
-      })
-      
-      previewImageItems.value.push(previewData)
-      
-      if (test.value) {
+        error: null,
+      });
+
+      previewImageItems.value.push(previewData);
+
+      if (test.run) {
         setTimeout(function () {
-          previewData.complete = false
+          previewData.complete = false;
           simulatorProgress((percent, complete) => {
-            previewData.uploadPercent = percent
-            if (complete) previewData.complete = true
-          })
-        }, 2000)
+            previewData.uploadPercent = percent;
+            if (complete) previewData.complete = true;
+          });
+        }, 2000);
       }
-      
-      sendFile('file/upload', {
-        model: props.fileModel, 
-        files: files.value[i]
-      }).onUploadProgress((ev) => {
-        previewImageItems.value[i].uploadPercent = (ev.loaded * 100) / ev.total
-      }).complete((ok, data) => {
-        previewImageItems.value[i].complete = true
-        
-        Object.assign(previewImageItems.value[i], data)
-      }).run()
-    })
+
+      sendFile("file/upload", {
+        model: props.fileModel,
+        files: files.value[i],
+      })
+        .onUploadProgress((ev) => {
+          previewImageItems.value[i].uploadPercent =
+            (ev.loaded * 100) / ev.total;
+        })
+        .complete((ok, data) => {
+          previewImageItems.value[i].complete = true;
+
+          Object.assign(previewImageItems.value[i], data);
+        })
+        .run();
+    });
   }
 
   // Use this as an example for handling file uploads
@@ -155,11 +162,47 @@ const upload = (event) => {
 //     (progressEvent.loaded * 100) / progressEvent.total
 //   )
 // }
+
+// Running test
+const testRunner = () => {
+  if (test.mode == "upload") {
+    
+    const runUpload = (val) => {
+      upload({
+        target: {
+          files: val,
+        },
+      });
+    }
+    
+    if (test.testFiles.length) {
+      runUpload(test.testFiles)
+    }
+    
+    watch(() => test.testFiles, (val) => {
+      console.log('watched')
+      runUpload(val)
+    });
+    console.log('run test', test.mode)
+  }
+};
+
+watch(() => test.run, (newVal) => {
+  if (newVal) {
+    testRunner()
+  }
+})
+if (test.run) {
+  testRunner();
+}
 </script>
 
 <template>
-  <PreviewImages v-if="previewImageItems.length && enablePreview" :images="previewImageItems"/>
-  
+  <PreviewImages
+    v-if="previewImageItems.length && enablePreview"
+    :images="previewImageItems"
+  />
+
   <div
     v-if="dropZone"
     class="w-full p-4 border-slate-400 border-2 border-dashed text-slate-500 mb-2"
@@ -174,7 +217,6 @@ const upload = (event) => {
           :label="label"
           :icon="icon"
           :color="color"
-          :class="{ 'rounded-r-none': files }"
         />
         <input
           ref="root"
@@ -185,13 +227,6 @@ const upload = (event) => {
           multiple
         />
       </label>
-      <div v-if="files">
-        <span
-          class="inline-flex px-4 py-2 justify-center bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 border rounded-r"
-        >
-          {{ files }}
-        </span>
-      </div>
     </div>
   </div>
 </template>

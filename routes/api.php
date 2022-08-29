@@ -72,5 +72,6 @@ if (app()->isLocal()) {
     ->group(function () {
       Route::get('/auth-boss', 'authenticationBoss');
       Route::post('/test-upload', 'testUpload');
+      Route::get('/get-samples-images', 'getSamplesImages');
     });
 }

@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Shop\Enums\FiletypeEnum;
+use Storage;
 
-class File extends Model
+class File extends BaseModel
 {
     use HasFactory;
     
@@ -27,5 +28,15 @@ class File extends Model
     public function relate()
     {
       return $this->morphTo();
+    }
+    
+    public function delete() {
+      $pathfile = makeModelPathFile($this);
+      
+      Storage::delete($pathfile);
+      
+      parent::delete();
+      
+      return true;
     }
 }

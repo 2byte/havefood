@@ -76,8 +76,33 @@ function responseApi(mixed $payload = null) {
 function queryLogEnabled() {
   return Illuminate\Support\Facades\DB::enableQueryLog();
 }
+
 function queryLogDump($exit = false) {
   if (!$exit) {
     dump(Illuminate\Support\Facades\DB::getQueryLog());
   }
+}
+
+function getModelFilePath(App\Models\File $file, array|bool $withPreviews = true) {
+  $parentModel = $file->relate;
+  
+  $makePath = function ($file, $sizeX, $sizeY) {
+    
+  };
+  
+  $makePathsBySizes = function ($sizes) {
+    return array_map(function ([$sizeX, $sizeY]) use ($makePath) {
+      return $makePath($file, sizeX: $sizeX, sizeY: $sizeY);
+    }, $sizes);
+  };
+  
+  $paths = [];
+  
+  if ($withPreviews === true) {
+    $paths[] = $makePathsBySizes($parentModel->uploadImageResizeSizes);
+  } elseif (!empty($withPreviews)) {
+    $paths[] = 
+  }
+  
+  return $parentModel->uploadDir .'/'. $file->user_id .'/'. $file->filename;
 }

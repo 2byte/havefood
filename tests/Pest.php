@@ -2,6 +2,7 @@
 
 use Database\Seeders\GoodsCategoriesSeeder;
 use Database\Seeders\GoodsOptionSeeder;
+use Database\Seeders\GoodsSeeder;
 use App\Models\User;
 use Illuminate\Support\Arr;
 
@@ -44,12 +45,13 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function seedsForGoods($except = []) {
+function seedsForGoods($except = ['goods']) {
     $user = User::factory()->create();
     
     $seedersList = [
         'categories' => GoodsCategoriesSeeder::class,
-        'options' => GoodsOptionSeeder::class
+        'options' => GoodsOptionSeeder::class, 
+        'goods' => GoodsSeeder::class
     ];
     
     if (!empty($except)) {
@@ -61,3 +63,5 @@ function seedsForGoods($except = []) {
     
     return $user;
 }
+
+require __DIR__ .'/suite_helpers.php';

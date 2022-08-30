@@ -56,7 +56,9 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
   ->name('file.')
   ->group(function () {
     Route::post('upload', 'upload')->name('upload');
-    //Route::get('get', 'get')->name('get');
+    Route::post('get', 'get')->name('get');
+    Route::post('get/previews', 'getPreviews')->name('get.previews');
+    Route::post('delete', 'delete')->name('delete');
   });
 
   Route::controller(AdminDifferentController::class)

@@ -19,6 +19,14 @@
 - POST /api/gov/file/upload
   - model
   - files[]
+- POST /api/gov/file/get
+  - relate_type
+  - relate_id
+- POST /api/gov/file/get/previews
+  - relate_type
+  - relate_id
+- POST /api/gov/file/get/delete
+  - id
 
-## /api/local/auth-boss
+## GET /api/local/auth-boss
   Авторизация api боссом

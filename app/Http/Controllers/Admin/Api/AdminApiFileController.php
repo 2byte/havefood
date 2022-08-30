@@ -29,7 +29,7 @@ class AdminApiFileController extends AdminBaseController
 
     $uploadedFiles = $model->uploadFile($request);
 
-    $createdFiles = array_map(function ($dataFile) use ($request, $aliasModel) {
+    $createdFiles = array_map(function ($dataFile) use ($request, $aliasModel, $relateId) {
       
       $file = File::create([
         'user_id' => $request->user()->id,
@@ -46,4 +46,36 @@ class AdminApiFileController extends AdminBaseController
 
     return responseApi($createdFiles)->success();
   }
+  
+  public function get(Request $request) 
+  {
+    $aliasModel = $request->model;
+    $relateId = $request->relate_id;
+
+    $model = Relation::getMorphedModel($aliasModel)::getModel()->findOrFail($relateId);
+
+    return responseApi($model->files)->success();
+  }
+  
+  public function getPreviews(Request $request) 
+  {
+    $aliasModel = $request->model;
+    $relateId = $request->relate_id;
+
+    $model = Relation::getMorphedModel($aliasModel)::getModel()->findOrFail($relateId);
+
+    return responseApi($model->getImagePreviews())->success();
+  }
+  
+  public function delete(Request $request) 
+  {
+    $id = $request->id;
+
+    $model = File::findOrFail($id);
+    
+    $model->delete();
+
+    return responseApi()->success();
+  }
+  
 }

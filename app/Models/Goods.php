@@ -8,7 +8,7 @@ use App\Shop\Goods\Enums\GoodsType;
 use Illuminate\Support\Facades\DB;
 use App\Shop\V1\Goods\GoodsManager;
 
-class Goods extends Model
+class Goods extends BaseModel
 {
   use HasFactory, Traits\UploadFileTrait;
 
@@ -40,6 +40,7 @@ class Goods extends Model
     [600, 600],
     [300, 300]
   ];
+  public $imagePreviewSize = [300, 300];
   
   public function category() {
     return $this->belongsTo(GoodsCategory::class);

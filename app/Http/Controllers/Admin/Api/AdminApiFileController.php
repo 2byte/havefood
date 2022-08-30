@@ -23,6 +23,7 @@ class AdminApiFileController extends AdminBaseController
   public function upload(Request $request) {
     
     $aliasModel = $request->model;
+    $relateId = $request->relate_id;
 
     $model = Relation::getMorphedModel($aliasModel)::getModel();
 
@@ -32,6 +33,7 @@ class AdminApiFileController extends AdminBaseController
       
       $file = File::create([
         'user_id' => $request->user()->id,
+        'relate_id' => $relateId ?? 0,
         'relate_type' => $aliasModel,
         'filename' => $dataFile['filename'],
         'type' => $dataFile['is_img'] ? FiletypeEnum::Img : FiletypeEnum::File,

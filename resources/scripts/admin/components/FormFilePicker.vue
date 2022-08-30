@@ -1,6 +1,6 @@
 <script setup>
 import { mdiUpload } from "@mdi/js";
-import { computed, ref, watch, reactive } from "vue";
+import { getCurrentInstance, computed, ref, watch, reactive, defineAsyncComponent, shallowReactive } from "vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
 import PreviewImages from "@/admin/components/PreviewImages.vue";
 import { sendFile } from "@/admin/libs/Api.js";
@@ -36,12 +36,23 @@ const props = defineProps({
     default: true,
   },
   test: {
-    type: [Object],
+    type: Boolean,
     default: null,
-  },
+  }
 });
 
+// ---------------- test property --------------//
 const test = props.test;
+
+let testComponent = ref(null)
+
+if (test) {
+  testComponent.value = defineAsyncComponent(() => import('@/admin/components/FormFilePickerTest.vue'))
+}
+
+const testProps = ref({})
+
+// ---------------- placeholder --------------//
 
 const emit = defineEmits(["update:modelValue", "dropPreview"]);
 
@@ -165,7 +176,9 @@ const upload = (event) => {
 
 // Running test
 const testRunner = () => {
-  if (test.mode == "upload") {
+  const testData = testProps.value
+  
+  if (testData.mode == "upload") {
     
     const runUpload = (val) => {
       upload({
@@ -175,11 +188,11 @@ const testRunner = () => {
       });
     }
     
-    if (test.testFiles.length) {
-      runUpload(test.testFiles)
+    if (testData.testFiles.length) {
+      runUpload(testData.testFiles)
     }
     
-    watch(() => test.testFiles, (val) => {
+    watch(() => testData.testFiles, (val) => {
       console.log('watched')
       runUpload(val)
     });
@@ -187,17 +200,19 @@ const testRunner = () => {
   }
 };
 
-watch(() => test.run, (newVal) => {
+watch(testProps, (newVal) => {
+  console.log('runned from watch')
   if (newVal) {
     testRunner()
   }
 })
-if (test.run) {
-  testRunner();
-}
+
 </script>
 
 <template>
+  
+  <component :is="testComponent" v-model:modelTestProps="testProps"/>
+    
   <PreviewImages
     v-if="previewImageItems.length && enablePreview"
     :images="previewImageItems"

@@ -62,13 +62,15 @@ test('Model getting images for previews', function () {
 test('Model use loadPreviews and set attribute previews', function () {
   $user = seedsForGoods(except: []);
   
-  makeBoss($user);
+  makeBoss($user, $this);
   
   $goods = Goods::first();
   
-  [$fileModels, $responseFromApi] = makeUploads($this, $goods,  3);
+  $dataUploads = makeUploads(test: $this, model: $goods, count: 3);
   
   $goods->loadPreviews();
   
   expect($goods->previews)->not->toBeNull();
+  
+  expect();
 });

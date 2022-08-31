@@ -25,7 +25,7 @@
 - POST /api/gov/file/get/previews
   - relate_type
   - relate_id
-- POST /api/gov/file/get/delete
+- POST /api/gov/file/delete
   - id
 
 ## GET /api/local/auth-boss

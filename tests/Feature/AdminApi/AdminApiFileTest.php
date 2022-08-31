@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile; 
 use Illuminate\Support\Facades\Storage; 
+use Illuminate\Testing\Fluent\AssertableJson;
 use App\Models\Goods;
 use App\Models\File;
 
@@ -35,6 +36,8 @@ test('Api upload single', function () {
   $response->assertStatus(200);
   
   expect(file_exists(storage_path('app/'. $response['data'][0]['path'])))->toBeTrue();
+  
+  //$response->dump();
   
   foreach ($response['data'] as $filedata) {
     unlink(storage_path('app/'. $filedata['path']));
@@ -74,6 +77,29 @@ test('Api upload multiple', function () {
       unlink(storage_path('app/'. $filedata['path']));
     }
   }
+});
+
+test('Api upload with attaching to model a entity', function () {
+  $user = seedsForGoods(except: []);
+  
+  makeBoss($user, $this);
+  
+  $goods = Goods::first();
+  
+    // multiple
+  $response = $this->postJson('/api/gov/file/upload', [
+    'files' => [makeFakeImage(), makeFakeImage()],
+    'model' => Goods::MORPH,
+    'relate_id' => $goods->id
+  ]);
+  
+  $response->assertStatus(200);
+  
+  $response->assertJson(fn (AssertableJson $json) =>
+    $json->has('data.1', fn ($json) => 
+      $json->where('sortpos', 2)->etc()
+    )->etc()
+  );
 });
 
 test('Api /api/gov/file/get getting files', function () {

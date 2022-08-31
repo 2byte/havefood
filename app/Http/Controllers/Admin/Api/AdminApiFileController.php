@@ -29,7 +29,16 @@ class AdminApiFileController extends AdminBaseController
 
     $uploadedFiles = $model->uploadFile($request);
 
-    $createdFiles = array_map(function ($dataFile) use ($request, $aliasModel, $relateId) {
+    $createdFiles = array_map(function ($dataFile) use ($request, $aliasModel, $relateId, $model) {
+      $sortpos = 0;
+      //queryLogEnabled();
+      if ($relateId) {
+        $sortpos = (File::select('sortpos')
+          ->whereRelateId($relateId)
+          ->whereRelateType($model->getMorphClass())
+          ->orderBy('sortpos', 'desc')
+          ->value('sortpos') ?? 0) + 1;
+      }
       
       $file = File::create([
         'user_id' => $request->user()->id,
@@ -37,10 +46,14 @@ class AdminApiFileController extends AdminBaseController
         'relate_type' => $aliasModel,
         'filename' => $dataFile['filename'],
         'type' => $dataFile['is_img'] ? FiletypeEnum::Img : FiletypeEnum::File,
-        'filesize' => $dataFile['size']
+        'filesize' => $dataFile['size'],
+        'sortpos' =>  $sortpos
       ]);
-      
-      return array_merge($dataFile, ['id' => $file->id]);
+      //queryLogDump();
+      return array_merge($dataFile, [
+        'id' => $file->id,
+        'sortpos' => $file->sortpos
+      ]);
     }, $uploadedFiles);
 
 

@@ -34,7 +34,7 @@ test('Model test polymorphic a relation of files', function () {
 });
 
 test('Model getting images for previews', function () {
-  $user = seedsForGoods();
+  $user = seedsForGoods(except: []);
   $user->update(['role' => 'boss']);
   
   $this->actingAs($user);
@@ -47,15 +47,16 @@ test('Model getting images for previews', function () {
   
   [$fileModels, $dataFromApi] = $mockUploder->createUploads(
     test: $this, 
+    model: $goods,
     count: 3,
-    model: $goods
   );
   
   $dataImagePreviews = $goods->getImagePreviews();
-  //dump($dataImagePreviews);
-  expect($dataImagePreviews)->toHaveCount(3);
   
-  //dump($dataImagePreviews);
+  dump($dataImagePreviews);
+  expect($dataImagePreviews)->toHaveCount(3);
+  expect($dataImagePreviews[0])->toHaveKeys(['small', 'big', 'original']);
+  
   /*foreach ($dataImagePreviews as $data) {
     
   }*/

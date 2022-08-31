@@ -1,6 +1,7 @@
 <?php
 
 use App\Shop\DevTestUtils\DevTestUtilsFileUploads;
+use Illuminate\Http\UploadedFile; 
 
 function makeBoss($user, $test, $login = true) {
   $user->update(['role' => 'boss']);
@@ -22,4 +23,11 @@ function makeUploads($test, $model, $count = 3) {
   );
   
   return compact('fileModels', 'dataFromApi');
+}
+
+function makeFakeImage() {
+  Storage::fake('images'); 
+  $file = UploadedFile::fake()->image('image.jpg')->size(100);
+  
+  return $file;
 }

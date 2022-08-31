@@ -83,6 +83,23 @@ function queryLogDump($exit = false) {
   }
 }
 
+/**
+ * Get file with all previews
+ * 
+ * @param $listAll = true - return [
+ *   'path string',
+ *   'path string',
+ *   ...
+ * ]
+ * 
+ * @return [
+ *   'original' => 'path string',
+ *   'previews' => [
+ *     300 => 'path string',
+ *     600 => 'path string',
+ *   ]
+ * ]
+ **/
 function getPathFilesByModel(App\Models\BaseModel $file, array|bool $withPreviews = true, $listAll = false) {
   $parentModel = $file->relate;
   

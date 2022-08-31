@@ -83,26 +83,44 @@ function queryLogDump($exit = false) {
   }
 }
 
-function getModelFilePath(App\Models\File $file, array|bool $withPreviews = true) {
+function getPathFilesByModel(App\Models\BaseModel $file, array|bool $withPreviews = true, $listAll = false) {
   $parentModel = $file->relate;
   
-  $makePath = function ($file, $sizeX, $sizeY) {
+  $makePath = function ($file, $sizeX = 0, $sizeY = 0) use ($parentModel) {
+    $filename = $file->filename;
     
+    if ($sizeX && $sizeY) {
+      [$name, $ext] = explode('.', $filename);
+      $filename = $name .'_'. $sizeX .'x'. $sizeY .'.'. $ext;
+    }
+    
+    return $parentModel->uploadDir .'/'. $file->user_id .'/'. $filename;
   };
   
-  $makePathsBySizes = function ($sizes) {
-    return array_map(function ([$sizeX, $sizeY]) use ($makePath) {
-      return $makePath($file, sizeX: $sizeX, sizeY: $sizeY);
+  $makePathsBySizes = function ($file, $sizes) use ($makePath) {
+    return array_map(function ($item) use ($file, $makePath) {
+      [$sizeX, $sizeY] = $item;
+      
+      return [$sizeX => $makePath($file, sizeX: $sizeX, sizeY: $sizeY)];
     }, $sizes);
   };
   
-  $paths = [];
+  $returnData = [
+    'original' => $makePath($file)
+  ];
   
   if ($withPreviews === true) {
-    $paths[] = $makePathsBySizes($parentModel->uploadImageResizeSizes);
-  } elseif (!empty($withPreviews)) {
-    $paths[] = 
+    $returnData['previews'] = $makePathsBySizes($file, $parentModel->uploadImageResizeSizes);
+  } elseif (is_array($withPreviews) && !empty($withPreviews)) {
+    
   }
   
-  return $parentModel->uploadDir .'/'. $file->user_id .'/'. $file->filename;
+  if ($listAll) {
+    $returnData = [
+      $returnData['original'],
+      ...array_values($returnData['previews'])
+    ];
+  }
+  
+  return $returnData;
 }

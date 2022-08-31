@@ -4,6 +4,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile; 
 use Illuminate\Support\Facades\Storage; 
 use App\Models\Goods;
+use App\Models\File;
 
 uses(RefreshDatabase::class);
 
@@ -130,9 +131,8 @@ test('Api /api/gov/file/delete', function () {
     'id' => $dataUploads['fileModels'][0]->id
   ]);
   
+  $response->dump();
   $response->assertStatus(200);
-  
-  //$response->dump();
   
   expect($goods->refresh()->files)->toBeEmpty();
 });
@@ -146,5 +146,8 @@ test('Model file make paths to all previews', function () {
   
   $dataUploads = makeUploads(test: $this, model: $goods, count: 1);
   
+  $files = getPathFilesByModel(File::first());
   
-})
+  expect($files)->toHaveKeys(['original', 'previews']);
+  expect($files['previews'])->toHaveCount(2);
+});

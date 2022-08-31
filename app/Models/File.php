@@ -31,9 +31,11 @@ class File extends BaseModel
     }
     
     public function delete() {
-      $pathfile = makeModelPathFile($this);
+      $pathfiles = getPathFilesByModel($this, listAll: true);
       
-      Storage::delete($pathfile);
+      foreach ($pathfiles as $pathfile) {
+        Storage::delete($pathfile);
+      }
       
       parent::delete();
       

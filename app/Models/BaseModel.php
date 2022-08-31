@@ -26,6 +26,10 @@ class BaseModel extends Model
   }
 
   public function files() {
+    return $this->morphMany(File::class, 'relate');
+  }
+  
+  public function filesSorted() {
     return $this->morphMany(File::class, 'relate')->orderBy('sortpos', 'asc');
   }
 
@@ -37,7 +41,12 @@ class BaseModel extends Model
     return $this->morphOne(File::class, 'relate')->oldestOfMany();
   }
 
-  public function makePathFile($modeFile) {}
+  public function loadPreviews(): void {
+    
+    $previews = $this->getImagePreviews();
+    
+    $this->setAttribute('previews', $previews);
+  }
 
   /**
    * Getting all previews of sorted

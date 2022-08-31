@@ -38,7 +38,7 @@ class DevTestUtilsFileUploads
     $response = $test->postJson('/api/gov/file/upload', [
       'files' => $files,
       'model' => $model::MORPH,
-      'relate_id' => $model->id,
+      'relate_id' => $model->id ?? 0,
     ]);
     
     $response->assertStatus(200);

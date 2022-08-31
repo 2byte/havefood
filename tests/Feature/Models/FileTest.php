@@ -57,8 +57,18 @@ test('Model getting images for previews', function () {
   expect($dataImagePreviews)->toHaveCount(3);
   expect($dataImagePreviews[0])->toHaveKeys(['small', 'big', 'original']);
   
-  /*foreach ($dataImagePreviews as $data) {
-    
-  }*/
+});
+
+test('Model use loadPreviews and set attribute previews', function () {
+  $user = seedsForGoods(except: []);
   
+  makeBoss($user);
+  
+  $goods = Goods::first();
+  
+  [$fileModels, $responseFromApi] = makeUploads($this, $goods,  3);
+  
+  $goods->loadPreviews();
+  
+  expect($goods->previews)->not->toBeNull();
 });

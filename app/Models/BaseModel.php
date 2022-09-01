@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Shop\Enums\FiletypeEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Storage;
 
 class BaseModel extends Model
 {
+  
   public $imagePreviewSizes = [
     'small' => [300,
       300],
@@ -24,6 +29,21 @@ class BaseModel extends Model
       GoodsCategory::MORPH => 'App\Models\GoodsCategory',
     ]);
   }
+  
+  public function previews() {
+    $previews = $this->files()
+      ->whereType(FiletypeEnum::Img)
+      ->orderBy('sortpos', 'asc');
+      
+    return $previews;
+  }
+  
+  public function previewSizes(): Attribute {
+    return new Attribute(
+      get: fn ($value) => 
+        $this->getImagePreviews($this->previews)
+    );
+  }
 
   public function files() {
     return $this->morphMany(File::class, 'relate');
@@ -39,13 +59,6 @@ class BaseModel extends Model
 
   public function oldestFile() {
     return $this->morphOne(File::class, 'relate')->oldestOfMany();
-  }
-
-  public function loadPreviews(): void {
-    
-    $previews = $this->getImagePreviews();
-    
-    $this->setAttribute('previews', $previews);
   }
 
   /**
@@ -71,11 +84,15 @@ class BaseModel extends Model
    * ]
    * }
    * */
-  public function getImagePreviews() {
+  public function getImagePreviews(?EloquentCollection $collection = null) {
 
-    $previews = $this->files()
-    ->orderBy('sortpos', 'asc')
-    ->get()
+    if (is_null($collection)) {
+      $collection = $this->files()
+        ->orderBy('sortpos', 'asc')
+        ->get();
+    }
+    
+    $previews = $collection
     ->map(function ($file) {
 
       $images = [];

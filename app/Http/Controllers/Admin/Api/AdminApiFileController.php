@@ -8,6 +8,9 @@ use App\Models\File;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Validation\ValidationException;
 use App\Shop\Enums\FiletypeEnum;
+use App\Http\Resources\ModelPreviewCollection;
+use App\Http\Resources\ModelPreviews;
+use App\Http\Resources\BaseApiCollection;
 
 class AdminApiFileController extends AdminBaseController
 {
@@ -77,7 +80,7 @@ class AdminApiFileController extends AdminBaseController
 
     $model = Relation::getMorphedModel($aliasModel)::getModel()->findOrFail($relateId);
 
-    return responseApi($model->getImagePreviews())->success();
+    return responseApi($model->previewSizes)->success();
   }
   
   public function delete(Request $request) 
@@ -90,5 +93,4 @@ class AdminApiFileController extends AdminBaseController
 
     return responseApi()->success();
   }
-  
 }

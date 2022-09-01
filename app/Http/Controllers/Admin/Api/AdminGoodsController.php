@@ -76,7 +76,7 @@ class AdminGoodsController extends Controller
       ]);
     }
     
-    $goods = Goods::find($id);
+    $goods = Goods::with('previews')->find($id);
     
     return responseApi($goods)->success();
   }

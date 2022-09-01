@@ -72,5 +72,23 @@ test('Model use loadPreviews and set attribute previews', function () {
   
   expect($goods->previews)->not->toBeNull();
   
-  expect();
+});
+
+test('Model use previews relation and set attribute previews', function () {
+  $user = seedsForGoods(except: []);
+  
+  makeBoss($user, $this);
+  
+  $goods = Goods::first();
+  
+  $dataUploads = makeUploads(test: $this, model: $goods, count: 3);
+  
+  $goods->load('previews');
+  
+  expect($goods->previews)->not->toBeNull();
+  
+  $previewSizes = $goods->previewSizes;
+  
+  expect($previewSizes)->toHaveCount(count($goods->uploadImageResizeSizes) + 1);
+  expect($previewSizes[0])->toHaveKeys(['small', 'big', 'original']);
 });

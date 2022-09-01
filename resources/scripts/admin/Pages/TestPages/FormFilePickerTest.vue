@@ -11,7 +11,7 @@ import FormFilePicker from '@/admin/components/FormFilePicker.vue'
     -->
     <FormFilePicker
       label="Загрузить изображение"
-      fileModel="goods"
+      model="goods"
       test
     />
   </div>

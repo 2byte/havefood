@@ -4,22 +4,22 @@ import FormTestSetting from "@/admin/components/FormTestSetting.vue";
 import Api from "@/admin/libs/Api.js";
 
 const props = defineProps({
-  modelTestProps: {
+  testProps: {
     type: Object,
     default: () => {}
   }
 })
 
-const emit = defineEmits(['update:modelTestProps'])
+const emit = defineEmits(['update:testProps'])
 
 const formSettings = reactive([
   {
-    name: "goodsId",
+    name: "model_id",
     label: "ID товара",
     value: ref(0),
   },
   {
-    name: "fileModel",
+    name: "model",
     value: ref("goods"),
     label: "Модель",
     type: "select",
@@ -38,6 +38,13 @@ const formSettings = reactive([
     type: "radio",
   },
   {
+    name: "upload",
+    label: "Upload",
+    value: ref(1),
+    type: "checkbox",
+    options: ['Да']
+  },
+  {
     name: "submit",
     label: "Запустить компонент",
     value: ref(null),
@@ -46,18 +53,24 @@ const formSettings = reactive([
     role: 'run',
     click() {
       test.run = true;
+      Object.keys(formSettings).forEach((key) => {
+        const formItem = formSettings[key]
+        
+        test[formItem.name] = formItem.value 
+      })
     },
   },
 ]);
 
 const test = reactive({
   run: false,
-  mode: ref("upload"),
+  mode: ref("cteate"),
+  upload: ref(false),
   testFiles: [],
 });
 
 watch(() => test.run, (newVal) => {
-  emit('update:modelTestProps', test)
+  emit('update:testProps', test)
 })
 
 Api("get-samples-images")

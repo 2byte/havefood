@@ -1,5 +1,5 @@
 <script setup>
-import { watch, onMounted, computed, reactive, ref } from 'vue'
+import { watch, onMounted, computed, reactive, ref } from "vue";
 import FormField from "@/admin/components/FormField.vue";
 import FormControl from "@/admin/components/FormControl.vue";
 import FormCheckRadioPicker from "@/admin/components/FormCheckRadioPicker.vue";
@@ -13,7 +13,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['click'])
+const emit = defineEmits(["click"]);
 
 const isFormControl = (type) => {
   return !type || type == "input" || type == "textarea" || type == "select";
@@ -24,25 +24,31 @@ const isFormChecker = (type) => {
 };
 
 const iconByRoles = {
-  run: mdiBugPlay
-}
+  run: mdiBugPlay,
+};
 
 // Saving state a form
 watch(props.formSettings, (newVal) => {
-  console.log('up', newVal)
-  
-  localStorage['gov_form_setting'] = JSON.stringify(newVal)
-})
+  console.log("up", newVal);
+
+  localStorage["gov_form_setting"] = JSON.stringify(newVal);
+});
 
 onMounted(() => {
-  if (localStorage['gov_form_setting']) {
-    const prevStateSettings = JSON.parse(localStorage['gov_form_setting'])
-    
+  if (localStorage["gov_form_setting"]) {
+    const prevStateSettings = JSON.parse(localStorage["gov_form_setting"]);
+
     prevStateSettings.forEach((item, i) => {
-      props.formSettings[i].value = item.value
-    })
+      let value = item.value
+      
+      if (typeof value == 'boolean') {
+        value = Number(value)
+      }
+      
+      props.formSettings[i].value = value;
+    });
   }
-})
+});
 </script>
 
 <template>

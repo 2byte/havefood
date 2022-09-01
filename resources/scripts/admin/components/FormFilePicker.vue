@@ -1,6 +1,6 @@
 <script setup>
 import { mdiUpload } from "@mdi/js";
-import { getCurrentInstance, computed, ref, watch, reactive, defineAsyncComponent, shallowReactive } from "vue";
+import { computed, ref, watch, reactive, defineAsyncComponent, shallowReactive } from "vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
 import PreviewImages from "@/admin/components/PreviewImages.vue";
 import { sendFile } from "@/admin/libs/Api.js";
@@ -38,6 +38,22 @@ const props = defineProps({
   test: {
     type: Boolean,
     default: null,
+  },
+  mode: {
+    type: String,
+    default: 'create'
+  },
+  model: {
+    required: true,
+    type: String
+  },
+  model_id: {
+    type: Number,
+    default: 0
+  },
+  dataPreviews: {
+    type: Array,
+    default: () => []
   }
 });
 
@@ -52,13 +68,59 @@ if (test) {
 
 const testProps = ref({})
 
-// ---------------- placeholder --------------//
+// Running test
+const testRunner = () => {
+  const testData = testProps.value
+  
+  if (testData.upload) {
+    
+    const runUpload = (val) => {
+      upload({
+        target: {
+          files: val,
+        },
+      });
+    }
+    
+    if (testData.testFiles.length) {
+      runUpload(testData.testFiles)
+    }
+    
+    watch(() => testData.testFiles, (val) => {
+      console.log('watched')
+      runUpload(val)
+    });
+    
+    console.log('run test', test.mode)
+  }
+};
+
+watch(testProps, (newVal) => {
+  console.log('runned from watch')
+  if (newVal) {
+    testRunner()
+    
+    Object.assign(state, newVal)
+  }
+})
+// ---------------- main --------------//
+
+const mode = ref(props.mode)
+
+const state = reactive({
+  mode: props.mode,
+  model: props.model,
+  model_id: props.model_id,
+  previews: props.dataPreviews
+})
 
 const emit = defineEmits(["update:modelValue", "dropPreview"]);
 
 const root = ref(null);
 
 const files = ref(props.modelValue);
+
+const previewImageItems = ref([]);
 
 const modelValueProp = computed(() => props.modelValue);
 
@@ -98,8 +160,6 @@ const simulatorProgress = (cb) => {
   }, 1000);
 };
 
-const previewImageItems = ref([]);
-
 const upload = (event) => {
   const value = event.target.files || event.dataTransfer.files;
 
@@ -117,8 +177,8 @@ const upload = (event) => {
       });
 
       previewImageItems.value.push(previewData);
-
-      if (test.run) {
+      
+      if (testProps.value.run) {
         setTimeout(function () {
           previewData.complete = false;
           simulatorProgress((percent, complete) => {
@@ -174,44 +234,11 @@ const upload = (event) => {
 //   )
 // }
 
-// Running test
-const testRunner = () => {
-  const testData = testProps.value
-  
-  if (testData.mode == "upload") {
-    
-    const runUpload = (val) => {
-      upload({
-        target: {
-          files: val,
-        },
-      });
-    }
-    
-    if (testData.testFiles.length) {
-      runUpload(testData.testFiles)
-    }
-    
-    watch(() => testData.testFiles, (val) => {
-      console.log('watched')
-      runUpload(val)
-    });
-    console.log('run test', test.mode)
-  }
-};
-
-watch(testProps, (newVal) => {
-  console.log('runned from watch')
-  if (newVal) {
-    testRunner()
-  }
-})
-
 </script>
 
 <template>
   
-  <component :is="testComponent" v-model:modelTestProps="testProps"/>
+  <component :is="testComponent" v-model:testProps="testProps"/>
     
   <PreviewImages
     v-if="previewImageItems.length && enablePreview"

@@ -6,11 +6,11 @@ import Api from "@/admin/libs/Api.js";
 const props = defineProps({
   testProps: {
     type: Object,
-    default: () => {}
-  }
-})
+    default: () => {},
+  },
+});
 
-const emit = defineEmits(['update:testProps'])
+const emit = defineEmits(["update:testProps"]);
 
 const formSettings = reactive([
   {
@@ -42,7 +42,7 @@ const formSettings = reactive([
     label: "Upload",
     value: ref(1),
     type: "checkbox",
-    options: ['Да']
+    options: ["Да"],
   },
   {
     name: "submit",
@@ -50,14 +50,19 @@ const formSettings = reactive([
     value: ref(null),
     type: "button",
     color: "success",
-    role: 'run',
+    role: "run",
     click() {
       test.run = true;
+
       Object.keys(formSettings).forEach((key) => {
-        const formItem = formSettings[key]
-        
-        test[formItem.name] = formItem.value 
-      })
+        const formItem = formSettings[key];
+
+        test[formItem.name] = formItem.value;
+      });
+
+      if (test.mode == "edit") {
+        loadPreviews();
+      }
     },
   },
 ]);
@@ -67,11 +72,15 @@ const test = reactive({
   mode: ref("cteate"),
   upload: ref(false),
   testFiles: [],
+  previews: [],
 });
 
-watch(() => test.run, (newVal) => {
-  emit('update:testProps', test)
-})
+watch(
+  () => test.run,
+  (newVal) => {
+    emit("update:testProps", test);
+  }
+);
 
 Api("get-samples-images")
   .success((data) => {
@@ -95,6 +104,22 @@ Api("get-samples-images")
     });
   })
   .run();
+
+const loadPreviews = () => {
+  Api("file/get/previews", "post", {model: test.model, relate_id: test.model_id})
+    .success((data) => {
+      test.previews = data
+        .filter((item) => item?.small)
+        .map((item) => {
+          return {
+            imageObj: item.small.url,
+            complete: true,
+            id: item.small.id
+          };
+        });
+    })
+    .run();
+};
 </script>
 
 <template>

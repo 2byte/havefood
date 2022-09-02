@@ -10,13 +10,15 @@ export class Api {
     apiTestServer = null
     apiAdminRoutes = [
       '/api/gov/different/get-goods-types',
-      '/api/gov/file/upload',
       '/api/gov/categories',
       '/api/gov/categories/store',
       '/api/gov/goods/store',
       '/api/gov/goods/get',
       '/api/gov/goods/option/get',
       '/api/gov/goods/option/store',
+      '/api/gov/file/upload',
+      '/api/gov/file/get/previews',
+      '/api/gov/file/delete',
       '/api/local/auth-boss',
       '/api/local/get-samples-images',
       '/sanctum/csrf-cookie',

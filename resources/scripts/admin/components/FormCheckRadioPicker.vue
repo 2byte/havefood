@@ -16,7 +16,7 @@ const props = defineProps({
   },
   column: Boolean,
   modelValue: {
-    type: [Object, Array, String, Number],
+    type: [Object, Array, String, Number, Boolean],
     default: null
   }
 })

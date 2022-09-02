@@ -82,7 +82,7 @@ const testRunner = () => {
       });
     }
     
-    if (testData.testFiles.length) {
+    if (testData.testFiles.length && testData.mode == 'create') {
       runUpload(testData.testFiles)
     }
     
@@ -100,9 +100,14 @@ watch(testProps, (newVal) => {
   if (newVal) {
     testRunner()
     
+    if (newVal.previews?.length) {
+      previewImageItems.value = newVal.previews
+    }
+    
     Object.assign(state, newVal)
   }
-})
+}, {deep: true})
+
 // ---------------- main --------------//
 
 const mode = ref(props.mode)
@@ -173,12 +178,13 @@ const upload = (event) => {
         imageObj: fileSourceUrl,
         uploadPercent: 0,
         complete: false,
+        uploading: true,
         error: null,
       });
 
       previewImageItems.value.push(previewData);
       
-      if (testProps.value.run) {
+      if (testProps.value.run && testProps.value.mode == 'create') {
         setTimeout(function () {
           previewData.complete = false;
           simulatorProgress((percent, complete) => {
@@ -190,16 +196,19 @@ const upload = (event) => {
 
       sendFile("file/upload", {
         model: props.fileModel,
+        relate_id: state.model_id,
         files: files.value[i],
       })
         .onUploadProgress((ev) => {
-          previewImageItems.value[i].uploadPercent =
+          previewData.uploadPercent =
             (ev.loaded * 100) / ev.total;
         })
         .complete((ok, data) => {
-          previewImageItems.value[i].complete = true;
-
-          Object.assign(previewImageItems.value[i], data);
+          Object.assign(previewData, {
+            complete: true,
+            uploading: false,
+            id: data[0].id
+          })
         })
         .run();
     });

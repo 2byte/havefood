@@ -39,13 +39,7 @@ onMounted(() => {
     const prevStateSettings = JSON.parse(localStorage["gov_form_setting"]);
 
     prevStateSettings.forEach((item, i) => {
-      let value = item.value
-      
-      if (typeof value == 'boolean') {
-        value = Number(value)
-      }
-      
-      props.formSettings[i].value = value;
+      props.formSettings[i].value = item.value;
     });
   }
 });

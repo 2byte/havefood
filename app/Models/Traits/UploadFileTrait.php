@@ -5,6 +5,7 @@ namespace App\Models\Traits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Image;
 use Storage;
 
@@ -27,6 +28,12 @@ trait UploadFileTrait {
    * ]
    **/
   public function uploadFile(Request $request) {
+  
+    if (!$request->file('files')->isValid()) {
+      throw ValidationException::withMessages([
+        'files' => $request->files->all()['files']->getErrorMessage()
+      ]);
+    }
     
     $validationRules = ['required', 'file'];
     

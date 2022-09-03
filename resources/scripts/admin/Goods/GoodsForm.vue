@@ -231,7 +231,7 @@ const buttonSubmitLabel = computed(() => {
     <BaseDivider />
 
     <h3 class="text-md font-medium text-slate-500 mb-4">Изображения</h3>
-    <FormFilePicker fileModel="goods" label="Загрузить изображение"/>
+    <FormFilePicker model="goods" :model_id="form.id" :mode="form.mode" label="Загрузить изображение"/>
     
     <h3 class="text-md font-medium text-slate-500 mb-4">Опции товара</h3>
     <div v-if="componentMode == 'create'" class="text-slate-400 mb-2">

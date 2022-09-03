@@ -1,5 +1,5 @@
 <script setup>
-import { watch } from 'vue'
+import { watch, ref } from 'vue'
 import BaseIcon  from '@/admin/components/BaseIcon.vue'
 import { mdiClose } from '@mdi/js'
 import Api from '@/admin/libs/Api.js'
@@ -45,6 +45,14 @@ const remove = (id, previewIndex) => {
       .run()
   }
 }
+
+watch(props.images, (newVal) => {
+  newVal.forEach((item, index) => {
+    if (item.error) {
+      props.images.splice(index, 1)
+    }
+  })
+}, { deep: true })
 </script>
 
 <template>
@@ -54,7 +62,7 @@ const remove = (id, previewIndex) => {
       <div class="absolute inset-0 text-4xl font-bold text-black/80 flex justify-center items-center" v-if="image?.uploading">
         {{ image.uploadPercent }}%
       </div>
-      <button v-if="image.complete" class="absolute top-1 right-1 text-md" @click="remove(image.id, index)">
+      <button v-if="image?.complete" class="absolute top-1 right-1 text-md" @click.prevent="remove(image.id, index)">
         <BaseIcon :path="mdiClose"/>
       </button>
       <img
@@ -65,4 +73,6 @@ const remove = (id, previewIndex) => {
       />
     </div>
   </div>
+  
+  <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />
 </template>

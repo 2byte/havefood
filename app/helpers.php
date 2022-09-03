@@ -103,6 +103,10 @@ function queryLogDump($exit = false) {
 function getPathFilesByModel(App\Models\BaseModel $file, array|bool $withPreviews = true, $listAll = false) {
   $parentModel = $file->relate;
   
+  if (is_null($parentModel)) {
+    $parentModel = Illuminate\Database\Eloquent\Relations\Relation::getMorphedModel($file->relate_type)::getModel();
+  }
+  
   $makePath = function ($file, $sizeX = 0, $sizeY = 0) use ($parentModel) {
     $filename = $file->filename;
     

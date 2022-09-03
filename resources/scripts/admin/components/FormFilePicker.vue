@@ -4,6 +4,7 @@ import { computed, ref, watch, reactive, defineAsyncComponent, shallowReactive }
 import BaseButton from "@/admin/components/BaseButton.vue";
 import PreviewImages from "@/admin/components/PreviewImages.vue";
 import { sendFile } from "@/admin/libs/Api.js";
+import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 
 const props = defineProps({
   modelValue: {
@@ -113,7 +114,7 @@ watch(testProps, (newVal) => {
 const mode = ref(props.mode)
 
 const state = reactive({
-  mode: props.mode,
+  mode: ref(props.mode),
   model: props.model,
   model_id: props.model_id,
   previews: props.dataPreviews
@@ -165,6 +166,8 @@ const simulatorProgress = (cb) => {
   }, 1000);
 };
 
+const errorsUpload = ref(null)
+
 const upload = (event) => {
   const value = event.target.files || event.dataTransfer.files;
 
@@ -199,6 +202,7 @@ const upload = (event) => {
         relate_id: state.model_id,
         files: files.value[i],
       })
+        .setErrors(errorsUpload)
         .onUploadProgress((ev) => {
           previewData.uploadPercent =
             (ev.loaded * 100) / ev.total;
@@ -207,7 +211,8 @@ const upload = (event) => {
           Object.assign(previewData, {
             complete: true,
             uploading: false,
-            id: data[0].id
+            id: data[0]?.id,
+            error: !ok
           })
         })
         .run();
@@ -254,10 +259,13 @@ const upload = (event) => {
     :images="previewImageItems"
   />
 
+  <DisplayErrors v-if="errorsUpload" :errors="errorsUpload" />
+  
   <div
     v-if="dropZone"
     class="w-full p-4 border-slate-400 border-2 border-dashed text-slate-500 mb-2"
   >
+    
     <div class="mb-2 font-semibold w-full text-center">
       Зона для перетаскивания файлов
     </div>

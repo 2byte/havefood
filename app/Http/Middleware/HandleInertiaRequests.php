@@ -17,7 +17,9 @@ class HandleInertiaRequests extends Middleware
 
     public function handle(Request $request, \Closure $next)
     {
-        if($request->route()->getPrefix() == 'gov') { 
+        $prefixes = ['gov', 'gov/test'];
+      
+        if(in_array($request->route()->getPrefix(), $prefixes)) { 
             $this->rootView = 'admin.admin_app'; 
         } 
         

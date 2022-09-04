@@ -84,7 +84,7 @@ function queryLogDump($exit = false) {
 }
 
 /**
- * Get file with all previews
+ * Get file with all previews base on morphed model $uploadImageResizeSizes
  * 
  * @param $listAll = true - return [
  *   'path string',

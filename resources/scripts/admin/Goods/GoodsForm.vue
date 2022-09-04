@@ -133,7 +133,7 @@ const submit = () => {
         : "Товар успешно сохранен";
 
       switchMode("update", payload?.goods_id);
-    });
+    }).run();
 };
 
 // Load goods by id from prop

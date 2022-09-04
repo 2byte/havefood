@@ -53,6 +53,7 @@ watch(props.images, (newVal) => {
     }
   })
 }, { deep: true })
+
 </script>
 
 <template>
@@ -74,5 +75,4 @@ watch(props.images, (newVal) => {
     </div>
   </div>
   
-  <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />
 </template>

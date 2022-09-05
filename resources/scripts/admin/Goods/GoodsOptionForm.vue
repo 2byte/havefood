@@ -133,7 +133,7 @@ const submit = () => {
 
       switchMode("update");
       emit("created");
-    });
+    }).run();
 };
 // ---------------- end submit --------------//
 

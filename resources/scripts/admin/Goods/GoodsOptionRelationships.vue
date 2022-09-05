@@ -23,26 +23,35 @@ const { load } = useGoodsOptionStore();
 
 load(props.goodsId);
 
-const isCreateOption = ref(false)
+const isCreateOption = ref(false);
+
+const slides = {
+  
+}
 </script>
 
 <template>
   <CardBox :loader="loading">
-    <nav>
-      <ul class="list-none">
-        <li class="inline">Опции к товару</li>
-        <li class="inline">Мои опции</li>
-        <li class="inline">Все опции</li>
+    <nav class="mb-4 shadow-sm overflow-x-auto">
+      <ul class="list-none w-max devide-x">
+        <li
+          class="inline-block bg-zinc-100 text-zinc-500 px-4 py-2 border border-solid border-zinc-200 shadow-sm font-semibold hover:bg-zinc-200 hover:border-zinc-300 hover:text-zinc-600"
+        >
+          Опции к товару
+        </li>
+        <li class="inline-block bg-zinc-100 text-zinc-500 px-4 py-2 border border-solid border-zinc-200 shadow-sm font-semibold hover:bg-zinc-200 hover:border-zinc-300 hover:text-zinc-600"
+        >
+          Мои опции
+        </li>
+        <li class="inline-block bg-zinc-100 text-zinc-500 px-4 py-2 border border-solid border-zinc-200 shadow-sm font-semibold hover:bg-zinc-200 hover:border-zinc-300 hover:text-zinc-600"
+        >
+          Все опции
+        </li>
       </ul>
     </nav>
 
-    <div class="flex flex-1 justify-beetwen w-full overflow-auto snap-x mb-2">
-      <div class="snap-center w-full flex-none">ff</div>
-      <div class="snap-center w-full flex-none">option2</div>
-    </div>
+    <GoodsOptionForm v-if="isCreateOption" :goods-id="goodsId" class="mb-2" />
 
-    <GoodsOptionForm v-if="isCreateOption" :goods-id="goodsId" class="mb-2"/>
-    
     <BaseButton
       color="success"
       label="Создать опцию"

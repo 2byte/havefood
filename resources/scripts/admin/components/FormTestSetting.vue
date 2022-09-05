@@ -11,6 +11,10 @@ const props = defineProps({
     type: [Object],
     default: () => {},
   },
+  keyForm: {
+    type: String,
+    default: 'gov_form_setting'
+  }
 });
 
 const emit = defineEmits(["click"]);
@@ -29,14 +33,14 @@ const iconByRoles = {
 
 // Saving state a form
 watch(props.formSettings, (newVal) => {
-  console.log("up", newVal);
+  console.log("up data for form settings test", newVal);
 
-  localStorage["gov_form_setting"] = JSON.stringify(newVal);
+  localStorage[props.keyForm] = JSON.stringify(newVal);
 });
 
 onMounted(() => {
-  if (localStorage["gov_form_setting"]) {
-    const prevStateSettings = JSON.parse(localStorage["gov_form_setting"]);
+  if (localStorage[props.keyForm]) {
+    const prevStateSettings = JSON.parse(localStorage[props.keyForm]);
 
     prevStateSettings.forEach((item, i) => {
       props.formSettings[i].value = item.value;

@@ -4,7 +4,12 @@ import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionItem from "@/admin/Goods/GoodsOptionItem.vue";
 import Api from "@/admin/libs/Api.js";
-import {
+import { useGoodsOptionListStore } from "@/admin/stores/goodsOptionListStore.js";
+
+const goodsOptionStore = useGoodsOptionListStore();
+const { loadOptions, isLoadingBySource } = goodsOptionStore;
+
+/*import {
   goodsData,
   list,
   tree,
@@ -12,6 +17,7 @@ import {
   errorStore,
   load,
 } from "@/admin/Goods/Repositories/goodsOptionStoreRepository.js";
+*/
 
 const props = defineProps({
   goodsId: {
@@ -47,9 +53,11 @@ const sourceProps = reactive({
 
 const detectSourceDefault = () => {
   Object.keys(sourceProps).forEach((sourceKey) => {
-    if (const source = sourceProps[sourceKey]) {
+    const source = sourceProps[sourceKey]
+    
+    if (source) {
       return source
-    } 
+    }
   })
 }
 
@@ -66,7 +74,8 @@ const state = reactive({
 
 const sourceLoaders = {
   goodsId() {
-    
+    loadOptions({source: this.name, value: sourceProps.goodsId})
+    loader.value = isLoadingBySource(this.name)
   },
   dataOptions() {
     return sourceProps.dataOptions
@@ -112,9 +121,9 @@ if (props.goodsId) {
   load(props.goodsId);
 }
 
-watch(goodsData, (data) => {
+/*watch(goodsData, (data) => {
   title.value = ` ${data.name}`;
-});
+});*/
 </script>
 
 <template>

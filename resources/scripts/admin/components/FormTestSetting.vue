@@ -43,7 +43,16 @@ onMounted(() => {
     const prevStateSettings = JSON.parse(localStorage[props.keyForm]);
 
     prevStateSettings.forEach((item, i) => {
-      props.formSettings[i].value = item.value;
+      const propFormItem = props.formSettings[i]
+      
+      // refresh localStorage doesn't exists items
+      if (!propFormItem) {
+        localStorage[props.keyForm] = JSON.stringify(props.formSettings)
+        return;
+      }
+      
+      propFormItem.value = item.value;
+      
     });
   }
 });

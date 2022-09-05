@@ -1,5 +1,5 @@
 <script setup>
-import { computed, watch, ref, defineAsyncComponent } from "vue";
+import { reactive, computed, watch, ref, defineAsyncComponent } from "vue";
 import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionItem from "@/admin/Goods/GoodsOptionItem.vue";
@@ -23,12 +23,59 @@ const props = defineProps({
   dataOptions: {
     type: Array,
   },
+  /**
+   * personal
+   * all
+   * */
+  list: {
+    type: String,
+    default: 'personal'
+  },
   title: String,
   test: {
     type: Boolean,
     default: false,
   },
 });
+
+const sourceProps = reactive({
+  goodsId: ref(props.goodsId),
+  optionId: ref(props.optionId),
+  dataOptions: ref(props.dataOptions),
+  list: ref(props.list)
+})
+
+const detectSourceDefault = () => {
+  Object.keys(sourceProps).forEach((sourceKey) => {
+    if (const source = sourceProps[sourceKey]) {
+      return source
+    } 
+  })
+}
+
+const state = reactive({
+  /**
+   * goodsId
+   * optionId
+   * dataOptions
+   * listPersonal
+   * listAll
+   **/
+  sourceRunLoader: detectSourceDefault(),
+})
+
+const sourceLoaders = {
+  goodsId() {
+    
+  },
+  dataOptions() {
+    return sourceProps.dataOptions
+  }
+}
+
+watch(state, (val) => {
+  sourceLoaders[val.sourceRunLoader]()
+})
 
 // ---------------- test property --------------//
 const isTest = props.test;
@@ -54,16 +101,12 @@ if (isTest) {
 
 // ---------------- main --------------//
 
-const loader = ref(false);
-const title = ref("");
+const defaultLoaderComputed = computed(() => {
+  return state.sourceRunLoader == 'dataOptions' ? false: true
+})
 
-const sourceOptions = computed(() => {
-  if (props.goodsId) {
-    return tree;
-  } else if (props.dataOptions) {
-    return props.dataOptions;
-  }
-});
+const loader = ref(defaultLoaderComputed);
+const title = ref("");
 
 if (props.goodsId) {
   load(props.goodsId);

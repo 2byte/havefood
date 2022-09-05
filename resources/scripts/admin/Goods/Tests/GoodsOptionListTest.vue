@@ -10,16 +10,34 @@ const props = defineProps({
 
 const store = useTestComponentStore();
 
-store.formSettings.push({
-  name: "goods_id",
-  label: "ID товара",
-  value: ref(0),
-});
+const formItems = [
+  {
+    name: "source",
+    label: "Источник",
+    type: "radio",
+    options: {
+      goods: "Товар",
+      personal: "Все личные опции",
+      all: "Все опции",
+    },
+    value: ref('goods'),
+  },
+  {
+    name: "submit",
+    type: "button",
+    label: "Запуск",
+    role: 'run',
+    value: ref(0),
+    color: 'success',
+    click: () => {
+      
+    }
+  },
+];
 
-const formSettings = store.formSettings
+store.setForm(formItems);
 
-console.log(store.formSettings, "from goodsOptionListTest");
-
+const formSettings = store.formSettings;
 </script>
 
 <template>

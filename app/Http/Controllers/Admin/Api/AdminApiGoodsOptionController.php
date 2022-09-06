@@ -5,50 +5,73 @@ namespace App\Http\Controllers\Admin\Api;
 use App\Http\Controllers\Admin\AdminBaseController;
 use Illuminate\Http\Request;
 use App\Models\Goods;
+use App\Models\GoodsOption;
 use App\Shop\V1\Goods\GoodsOptionValidationRules;
 use App\Shop\V1\Goods\GoodsOptionManager;
 
 class AdminApiGoodsOptionController extends AdminBaseController
 {
-    //
+  //
+
+  public function getGoodsOptions(Request $request) {
+    $source = $request->source;
+    $value = $request->value;
     
-    public function getGoodsOptions(Request $request)
-    {
-      $goods = Goods::findOrFail($request->goods_id);
+    $goods = null;
+    
+    switch ($source) {
+      case 'goodsId':
+        $options = GoodsOption::makeOptionTree(Goods::findOrFail($value)->options);
+        $goods = $options[0]->pivot->pivotParent;
+      break;
+
+      case 'personal':
+        $options = GoodsOption::makeOptionTree(
+          GoodsOption::root()
+            ->whereUserId($request->user()->id)
+            ->orderBy('id', 'desc')
+            ->get()
+        );
+      break;
       
-      $options = $goods->options;
-      $treeOptions = $goods->getOptionsWithGroups();
-      
-      return responseApi(compact('goods', 'options', 'treeOptions'))->success();
+      case 'all':
+        $options = GoodsOption::makeOptionTree(
+          GoodsOption::root()
+            ->orderBy('id', 'desc')
+            ->get()
+        );
+      break;
     }
-    
-    public function store(Request $request)
-    {
-      
-      if ($request->mode == 'update') {
-        if ($request->group) {
-          GoodsOptionManager::updateOptionGroup($request);
-        } else {
-          GoodsOptionManager::updateOption($request);
-        }
-        
-        return responseApi()->success();
-      }
-      
-      // ---------------- creating ----------------- //
-      
+
+    return responseApi(compact('goods', 'options'))->success();
+  }
+
+  public function store(Request $request) {
+
+    if ($request->mode == 'update') {
       if ($request->group) {
-        $option = GoodsOptionManager::createGroup($request, $request->user());
+        GoodsOptionManager::updateOptionGroup($request);
       } else {
-        $option = GoodsOptionManager::createOption($request, $request->user());
+        GoodsOptionManager::updateOption($request);
       }
-      
-      $createdOptionId = $option->getModel()->id;
-      
-      if (!is_null($goodsId = $request->goods_id)) {
-        Goods::findOrFail($goodsId)->attachOption($createdOptionId, $request->user());
-      }
-      
-      return responseApi(['option_id' => $createdOptionId])->success();
+
+      return responseApi()->success();
     }
+
+    // ---------------- creating ----------------- //
+
+    if ($request->group) {
+      $option = GoodsOptionManager::createGroup($request, $request->user());
+    } else {
+      $option = GoodsOptionManager::createOption($request, $request->user());
+    }
+
+    $createdOptionId = $option->getModel()->id;
+
+    if (!is_null($goodsId = $request->goods_id)) {
+      Goods::findOrFail($goodsId)->attachOption($createdOptionId, $request->user());
+    }
+
+    return responseApi(['option_id' => $createdOptionId])->success();
+  }
 }

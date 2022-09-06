@@ -5,6 +5,7 @@ import FormControl from "@/admin/components/FormControl.vue";
 import FormCheckRadioPicker from "@/admin/components/FormCheckRadioPicker.vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
 import { mdiBugPlay } from "@mdi/js";
+import { useTestComponentStore } from "@/admin/stores/testComponentStore.js";
 
 const props = defineProps({
   formSettings: {
@@ -17,6 +18,7 @@ const props = defineProps({
   }
 });
 
+const store = useTestComponentStore()
 const emit = defineEmits(["click"]);
 
 const isFormControl = (type) => {
@@ -89,7 +91,7 @@ onMounted(() => {
         :label="item.label"
         :color="item?.color"
         :icon="item?.role ? iconByRoles[item.role] : item.icon"
-        @click="item?.click()"
+        @click="item?.click(store.settingNames)"
       />
     </template>
   </div>

@@ -88,32 +88,6 @@ class Goods extends BaseModel
     ]);
   }
 
-  public function getOptionsWithGroups() {
-    // load all options
-    $stockOptions = $this->options;
-
-    // load all a childs
-    $stockOptions->each(function ($option) use ($stockOptions) {
-      if ($option->group) {
-        $childOptions = GoodsOption::whereParentId($option->id)
-        ->orderBy('sortpos', 'asc')
-        ->get()
-        ->whenEmpty(fn () => collect());
-        $option->setAttribute('childs', $childOptions);
-      }
-    });
-
-    $sortedOptionWithGroups = $stockOptions->sortBy(function ($option) {
-      return $option->pivot->sortpos;
-    });
-    // do up the index from pivot
-    $sortedOptionWithGroups->each(function ($option) {
-      $option->setAttribute('sortpos', $option->pivot->sortpos);
-    });
-
-    return $sortedOptionWithGroups->values();
-  }
-
   public function makeOptionSortUp($optionId,
     $direction = 'up'): bool
   {

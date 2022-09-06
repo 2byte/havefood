@@ -70,13 +70,17 @@ const state = reactive({
    * listAll
    **/
   sourceRunLoader: detectSourceDefault(),
+  dataOptions: ref([])
 })
 
 const sourceLoaders = {
   goodsId() {
-    loadOptions({source: this.name, value: sourceProps.goodsId})
-    loader.value = isLoadingBySource(this.name)
+    loadOptions({source: 'goodsId', value: sourceProps.goodsId})
+    loader.value = isLoadingBySource('goodsId')
+    console.log('Runned source loader', 'goodsId')
   },
+  personal() {},
+  all() {},
   dataOptions() {
     return sourceProps.dataOptions
   }
@@ -98,9 +102,10 @@ if (isTest) {
       "@/admin/Goods/Tests/GoodsOptionListTest.vue"
     );
 
-    const store = await import("@/admin/stores/testComponentStore.js");
+    const { useTestComponentStore } = await import("@/admin/stores/testComponentStore.js");
 
-    testStore.value = store;
+    testStore.value = useTestComponentStore();
+    testStore.value.setStateComponent(state)
 
     return testComp;
   });
@@ -110,16 +115,14 @@ if (isTest) {
 
 // ---------------- main --------------//
 
+
 const defaultLoaderComputed = computed(() => {
   return state.sourceRunLoader == 'dataOptions' ? false: true
 })
 
 const loader = ref(defaultLoaderComputed);
-const title = ref("");
 
-if (props.goodsId) {
-  load(props.goodsId);
-}
+const title = ref("");
 
 /*watch(goodsData, (data) => {
   title.value = ` ${data.name}`;
@@ -129,10 +132,10 @@ if (props.goodsId) {
 <template>
   <component :is="testComponent" keyForm="gov_goods_option_list" />
 
-  <CardBox :empty="!list.length" :loader="loading" :title="title">
+  <CardBox :empty="!state.dataOptions.length" :loader="loader" :title="title">
     <h3 class="text-lg mb-6 text-gray-600 font-semibold">Список опций</h3>
     <GoodsOptionItem
-      v-for="option in tree"
+      v-for="option in state.dataOptions"
       :key="option.id"
       :option="option"
       class="-mx-6"

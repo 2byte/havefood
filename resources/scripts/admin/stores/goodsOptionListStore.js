@@ -54,7 +54,7 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
       return `${source[0].toUpperCase()}${source.substr(1)}`;
     },
     isLoadingBySource(source) {
-      return this.statusLoading(this.makeNameStorage(source));
+      return this.statusLoading[this.makeNameStorage(source)];
     },
     /*async load(goodsId, forceLoad = true) {
       if (!forceLoad && this.list.length > 0) {

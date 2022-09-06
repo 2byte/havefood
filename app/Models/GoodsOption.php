@@ -51,6 +51,19 @@ class GoodsOption extends Model
     return $query->whereNull('parent_id');
   }
 
+  /**
+   * 
+   * @return Illuminate\Database\Eloquent\Collection {
+     "items": array(
+       GoodsOption {
+         childs => Illuminate\Database\Eloquent\Collection
+       },
+       GoodsOption {
+         childs => Illuminate\Database\Eloquent\Collection
+       },
+     )
+   }
+   * */
   public static function makeOptionTree($options) {
     // load all options
     $stockOptions = $options;
@@ -65,8 +78,8 @@ class GoodsOption extends Model
         $option->setAttribute('childs', $childOptions);
       }
     });
-
-    if ($stockOptions->has('pivot')) {
+    
+    if ($stockOptions[0]->pivot) {
       $sortedOptionWithGroups = $stockOptions->sortBy(function ($option) {
         return $option->pivot->sortpos;
       });

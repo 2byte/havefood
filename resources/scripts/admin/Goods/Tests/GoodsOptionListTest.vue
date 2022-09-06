@@ -16,11 +16,11 @@ const formItems = [
     label: "Источник",
     type: "radio",
     options: {
-      goods: "Товар",
+      goodsId: "Товар",
       personal: "Все личные опции",
       all: "Все опции",
     },
-    value: ref('goods'),
+    value: ref('goodsId'),
   },
   {
     name: "submit",
@@ -29,8 +29,8 @@ const formItems = [
     role: 'run',
     value: ref(0),
     color: 'success',
-    click: () => {
-      
+    click: (form) => {
+      store.stateComponent.sourceRunLoader = form.source.value
     }
   },
 ];

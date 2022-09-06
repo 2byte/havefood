@@ -125,7 +125,8 @@ test('Getting sorted list of options and groups', function () {
         ]);
     }
     
-    $options = $goods->getOptionsWithGroups();
+    
+    $options = GoodsOptionModel::makeOptionTree($goods->options);
     
     foreach ($options as $index => $option) {
         expect($option->sortpos)->toBe($index);

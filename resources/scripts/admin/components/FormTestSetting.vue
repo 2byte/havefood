@@ -45,7 +45,7 @@ onMounted(() => {
     prevStateSettings.forEach((item, i) => {
       const propFormItem = props.formSettings[i]
       
-      // refresh localStorage doesn't exists items
+      // refresh localStorage if doesn't exists items
       if (!propFormItem) {
         localStorage[props.keyForm] = JSON.stringify(props.formSettings)
         return;

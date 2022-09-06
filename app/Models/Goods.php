@@ -10,10 +10,11 @@ use App\Shop\V1\Goods\GoodsManager;
 
 class Goods extends BaseModel
 {
-  use HasFactory, Traits\UploadFileTrait;
+  use HasFactory,
+  Traits\UploadFileTrait;
 
   public $table = 'goods';
-  
+
   public $fillable = [
     'user_id',
     'category_id',
@@ -29,19 +30,23 @@ class Goods extends BaseModel
   protected $casts = ['goods_type' => GoodsType::class];
 
   const MORPH = 'goods';
-  
+
   public $uploadDir = 'public/static/uploads/goods';
   public $uploadAccessibleExtensions = [];
   public $uploadMaxFilesizeKb = 20000;
-  public $uploadImageDimensions = [300, 300];
+  public $uploadImageDimensions = [300,
+    300];
   // 1/1, 2/1, 3/4
   public $uploadImageRatio = null;
   public $uploadImageResizeSizes = [
-    [600, 600],
-    [300, 300]
+    [600,
+      600],
+    [300,
+      300]
   ];
-  public $imagePreviewSize = [300, 300];
-  
+  public $imagePreviewSize = [300,
+    300];
+
   public function category() {
     return $this->belongsTo(GoodsCategory::class);
   }
@@ -69,11 +74,11 @@ class Goods extends BaseModel
     if ($userId instanceof User) {
       $userId = $userId->id;
     }
-    
+
     if (is_numeric($optionId)) {
       $option = GoodsOption::findOrFail($optionId);
     }
-    
+
     $sortpos = DB::table('goods_ref_options')->selectRaw('COUNT(*) as count')->whereGoodsId($this->id)->value('count');
 
     $this->options()->attach($optionId, [

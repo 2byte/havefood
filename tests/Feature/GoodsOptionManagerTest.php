@@ -126,7 +126,7 @@ test('Getting sorted list of options and groups', function () {
     }
     
     $options = $goods->getOptionsWithGroups();
-
+    
     foreach ($options as $index => $option) {
         expect($option->sortpos)->toBe($index);
         
@@ -141,7 +141,7 @@ test('Getting sorted list of options and groups', function () {
     }
 });
 
-test('Sorting an options', function () {
+test('Sorting options', function () {
     $user = seedsForGoods(except: 'option');
     
     $goods = Goods::factory()->create();
@@ -172,7 +172,7 @@ test('Sorting an options', function () {
     )->toEqual([0, 1, 2]);
 });
 
-test('Sorting an options in group', function () {
+test('Sorting options in group', function () {
     $user = seedsForGoods(except: 'option');
     
     $goods = Goods::factory()->create();

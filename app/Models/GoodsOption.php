@@ -79,7 +79,7 @@ class GoodsOption extends Model
       }
     });
     
-    if ($stockOptions[0]->pivot) {
+    if (isset($stockOptions[0]) && $stockOptions[0]->pivot) {
       $sortedOptionWithGroups = $stockOptions->sortBy(function ($option) {
         return $option->pivot->sortpos;
       });

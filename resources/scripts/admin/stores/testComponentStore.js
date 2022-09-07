@@ -2,12 +2,11 @@ import { ref, reactive, defineAsyncComponent, watch, computed } from "vue";
 import { defineStore } from "pinia";
 
 export const useTestComponentStore = defineStore("testComponent", () => {
-  const formSettings = reactive([]);
+  const formSettings = ref([]);
   const settingNames = reactive({});
   const pathTestComponent = ref(null);
   const stateComponent = ref({});
 
-  
   // formSettings to settingNames
   watch(
     formSettings,
@@ -27,25 +26,19 @@ export const useTestComponentStore = defineStore("testComponent", () => {
     { deep: true }
   );
 
-  async function init(pathfile, cb) {
-    const formSettingsComponent = await defineAsyncComponent(() =>
-      import("../Goods/Tests/GoodsOptionListTest.vue")
-    );
-
-    pathTestComponent.value = pathfile;
-
-    return cb(formSettingsComponent);
-  }
-
   function setForm(formItems) {
-    formItems.forEach((item) => {
-      formSettings.push(item);
-    });
-  }
-  
-  function setStateComponent(refObj) {
-    stateComponent.value = refObj
+    formSettings.value = formItems
   }
 
-  return { formSettings, settingNames, stateComponent, init, setForm, setStateComponent };
+  function setStateComponent(refObj) {
+    stateComponent.value = refObj;
+  }
+
+  return {
+    formSettings,
+    settingNames,
+    stateComponent,
+    setForm,
+    setStateComponent,
+  };
 });

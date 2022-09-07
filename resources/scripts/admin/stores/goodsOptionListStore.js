@@ -1,23 +1,21 @@
 import { defineStore } from "pinia";
 import Api from "@/admin/libs/Api.js";
+import { toRef } from 'vue'
 
 export const useGoodsOptionListStore = defineStore("goodsOptionList", {
   state: () => ({
     listByGoodsId: [],
-    listByOptionId: [],
     listByPersonal: [],
-    listAll: [],
+    listByAll: [],
     sourceValue: null,
     goodsData: null,
     statusLoading: {
       listByGoodsId: true,
-      listByOptionId: true,
       listByPersonal: true,
-      listAll: true,
+      listByAll: true,
     },
     errors: {
       listByGoodsId: null,
-      listByOptionId: null,
       listByPersonal: null,
       listAll: null,
     },
@@ -30,6 +28,8 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
       const sourceName = this.makeNameStorage(source);
       const keySource = `listBy${sourceName}`
       
+      this.statusLoading[keySource] = true
+      
       const storage = this[keySource];
 
       if (!storage) {
@@ -37,6 +37,7 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
       }
 
       if (this.lazyLoad && !forceLoad && storage.length) {
+        this.statusLoading[keySource] = false
         return storage;
       }
 
@@ -52,6 +53,7 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
         })
         .fail((err) => {
           this.errors[keySource] = err;
+          console.log(err)
         })
         .run();
     },
@@ -59,30 +61,7 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
       return `${source[0].toUpperCase()}${source.substr(1)}`;
     },
     isLoadingBySource(source) {
-      return this.statusLoading[this.makeNameStorage(source)];
+      return toRef(this.statusLoading, `listBy${this.makeNameStorage(source)}`);
     },
-    /*async load(goodsId, forceLoad = true) {
-      if (!forceLoad && this.list.length > 0) {
-        if (this.loading) this.loading.false;
-
-        return Promise.resolve();
-      }
-
-      Api(`goods/option/get`, 'get', {goods_id: goodsId})
-        .complete((ok, data) => {
-          this.loading = false;
-          if (ok) {
-            this.list = data.options;
-            this.tree = data.treeOptions;
-            this.goodsData = data.goods;
-            this.goodsId = goodsId
-          }
-        })
-        .fail((err) => {
-          this.error = err;
-          alert(err);
-        })
-        .run();
-    },*/
   },
 });

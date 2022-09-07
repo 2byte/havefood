@@ -27,4 +27,9 @@ class AdminComponentTestController extends AdminBaseController
       'goodsId' => (int)$request->goods_id
     ]);
   }
+  
+  public function goodsOptionForm(Request $request)
+  {
+    return Inertia::render('TestPages/GoodsOptionFormTpage');
+  }
 }

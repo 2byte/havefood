@@ -1,15 +1,20 @@
 <script setup>
-import { reactive, computed, watch, ref, defineAsyncComponent, markRaw, toRef } from "vue";
-import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
+import {
+  reactive,
+  computed,
+  watch,
+  ref,
+  defineAsyncComponent,
+} from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionItem from "@/admin/Goods/GoodsOptionItem.vue";
 import Api from "@/admin/libs/Api.js";
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 import { useGoodsOptionListStore } from "@/admin/stores/goodsOptionListStore.js";
 
 const goodsOptionStore = useGoodsOptionListStore();
 const { loadOptions, isLoadingBySource } = goodsOptionStore;
-const { listByGoodsId } = storeToRefs(goodsOptionStore)
+const { listByGoodsId, listByPersonal, listByAll } = storeToRefs(goodsOptionStore);
 
 const props = defineProps({
   goodsId: {
@@ -27,7 +32,7 @@ const props = defineProps({
    * */
   list: {
     type: String,
-    default: 'personal'
+    default: "personal",
   },
   title: String,
   test: {
@@ -36,22 +41,23 @@ const props = defineProps({
   },
 });
 
-const sourceProps = reactive({
+const sourceValueDefault = reactive({
   goodsId: ref(props.goodsId),
   optionId: ref(props.optionId),
   dataOptions: ref(props.dataOptions),
-  list: ref(props.list)
-})
+  personal: ref(props.list),
+  all: ref(props.list),
+});
 
 const detectSourceDefault = () => {
-  for (const key of Object.keys(sourceProps)) {
-    const source = sourceProps[key]
-    
+  for (const key of Object.keys(sourceValueDefault)) {
+    const source = sourceValueDefault[key];
+
     if (source) {
-      return key
+      return key;
     }
   }
-}
+};
 
 const state = reactive({
   /**
@@ -61,38 +67,45 @@ const state = reactive({
    * listPersonal
    * listAll
    **/
-  sourceRunLoader: detectSourceDefault(),
-  sourceValue: sourceProps[detectSourceDefault()],
+  sourceRunnedLoader: detectSourceDefault(),
+  sourceValue: sourceValueDefault[detectSourceDefault()],
   dataOptions: [],
-  loading: true,
+  statusLoading: isLoadingBySource(detectSourceDefault()),
   loader: null
-})
+});
 
 const sourceLoaders = {
-  goodsId() {
-    loadOptions({source: 'goodsId', value: state.sourceValue})
-    state.loading = isLoadingBySource('goodsId')
-    state.dataOptions = listByGoodsId
-    console.log('Runned source loader', 'goodsId')
-  },
-  list() {},
-  dataOptions() {
-    state.loading = false
-    
-    return sourceProps.dataOptions
-  }
-}
+    goodsId() {
+      loadOptions({ source: "goodsId", value: state.sourceValue });
+      state.statusLoading = isLoadingBySource('goodsId')
+      state.dataOptions = listByGoodsId;
+    },
+    personal() {
+      loadOptions({source: 'personal'})
+      state.statusLoading = isLoadingBySource('personal')
+      state.dataOptions = listByPersonal;
+    },
+    all() {
+      loadOptions({source: 'all'})
+      state.statusLoading = isLoadingBySource('all')
+      state.dataOptions = listByAll;
+    },
+    dataOptions() {
+      state.statusLoading = false
 
-watch(() => state.sourceRunLoader, (newRunLoader) => {
-  state.loader = sourceLoaders[newRunLoader]
-  state.loader()
+      return sourceProps.dataOptions;
+    },
+};
+
+state.loader = computed(() => {
+  return sourceLoaders[state.sourceRunnedLoader]
 })
 
-state.loader = sourceLoaders[state.sourceRunLoader]
+state.loader();
 
-if (typeof state.loader != 'function') {
-  console.log(state.loader, state.sourceRunLoader)
-  throw new Error('Error run loader state.loader', state.loader)
+if (typeof state.loader != "function") {
+  console.log(state.loader, state.sourceRunLoader);
+  throw new Error("Error run loader state.loader", state.loader);
 }
 
 // ---------------- test property --------------//
@@ -107,10 +120,12 @@ if (isTest) {
       "@/admin/Goods/Tests/GoodsOptionListTest.vue"
     );
 
-    const { useTestComponentStore } = await import("@/admin/stores/testComponentStore.js");
+    const { useTestComponentStore } = await import(
+      "@/admin/stores/testComponentStore.js"
+    );
 
     testStore.value = useTestComponentStore();
-    testStore.value.setStateComponent(state)
+    testStore.value.setStateComponent(state);
 
     return testComp;
   });
@@ -130,7 +145,11 @@ const title = ref("");
 <template>
   <component :is="testComponent" keyForm="gov_goods_option_list" />
 
-  <CardBox :empty="!state.dataOptions.length" :loader="state.loading" :title="title">
+  <CardBox
+    :empty="!state.dataOptions.length"
+    :loader="state.statusLoading"
+    :title="title"
+  >
     <h3 class="text-lg mb-6 text-gray-600 font-semibold">Список опций</h3>
     <GoodsOptionItem
       v-for="option in state.dataOptions"

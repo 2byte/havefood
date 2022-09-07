@@ -27,6 +27,7 @@ Route::middleware(['auth', 'auth.role:boss,admin,manager'])
       Route::get('goods-form', 'goodsForm')->name('goods.form');
       Route::get('goods-option-relationships', 'goodsOptionRelationships')->name('goods.goodsOptionRelationships');
       Route::get('goods-option-list', 'goodsOptionList')->name('goods.goodsOptionList');
+      Route::get('goods-option-form', 'goodsOptionForm')->name('goods.goodsOptionForm');
     });
   });
 });

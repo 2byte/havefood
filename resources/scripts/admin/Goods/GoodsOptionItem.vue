@@ -55,7 +55,7 @@ const clickSetting = () => {
       <GoodsOptionForm
         v-if="showEditForm"
         class="-mx-6 -mb-6"
-        :title="false"
+        title="Редактирование опции"
         :optionData="option"
         mode="update"
       />
@@ -73,8 +73,8 @@ const clickSetting = () => {
         <div :class="cellValClasses">{{ option.description }}</div>
         <div :class="titleClasses">Цена</div>
         <div :class="cellValClasses">{{ prepData.price }}</div>
-        <div :class="titleClasses">Заметка</div>
-        <div :class="cellValClasses">{{ option.note }}</div>
+        <div :class="titleClasses" v-if="option.note">Заметка</div>
+        <div :class="cellValClasses" v-if="option.note">{{ option.note }}</div>
       </div>
     </transition>
 

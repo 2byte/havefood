@@ -20,18 +20,33 @@ const formItems = [
       personal: "Все личные опции",
       all: "Все опции",
     },
-    value: ref('goodsId'),
+    /*subform: [
+      {
+        ifvalue: 'goodsId',
+        label: 'ID товара',
+        name: 'goodsId',
+        value: ref('')
+      }
+    ],*/
+    value: ref("goodsId"),
+  },
+  {
+    label: "ID товара",
+    name: "goodsId",
+    value: ref('0'),
   },
   {
     name: "submit",
     type: "button",
     label: "Запуск",
-    role: 'run',
+    role: "run",
     value: ref(0),
-    color: 'success',
+    color: "success",
     click: (form) => {
-      store.stateComponent.sourceRunLoader = form.source.value
-    }
+      store.stateComponent.sourceRunLoader = form.source.value;
+      store.stateComponent.sourceValue = form.goodsId.value;
+      store.stateComponent.loader();
+    },
   },
 ];
 

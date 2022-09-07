@@ -28,8 +28,9 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
       this.sourceValue = value;
 
       const sourceName = this.makeNameStorage(source);
-
-      const storage = this[`listBy${sourceName}`];
+      const keySource = `listBy${sourceName}`
+      
+      const storage = this[keySource];
 
       if (!storage) {
         throw new Error(`Error find storage listBy${sourceName}`);
@@ -44,11 +45,15 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
         value,
       })
         .success((data) => {
-          storage = data;
+          this[keySource] = data.options;
+        })
+        .complete((ok, data) => {
+          this.statusLoading[keySource] = false
         })
         .fail((err) => {
-          this.errors[sourceName] = err;
-        });
+          this.errors[keySource] = err;
+        })
+        .run();
     },
     makeNameStorage(source) {
       return `${source[0].toUpperCase()}${source.substr(1)}`;

@@ -12,8 +12,17 @@
 - /api/gov/goods/store - создание, редактирование товара POST
 - /api/gov/goods/get - получение товара
   - get param {id}
-- /api/gov/goods/options/get получение опций товара
-  - get param {goods_id}
+- POST /api/gov/goods/option/get получение дерева опций в отсортированном виде
+  - Поля
+  - {source} - источник
+    - goodsId
+    - optionId
+    - presonal
+    - all
+  - {value} - значение для источника
+    - id модели если goodsId или optionId
+- POST /api/gov/goods/option/first
+  - {id}
 
 ## /api/gov/file
 - POST /api/gov/file/upload

@@ -5,12 +5,14 @@ import { toRef } from 'vue'
 export const useGoodsOptionListStore = defineStore("goodsOptionList", {
   state: () => ({
     listByGoodsId: [],
+    listByOptionId: [],
     listByPersonal: [],
     listByAll: [],
     sourceValue: null,
     goodsData: null,
     statusLoading: {
       listByGoodsId: true,
+      listByOptionId: true,
       listByPersonal: true,
       listByAll: true,
     },

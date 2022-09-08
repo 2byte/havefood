@@ -2,6 +2,7 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Goods;
+use App\Models\GoodsOption;
 
 uses(RefreshDatabase::class);
 
@@ -19,6 +20,24 @@ test('api getting options source goodsId', function () {
   $response = $this->postJson('/api/gov/goods/option/get', [
     'source' => 'goodsId',
     'value' => $goods->id
+  ]);
+  
+  //$response->dump();
+  $response->assertStatus(200);
+});
+
+test('api getting options source optionId', function () {
+  $user = seedsForGoods(except: 'option');
+  
+  makeBoss($user, $this);
+  
+  $options = makeGoodsOptions();
+  
+  $option = GoodsOption::whereGroup(1)->first();
+  
+  $response = $this->postJson('/api/gov/goods/option/get', [
+    'source' => 'optionId',
+    'value' => $option->id
   ]);
   
   //$response->dump();

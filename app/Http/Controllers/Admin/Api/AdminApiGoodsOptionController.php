@@ -24,6 +24,10 @@ class AdminApiGoodsOptionController extends AdminBaseController
         $options = GoodsOption::makeOptionTree(Goods::findOrFail($value)->options);
         $goods = $options[0]->pivot->pivotParent;
       break;
+      
+      case 'optionId':
+        $options = GoodsOption::findOrFail($value)->optionChilds;
+      break;
 
       case 'personal':
         $options = GoodsOption::makeOptionTree(
@@ -44,6 +48,15 @@ class AdminApiGoodsOptionController extends AdminBaseController
     }
 
     return responseApi(compact('goods', 'options'))->success();
+  }
+  
+  public function getGoodsOptionFirst(Request $request)
+  {
+    $id = $request->id;
+    
+    $option = Goods::findOrFail($id);
+    
+    return responseApi($option);
   }
 
   public function store(Request $request) {
@@ -68,7 +81,7 @@ class AdminApiGoodsOptionController extends AdminBaseController
 
     $createdOptionId = $option->getModel()->id;
 
-    if (!is_null($goodsId = $request->goods_id)) {
+    if ($request->goods_id != 0 && !is_null($goodsId = $request->goods_id)) {
       Goods::findOrFail($goodsId)->attachOption($createdOptionId, $request->user());
     }
 

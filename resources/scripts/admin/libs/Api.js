@@ -164,7 +164,7 @@ export class Api {
                     new Error(`Invalid response for request ${axiosParams.url} method ${axiosParams.method} params ${JSON.stringify(axiosParams.params) ?? '[]'}, response ${JSON.stringify(err.response?.data ?? [])} code: ${err.response.status}`)
                 )
               } else {
-                throw new Error('Error Api.makeRequest with ' + JSON.stringify(axiosParams) + ' err: ' + err.message);
+                throw new Error('Error Api.makeRequest with ' + JSON.stringify(axiosParams) + ' err: ' + err.message, err.stack);
               }
               
             })

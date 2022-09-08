@@ -1,10 +1,10 @@
 <script setup>
-import { computed, ref, reactive } from "vue";
-import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
+import { computed, ref, reactive, defineAsyncComponent } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import FormField from "@/admin/components/FormField.vue";
 import FormControl from "@/admin/components/FormControl.vue";
 import FormCheckRadioPicker from "@/admin/components/FormCheckRadioPicker.vue";
+import FormFilePicker from "@/admin/components/FormFilePicker.vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
 import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 import NotificationBar from "@/admin/components/NotificationBar.vue";
@@ -13,21 +13,44 @@ import {
   goodsTypeOptions,
 } from "@/admin/Goods/Repositories/goodsTypeRepository.js";
 import Api from "@/admin/libs/Api.js";
+import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 
 const props = defineProps({
+  /**
+   * Load from api by goods_id
+   * */
   goodsId: {
     default: 0,
   },
+  /**
+   * Load from api by option_id
+   * */
   optionId: {
     default: 0,
   },
+  /**
+   * Load a data for form
+   * */
   optionData: Object,
+  /**
+   * option or group
+   * */
   type: {
     default: "option",
   },
+  /**
+   * create or update
+   * */
   mode: {
     default: "create",
   },
+  /**
+   * Test mode
+   * */
+  test: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const emit = defineEmits(["created"]);
@@ -43,6 +66,10 @@ const switchMode = (newMode, newType) => {
     typeOption.value = newType;
   }
 };
+
+const isModeUpdate = computed(() => {
+  return componentMode.value == 'update'
+})
 
 const form = reactive({
   goods_id: refGoodsId,
@@ -123,9 +150,15 @@ const submit = () => {
     .setLoader(loaderSubmit)
     .setErrors(errorsFromApi)
     .success((data) => {
-      notificationSave.value = data?.option_id
-        ? "Опция успешно создана"
-        : "Опция успешно сохранена";
+      
+      if (data?.option_id) {
+        notificationSave.value = "Опция успешно создана"
+        if (form.group) {
+          notificationSave.value += ' , вы можете перейти к созданию опций в группе'
+        }
+      } else {
+        notificationSave.value = "Опция успешно сохранена"
+      }
 
       if (data?.option_id) {
         refOptionId.value = data.option_id;
@@ -138,14 +171,19 @@ const submit = () => {
 // ---------------- end submit --------------//
 
 const titleCardBox = computed(() => {
+  
   const pieces = {
     create: "Создание",
     update: "Редактирование",
     option: "опции",
     group: "группы",
   };
+  
+  const id = computed(() => {
+    return componentMode.value == 'update' ? `#${refOptionId.value} ` : ''
+  })
 
-  return `${pieces[componentMode.value]} ${pieces[typeOption.value]}`;
+  return `${id.value}${pieces[componentMode.value]} ${pieces[typeOption.value]}`;
 });
 
 const formGroupModelComputed = computed({
@@ -160,9 +198,35 @@ const formGroupModelComputed = computed({
     }
   },
 });
+
+// ---------------- test property --------------//
+const isTest = props.test;
+
+const testComponent = ref(null);
+const testStore = ref({});
+
+if (isTest) {
+  testComponent.value = defineAsyncComponent(async () => {
+    const testComp = await import(
+      "@/admin/Goods/Tests/GoodsOptionFormTest.vue"
+    );
+
+    const { useTestComponentStore } = await import(
+      "@/admin/stores/testComponentStore.js"
+    );
+
+    testStore.value = useTestComponentStore();
+    //testStore.value.setStateComponent();
+
+    return testComp;
+  });
+}
+// ---------------- end test property --------------//
 </script>
 
 <template>
+  <component :is="testComponent" keyForm="gov_goods_option_form" />
+
   <CardBox :title="titleCardBox" form @submit.prevent="submit">
     <FormField label="Тип опции">
       <FormCheckRadioPicker
@@ -212,6 +276,8 @@ const formGroupModelComputed = computed({
         :loader="loadingGoodsTypes"
       />
     </FormField>
+    
+    <FormFilePicker model="goodsoption" :model_id="refOptionId" label="Загрузить изображения"/>
 
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />
 
@@ -226,4 +292,7 @@ const formGroupModelComputed = computed({
       :loader="loaderSubmit"
     />
   </CardBox>
+  
+  <GoodsOptionList v-if="isModeUpdate && form.group" :option-id="refOptionId"/>
+  
 </template>

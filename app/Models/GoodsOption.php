@@ -44,7 +44,7 @@ class GoodsOption extends Model
   }
 
   public function optionChilds() {
-    return $this->hasMany(self::class, 'parent_id', 'id');
+    return $this->hasMany(self::class, 'parent_id', 'id')->orderBy('sortpos', 'asc');
   }
   
   public function scopeRoot($query) {

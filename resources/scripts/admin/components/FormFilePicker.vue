@@ -30,9 +30,6 @@ const props = defineProps({
   dropZone: {
     default: true,
   },
-  fileModel: {
-    default: "goods",
-  },
   enablePreview: {
     default: true,
   },

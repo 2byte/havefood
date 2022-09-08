@@ -14,7 +14,7 @@ import { useGoodsOptionListStore } from "@/admin/stores/goodsOptionListStore.js"
 
 const goodsOptionStore = useGoodsOptionListStore();
 const { loadOptions, isLoadingBySource } = goodsOptionStore;
-const { listByGoodsId, listByPersonal, listByAll } = storeToRefs(goodsOptionStore);
+const { listByGoodsId, listByOptionId, listByPersonal, listByAll } = storeToRefs(goodsOptionStore);
 
 const props = defineProps({
   goodsId: {
@@ -79,6 +79,11 @@ const sourceLoaders = {
       loadOptions({ source: "goodsId", value: state.sourceValue });
       state.statusLoading = isLoadingBySource('goodsId')
       state.dataOptions = listByGoodsId;
+    },
+    optionId() {
+      loadOptions({ source: "optionId", value: state.sourceValue });
+      state.statusLoading = isLoadingBySource('optionId')
+      state.dataOptions = listByOptionId;
     },
     personal() {
       loadOptions({source: 'personal'})

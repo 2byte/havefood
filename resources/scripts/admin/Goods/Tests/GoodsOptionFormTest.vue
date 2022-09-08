@@ -12,20 +12,19 @@ const store = useTestComponentStore();
 
 const formItems = [
   {
-    name: "source",
-    label: "Источник",
+    name: "mode",
+    label: "Режим",
     type: "radio",
     options: {
-      goodsId: "Товар",
-      personal: "Все личные опции",
-      all: "Все опции",
+      create: "create",
+      personal: "update",
     },
-    value: ref("goodsId"),
+    value: ref("create"),
   },
   {
-    label: "ID товара",
-    name: "goodsId",
-    value: ref('0'),
+    label: "ID опции",
+    name: "optionId",
+    value: ref(0),
   },
   {
     name: "submit",

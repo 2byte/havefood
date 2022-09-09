@@ -46,8 +46,8 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
     ->controller(AdminApiGoodsOptionController::class)
     ->name('option.')
     ->group(function () {
-      Route::post('get', 'getGoodsOptions')->name('get');
       Route::post('get/first', 'getGoodsOptionFirst')->name('get.first');
+      Route::post('get', 'getGoodsOptions')->name('get');
       Route::post('store', 'store')->name('store');
     });
   });

@@ -1,6 +1,7 @@
-import { defineStore } from "pinia";
+import { defineStore, storeToRefs } from "pinia";
 import Api from "@/admin/libs/Api.js";
-import { toRef } from 'vue'
+import { toRef, watch } from 'vue'
+import { useGoodsOptionStore } from '@/admin/stores/goodsOptionStore.js'
 
 export const useGoodsOptionListStore = defineStore("goodsOptionList", {
   state: () => ({
@@ -19,12 +20,14 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
     errors: {
       listByGoodsId: null,
       listByPersonal: null,
+      optionId: null,
       listAll: null,
     },
     lazyLoad: true,
+    parentOptionStore: null
   }),
   actions: {
-    loadOptions({ source, value = null, forceLoad = false }) {
+    async loadOptions({ source, value = null, forceLoad = false }) {
       this.sourceValue = value;
 
       const sourceName = this.makeNameStorage(source);
@@ -36,6 +39,14 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
 
       if (!storage) {
         throw new Error(`Error find storage listBy${sourceName}`);
+      }
+      
+      if (source == 'optionId') {
+        const optionStore = useGoodsOptionStore()
+        
+        optionStore.loadOption(value)
+        
+        this.parentOptionStore = optionStore
       }
 
       if (this.lazyLoad && !forceLoad && storage.length) {

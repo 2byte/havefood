@@ -1,27 +1,26 @@
 import { defineStore } from "pinia";
 import Api from "@/admin/libs/Api.js";
 
-export const useCommonStore = defineStore("common-name", {
+export const useGoodsOptionStore = defineStore("goodsOption", {
   state: () => ({
-    list: [],
-    currentItem: null,
+    option: null,
     loading: true,
     error: null,
   }),
   actions: {
-    async fetchAll(forceLoad = true) {
-      if (!forceLoad && this.listCategories.length > 0) {
-        if (this.loading) this.loading.false;
+    async loadOption(optionId, forceLoad = true) {
+      if (!forceLoad && Object.keys(this.option) > 0) {
+        if (this.loading) this.loading = false;
 
         return Promise.resolve();
       }
 
-      const req = Api("method");
+      const req = Api("goods/option/get/first", 'post', {id: optionId});
 
       req.complete((ok, data) => {
         this.loading = false;
         if (ok) {
-          this.list = data;
+          this.option = data;
         }
       });
 

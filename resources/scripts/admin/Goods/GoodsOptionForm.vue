@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, reactive, defineAsyncComponent } from "vue";
+import { computed, watch, ref, reactive, defineAsyncComponent } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import FormField from "@/admin/components/FormField.vue";
 import FormControl from "@/admin/components/FormControl.vue";
@@ -28,6 +28,10 @@ const props = defineProps({
   optionId: {
     default: 0,
   },
+  parentOptionData: {
+    type: Object,
+    default: () => {},
+  },
   /**
    * Load a data for form
    * */
@@ -49,12 +53,21 @@ const props = defineProps({
    * */
   test: {
     type: Boolean,
+    default: false,
+  },
+  buttonCloseForm: {
+    type: Boolean,
+    default: false,
+  },
+  showChildOptonList: {
+    type: Boolean,
     default: false
   }
 });
 
-const emit = defineEmits(["created"]);
+const emit = defineEmits(["created", "close-form"]);
 
+const isCreatingForGroup = ref(!!props.optionId);
 const typeOption = ref(props.type);
 const componentMode = ref(props.mode);
 const refGoodsId = ref(props.goodsId);
@@ -68,12 +81,15 @@ const switchMode = (newMode, newType) => {
 };
 
 const isModeUpdate = computed(() => {
-  return componentMode.value == 'update'
-})
+  return componentMode.value == "update";
+});
 
 const form = reactive({
   goods_id: refGoodsId,
+  // for update
   option_id: refOptionId,
+  // for creating in group
+  parent_id: refOptionId,
   mode: componentMode,
   group: 0,
   group_variant: "checkbox",
@@ -95,10 +111,11 @@ if (props.optionData) {
     "price_type",
     "price",
     "note",
+    "group",
     "goods_type",
     "group_variant",
-    'note',
-    'hidden'
+    "note",
+    "hidden"
   ];
 
   paramsForUpdate.forEach((attribute) => {
@@ -150,14 +167,14 @@ const submit = () => {
     .setLoader(loaderSubmit)
     .setErrors(errorsFromApi)
     .success((data) => {
-      
       if (data?.option_id) {
-        notificationSave.value = "Опция успешно создана"
+        notificationSave.value = "Опция успешно создана";
         if (form.group) {
-          notificationSave.value += ' , вы можете перейти к созданию опций в группе'
+          notificationSave.value +=
+            " , вы можете перейти к созданию опций в группе";
         }
       } else {
-        notificationSave.value = "Опция успешно сохранена"
+        notificationSave.value = "Опция успешно сохранена";
       }
 
       if (data?.option_id) {
@@ -166,24 +183,26 @@ const submit = () => {
 
       switchMode("update");
       emit("created");
-    }).run();
+    })
+    .run();
 };
 // ---------------- end submit --------------//
 
 const titleCardBox = computed(() => {
-  
   const pieces = {
     create: "Создание",
     update: "Редактирование",
     option: "опции",
     group: "группы",
   };
-  
-  const id = computed(() => {
-    return componentMode.value == 'update' ? `#${refOptionId.value} ` : ''
-  })
 
-  return `${id.value}${pieces[componentMode.value]} ${pieces[typeOption.value]}`;
+  const id = computed(() => {
+    return componentMode.value == "update" ? `#${refOptionId.value} ` : "";
+  });
+
+  return `${id.value}${pieces[componentMode.value]} ${
+    pieces[typeOption.value]
+  }`;
 });
 
 const formGroupModelComputed = computed({
@@ -216,19 +235,30 @@ if (isTest) {
     );
 
     testStore.value = useTestComponentStore();
-    //testStore.value.setStateComponent();
+    testStore.value.setStateComponent(
+      reactive({
+        form,
+        switchMode,
+      })
+    );
 
     return testComp;
   });
 }
 // ---------------- end test property --------------//
+
 </script>
 
 <template>
+  
   <component :is="testComponent" keyForm="gov_goods_option_form" />
 
-  <CardBox :title="titleCardBox" form @submit.prevent="submit">
-    <FormField label="Тип опции">
+  <CardBox :title="titleCardBox" form @submit.prevent="submit" :="$attrs">
+    <div v-if="isCreatingForGroup && parentOptionData" class="mb-2 text-teal-500">
+      Создание опции в группе {{ parentOptionData.name }}
+    </div>
+    
+    <FormField label="Тип опции" v-if="!isCreatingForGroup && !optionData">
       <FormCheckRadioPicker
         v-model="formGroupModelComputed"
         name="group"
@@ -276,8 +306,12 @@ if (isTest) {
         :loader="loadingGoodsTypes"
       />
     </FormField>
-    
-    <FormFilePicker model="goodsoption" :model_id="refOptionId" label="Загрузить изображения"/>
+
+    <FormFilePicker
+      model="goodsoption"
+      :model_id="refOptionId"
+      label="Загрузить изображения"
+    />
 
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />
 
@@ -285,14 +319,29 @@ if (isTest) {
       {{ notificationSave }}
     </NotificationBar>
 
-    <BaseButton
-      type="submit"
-      color="success"
-      :label="labelButton"
-      :loader="loaderSubmit"
-    />
+    <div class="flex justify-between">
+      <BaseButton
+        type="submit"
+        color="success"
+        :label="labelButton"
+        :loader="loaderSubmit"
+      />
+
+      <BaseButton
+        type="submit"
+        v-if="buttonCloseForm"
+        color="danger"
+        label="Отмена"
+        @click.prevent="$emit('close-form')"
+      />
+    </div>
   </CardBox>
   
-  <GoodsOptionList v-if="isModeUpdate && form.group" :option-id="refOptionId"/>
+  <GoodsOptionList
+    v-if="isModeUpdate && form.group && showChildOptonList"
+    :option-id="refOptionId"
+    :empty-message="`В группе ${form.name} ещё нет опций`"
+    button-create
+  />
   
 </template>

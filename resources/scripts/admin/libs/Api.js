@@ -15,6 +15,7 @@ export class Api {
       '/api/gov/goods/store',
       '/api/gov/goods/get',
       '/api/gov/goods/option/get',
+      '/api/gov/goods/option/get/first',
       '/api/gov/goods/option/store',
       '/api/gov/file/upload',
       '/api/gov/file/get/previews',

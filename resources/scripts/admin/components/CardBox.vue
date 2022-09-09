@@ -23,6 +23,10 @@ const props = defineProps({
   },
   hasTable: Boolean,
   empty: Boolean,
+  emptyMessage: {
+    type: String, 
+    default: 'Ничего нет'
+  },
   form: Boolean,
   hoverable: Boolean,
   modal: Boolean,
@@ -104,7 +108,7 @@ const submit = e => {
       v-if="empty"
       class="text-center py-24 text-gray-500 dark:text-gray-400"
     >
-      <p>Ничего нет</p>
+      <p>{{ emptyMessage }}</p>
     </div>
     <div
       v-else

@@ -1,6 +1,5 @@
 <script setup>
 import { computed, watch, ref } from "vue";
-import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
@@ -52,17 +51,20 @@ const clickSetting = () => {
       leave-active-class="animate__animated animate__bounceOutRight"
       @after-leave="showInfo = true"
     >
-      <GoodsOptionForm
-        v-if="showEditForm"
-        class="-mx-6 -mb-6"
-        title="Редактирование опции"
-        :optionData="option"
-        mode="update"
-      />
+      <div v-if="showEditForm" class="mb-2">
+        <GoodsOptionForm
+          v-if="showEditForm"
+          class="-mx-6 -mb-6"
+          title="Редактирование опции"
+          :optionData="option"
+          mode="update"
+        />
+      </div>
     </transition>
     <transition
       enter-active-class="animate__animated animate__slideInLeft"
       leave-active-class="animate__animated animate__bounceOutRight"
+      appear
     >
       <div class="flex flex-col" v-if="showInfo">
         <template v-if="option.group">
@@ -77,7 +79,8 @@ const clickSetting = () => {
         <div :class="cellValClasses" v-if="option.note">{{ option.note }}</div>
       </div>
     </transition>
-
-    <GoodsOptionList v-if="option.childs?.length" :dataOption="option.childs" />
+    
+    <GoodsOptionList v-if="option.childs?.length" :dataOptions="option.childs" :parentOption="option" is-recursive/>
+    
   </CardBox>
 </template>

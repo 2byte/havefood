@@ -17,9 +17,19 @@ const formItems = [
     type: "radio",
     options: {
       create: "create",
-      personal: "update",
+      update: "update",
     },
     value: ref("create"),
+  },
+  {
+    name: "typeOption",
+    label: "Тип опции",
+    type: "radio",
+    options: {
+      option: "Опция",
+      group: "Группа",
+    },
+    value: ref("option"),
   },
   {
     label: "ID опции",
@@ -34,9 +44,19 @@ const formItems = [
     value: ref(0),
     color: "success",
     click: (form) => {
-      store.stateComponent.sourceRunnedLoader = form.source.value;
-      store.stateComponent.sourceValue = form.goodsId.value;
-      store.stateComponent.loader();
+      if (form.mode.value == "update") {
+        Api("goods/option/get/first", "post", { id: form.optionId.value })
+          .success((data) => {
+            data.option_id = data.id
+            
+            Object.assign(store.stateComponent.form, data);
+            
+            store.stateComponent.switchMode(form.mode.value, form.typeOption.value);
+          })
+          .run();
+      } else {
+        store.stateComponent.switchMode(form.mode.value, form.typeOption.value);
+      }
     },
   },
 ];

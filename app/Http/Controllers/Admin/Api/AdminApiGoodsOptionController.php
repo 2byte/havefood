@@ -54,9 +54,9 @@ class AdminApiGoodsOptionController extends AdminBaseController
   {
     $id = $request->id;
     
-    $option = Goods::findOrFail($id);
+    $option = GoodsOption::findOrFail($id);
     
-    return responseApi($option);
+    return responseApi($option)->success();
   }
 
   public function store(Request $request) {

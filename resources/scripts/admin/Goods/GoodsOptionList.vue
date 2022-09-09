@@ -1,20 +1,18 @@
 <script setup>
-import {
-  reactive,
-  computed,
-  watch,
-  ref,
-  defineAsyncComponent,
-} from "vue";
+import { reactive, computed, watch, ref, defineAsyncComponent } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionItem from "@/admin/Goods/GoodsOptionItem.vue";
+import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
+import BaseButton from "@/admin/components/BaseButton.vue";
 import Api from "@/admin/libs/Api.js";
 import { storeToRefs } from "pinia";
 import { useGoodsOptionListStore } from "@/admin/stores/goodsOptionListStore.js";
+import { mdiPlus } from '@mdi/js'
 
 const goodsOptionStore = useGoodsOptionListStore();
 const { loadOptions, isLoadingBySource } = goodsOptionStore;
-const { listByGoodsId, listByOptionId, listByPersonal, listByAll } = storeToRefs(goodsOptionStore);
+const { listByGoodsId, listByOptionId, listByPersonal, listByAll, parentOptionStore } =
+  storeToRefs(goodsOptionStore);
 
 const props = defineProps({
   goodsId: {
@@ -25,6 +23,9 @@ const props = defineProps({
   },
   dataOptions: {
     type: Array,
+  },
+  parentOption: {
+    type: Object
   },
   /**
    * personal
@@ -39,6 +40,18 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  emptyMessage: {
+    type: String,
+    default: "Нет опций",
+  },
+  buttonCreate: {
+    type: Boolean,
+    default: false,
+  },
+  isRecursive: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const sourceValueDefault = reactive({
@@ -71,40 +84,41 @@ const state = reactive({
   sourceValue: sourceValueDefault[detectSourceDefault()],
   dataOptions: [],
   statusLoading: isLoadingBySource(detectSourceDefault()),
-  loader: null
+  loader: null,
+  parentOption: null
 });
 
 const sourceLoaders = {
-    goodsId() {
-      loadOptions({ source: "goodsId", value: state.sourceValue });
-      state.statusLoading = isLoadingBySource('goodsId')
-      state.dataOptions = listByGoodsId;
-    },
-    optionId() {
-      loadOptions({ source: "optionId", value: state.sourceValue });
-      state.statusLoading = isLoadingBySource('optionId')
-      state.dataOptions = listByOptionId;
-    },
-    personal() {
-      loadOptions({source: 'personal'})
-      state.statusLoading = isLoadingBySource('personal')
-      state.dataOptions = listByPersonal;
-    },
-    all() {
-      loadOptions({source: 'all'})
-      state.statusLoading = isLoadingBySource('all')
-      state.dataOptions = listByAll;
-    },
-    dataOptions() {
-      state.statusLoading = false
+  goodsId(reload = false) {
+    loadOptions({ source: "goodsId", value: state.sourceValue }, reload);
+    state.statusLoading = isLoadingBySource("goodsId");
+    state.dataOptions = listByGoodsId;
+  },
+  optionId(reload = false) {
+    loadOptions({ source: "optionId", value: state.sourceValue }, reload);
+    state.statusLoading = isLoadingBySource("optionId");
+    state.dataOptions = listByOptionId;
+  },
+  personal(reload = false) {
+    loadOptions({ source: "personal" }, reload);
+    state.statusLoading = isLoadingBySource("personal");
+    state.dataOptions = listByPersonal;
+  },
+  all(reload = false) {
+    loadOptions({ source: "all" }, reload);
+    state.statusLoading = isLoadingBySource("all");
+    state.dataOptions = listByAll;
+  },
+  dataOptions() {
+    state.statusLoading = false;
 
-      return sourceProps.dataOptions;
-    },
+    state.dataOptions = props.dataOptions;
+  },
 };
 
 state.loader = computed(() => {
-  return sourceLoaders[state.sourceRunnedLoader]
-})
+  return sourceLoaders[state.sourceRunnedLoader];
+});
 
 state.loader();
 
@@ -119,7 +133,7 @@ const isTest = props.test;
 const testComponent = ref(null);
 const testStore = ref({});
 
-if (isTest) {
+if (isTest && !props.isRecursive) {
   testComponent.value = defineAsyncComponent(async () => {
     const testComp = await import(
       "@/admin/Goods/Tests/GoodsOptionListTest.vue"
@@ -145,22 +159,60 @@ const title = ref("");
 /*watch(goodsData, (data) => {
   title.value = ` ${data.name}`;
 });*/
+
+const showOptionForm = ref(false);
+
+const listOptionName = computed(() => {
+  const loaderNames = {
+    goodsId: `товара`,
+    optionId: `группы ${props.parentOption?.name}`,
+    dataOptions: `группы ${props.parentOption?.name}`,
+    personal: `личные`,
+    all: `все`,
+  }
+  
+  return loaderNames[state.sourceRunnedLoader]
+})
+// ---------------- created option in group--------------//
+
+const onCreatedOptionInGroup = () => {
+  state.loader(true)
+}
 </script>
 
 <template>
   <component :is="testComponent" keyForm="gov_goods_option_list" />
-
+  
   <CardBox
     :empty="!state.dataOptions.length"
     :loader="state.statusLoading"
     :title="title"
+    :empty-message="emptyMessage"
   >
-    <h3 class="text-lg mb-6 text-gray-600 font-semibold">Список опций</h3>
+    <h3 class="text-lg mb-6 text-gray-600 font-semibold">Список опций <span class="text-slate-400">{{ listOptionName }}</span></h3>
     <GoodsOptionItem
       v-for="option in state.dataOptions"
       :key="option.id"
       :option="option"
-      class="-mx-6"
+      class="-mx-6 last:border-b-0"
     />
   </CardBox>
+
+  <GoodsOptionForm
+    v-if="showOptionForm && !parentOptionStore.loading"
+    :option-id="optionId"
+    :parent-option-data="parentOptionStore.option"
+    buttonCloseForm
+    @closeForm="showOptionForm = false"
+    @created="onCreatedOptionInGroup"
+  />
+
+  <BaseButton
+    color="success"
+    label="Создать опцию"
+    :icon="mdiPlus"
+    v-if="buttonCreate && !showOptionForm"
+    @click="showOptionForm = !showOptionForm"
+    class="w-min mt-2"
+  />
 </template>

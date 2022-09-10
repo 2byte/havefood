@@ -2,7 +2,12 @@
 import { ref, reactive, defineAsyncComponent } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import BaseIcon from "@/admin/components/BaseIcon.vue";
-import { mdiCashMultiple, mdiShoppingOutline } from "@mdi/js";
+import {
+  mdiCashMultiple,
+  mdiShoppingOutline,
+  mdiPlaylistEdit,
+  mdiViewCarouselOutline,
+} from "@mdi/js";
 
 const props = defineProps({
   goods: {
@@ -11,12 +16,12 @@ const props = defineProps({
   },
   test: {
     type: Boolean,
-    default: false
+    default: false,
   },
 });
 
 const state = reactive({
-  goods: ref(props.goods)
+  goods: ref(props.goods),
 });
 
 // ---------------- test property --------------//
@@ -27,9 +32,7 @@ const testStore = ref({});
 
 if (isTest && !props.isRecursive) {
   testComponent.value = defineAsyncComponent(async () => {
-    const testComp = await import(
-      "@/admin/Goods/Tests/GoodsItemTest.vue"
-    );
+    const testComp = await import("@/admin/Goods/Tests/GoodsItemTest.vue");
 
     const { useTestComponentStore } = await import(
       "@/admin/stores/testComponentStore.js"
@@ -43,17 +46,41 @@ if (isTest && !props.isRecursive) {
 }
 
 // ---------------- end test property --------------//
+const slideDisplay = () => {}
+
+const actionButtons = [
+  {
+    id: 'actionView',
+    title: "Просмотр",
+    icon: mdiViewCarouselOutline,
+    isActive: ref(false),
+    click() {
+      console.log('enable view')
+    },
+  },
+  {
+    id: 'actionEdit',
+    title: "Редактировать",
+    icon: mdiPlaylistEdit,
+    isActive: ref(false),
+    click() {
+      console.log('enable edit')
+    },
+  },
+];
+
+const isActiveAction = () => {}
 </script>
 
 <template>
-  
   <component :is="testComponent" keyForm="gov_goods_item" />
-  
+
   <CardBox
     :title="state.goods.name"
     class="mb-2 shadow-sm"
     :icon="mdiShoppingOutline"
     v-if="state.goods"
+    :actionButtons="actionButtons"
   >
     <div class="font-sm text-gray-500">{{ state.goods.description }}</div>
     <div class="text-stone-500">

@@ -10,7 +10,7 @@ use App\Shop\Goods\Enums\GoodsOptionGroupType;
 
 class GoodsOption extends Model
 {
-  use HasFactory;
+  use HasFactory, Traits\UploadFileTrait;
 
   public $table = 'goods_options';
 
@@ -38,6 +38,20 @@ class GoodsOption extends Model
   ];
 
   const MORPH = 'goodsoption';
+  
+  public $uploadDir = 'public/static/uploads/goodsoption';
+  public $uploadAccessibleExtensions = [];
+  public $uploadMaxFilesizeKb = 20000;
+  public $uploadImageDimensions = [300,
+    300];
+  // 1/1, 2/1, 3/4
+  public $uploadImageRatio = null;
+  public $uploadImageResizeSizes = [
+    [600,
+      600],
+    [300,
+      300]
+  ];
 
   public function goods() {
     return $this->belongsToMany(Goods::class, 'goods_ref_options', 'option_id', 'goods_id')->withTimestamps();

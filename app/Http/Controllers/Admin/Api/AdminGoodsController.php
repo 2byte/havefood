@@ -69,14 +69,17 @@ class AdminGoodsController extends Controller
   public function get(Request $request)
   {
     $id = $request->id;
+    $typeList = $request->input('type_list', 'singleGoods');
     
-    if (is_null($id)) {
+    if (is_null($id) && $typeList == 'singleGoods') {
       throw ValidationException::withMessages([
-        'message' => 'incorrect the id'
+        'message' => 'Incorrect the id'
       ]);
     }
     
-    $goods = Goods::with('previews')->find($id);
+    $goods = Goods::with('previews')->findOrFail($id);
+    
+    $goods->setAttribute('preview_of_sizes', $goods->preview_sizes);
     
     return responseApi($goods)->success();
   }

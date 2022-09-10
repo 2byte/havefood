@@ -195,7 +195,7 @@ const upload = (event) => {
       }
 
       sendFile("file/upload", {
-        model: props.fileModel,
+        model: props.model,
         relate_id: state.model_id,
         files: files.value[i],
       })

@@ -1,6 +1,6 @@
 import { defineStore, storeToRefs } from "pinia";
 import Api from "@/admin/libs/Api.js";
-import { toRef, watch } from 'vue'
+import { toRef } from 'vue'
 import { useGoodsOptionStore } from '@/admin/stores/goodsOptionStore.js'
 
 export const useGoodsOptionListStore = defineStore("goodsOptionList", {

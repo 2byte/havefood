@@ -1,5 +1,5 @@
 <script setup>
-import GoodsForm from "@/admin/Goods/GoodsForm.vue";
+import GoodsItem from "@/admin/Goods/GoodsItem.vue";
 
 const props = defineProps({
   goodsId: {
@@ -13,6 +13,6 @@ const props = defineProps({
   <div
     class="px-2 py-2 bg-gray-100 min-h-screen flex flex-col items-stretch justify-center"
   >
-    <GoodsForm label="Загрузить изображение" test />
+    <GoodsItem test />
   </div>
 </template>

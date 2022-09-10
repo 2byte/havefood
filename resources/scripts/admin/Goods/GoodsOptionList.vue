@@ -189,7 +189,7 @@ const onCreatedOptionInGroup = () => {
     :title="title"
     :empty-message="emptyMessage"
   >
-    <h3 class="text-lg mb-6 text-gray-600 font-semibold">Список опций <span class="text-slate-400">{{ listOptionName }}</span></h3>
+    <h3 class="text-lg mb-6 text-gray-600 font-semibold">Список опций <span class="text-gray-400">{{ listOptionName }}</span></h3>
     <GoodsOptionItem
       v-for="option in state.dataOptions"
       :key="option.id"

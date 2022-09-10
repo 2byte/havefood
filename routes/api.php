@@ -40,7 +40,7 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
   ->name('goods.')
   ->group(function () {
     Route::post('store', 'store')->name('store');
-    Route::get('get', 'get')->name('get');
+    Route::post('get', 'get')->name('get');
 
     Route::prefix('option')
     ->controller(AdminApiGoodsOptionController::class)

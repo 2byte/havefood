@@ -10,8 +10,11 @@
 
 ## /api/gov/goods - работа с товарами
 - /api/gov/goods/store - создание, редактирование товара POST
-- /api/gov/goods/get - получение товара
-  - get param {id}
+- POST /api/gov/goods/get - получение товара
+  - {id} - получить один товара
+  - {type\_list} - получить список товаров default=singleGoods
+  - {...} - дополнительные параметры для фильтра
+  
 - POST /api/gov/goods/option/get получение дерева опций в отсортированном виде
   - Поля
   - {source} - источник

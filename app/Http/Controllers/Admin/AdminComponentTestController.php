@@ -32,4 +32,9 @@ class AdminComponentTestController extends AdminBaseController
   {
     return Inertia::render('TestPages/GoodsOptionFormTpage');
   }
+  
+  public function goodsItem(Request $request)
+  {
+    return Inertia::render('TestPages/GoodsItemTpage');
+  }
 }

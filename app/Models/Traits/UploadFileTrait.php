@@ -28,11 +28,23 @@ trait UploadFileTrait {
    * ]
    **/
   public function uploadFile(Request $request) {
-  
-    if (!$request->file('files')->isValid()) {
-      throw ValidationException::withMessages([
-        'files' => $request->files->all()['files']->getErrorMessage()
-      ]);
+    
+    $files = $request->file('files');
+    
+    $checkIsValidFile = function ($file) {
+      if (!$file->isValid()) {
+        throw ValidationException::withMessages([
+          'files' => $request->files->all()['files']->getErrorMessage()
+        ]);
+      }
+    };
+    
+    if (!is_array($files)) {
+      $files = [$files];
+    }
+    
+    foreach ($files as $file) {
+      $checkIsValidFile($file);
     }
     
     $validationRules = ['required', 'file'];

@@ -44,8 +44,7 @@ class Goods extends BaseModel
     [300,
       300]
   ];
-  public $imagePreviewSize = [300,
-    300];
+  //public $imagePreviewSize = [300, 300];
 
   public function category() {
     return $this->belongsTo(GoodsCategory::class);

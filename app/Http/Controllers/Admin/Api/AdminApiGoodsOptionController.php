@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminBaseController;
 use Illuminate\Http\Request;
 use App\Models\Goods;
 use App\Models\GoodsOption;
+use App\Models\File;
 use App\Shop\V1\Goods\GoodsOptionValidationRules;
 use App\Shop\V1\Goods\GoodsOptionManager;
 
@@ -84,6 +85,11 @@ class AdminApiGoodsOptionController extends AdminBaseController
     if ($request->goods_id != 0 && !is_null($goodsId = $request->goods_id)) {
       Goods::findOrFail($goodsId)->attachOption($createdOptionId, $request->user());
     }
+    
+    File::whereRelateType(GoodsOption::MORPH)
+      ->whereUserId($request->user()->id)
+      ->whereRelateId(0)
+      ->update(['relate_id' => $createdOptionId->id]);
 
     return responseApi(['option_id' => $createdOptionId])->success();
   }

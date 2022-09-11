@@ -31,9 +31,9 @@ const props = defineProps({
   hoverable: Boolean,
   modal: Boolean,
   loader: Boolean,
-  actionButtons: {
-    type: Array,
-    default: () => []
+  actionButtonManager: {
+    type: Object,
+    default: null
   }
 })
 
@@ -74,49 +74,7 @@ const submit = e => {
   emit('submit', e)
 }
 
-// Action button the focusable
-const stateActionButtons = new Map()
-
-const clickActionButton = (el, btn) => {
-  const isFocusElem = () => {
-    return stateActionButtons.has(el) && stateActionButtons.get(el)
-  }
-  const focusElem = () => { stateActionButtons.set(el, true) }
-  
-  const unfocusElem = () => {
-    el.blur()
-    stateActionButtons.set(el, false)
-  }
-
-  const unfocusOtherwise = () => {
-    stateActionButtons.forEach((val, elem) => {
-      if (elem != el) {
-        stateActionButtons.set(elem, false)
-      }
-    })
-    props.actionButtons.forEach((arrItemBtn) => {
-      if (arrItemBtn.id != btn.id) {
-        btnSetIsActive(arrItemBtn, false)
-      }
-    })
-  }
-  
-  const btnSetIsActive = (btnLink, val = true) => {
-    if (btnLink.hasOwnProperty('isActive')) {
-      btnLink.isActive.value = val;
-    }
-  }
-  
-  if (!isFocusElem()) {
-    btn.click()
-    focusElem()
-    btnSetIsActive(btn, true)
-    unfocusOtherwise()
-  } else {
-    btnSetIsActive(btn, false)
-    unfocusElem()
-  }
-}
+const actionButtonList = props.actionButtonManager?.buttons
 </script>
 
 <template>
@@ -143,11 +101,11 @@ const clickActionButton = (el, btn) => {
       </p>
       
       <a
-        v-for="(actBtn, index) in actionButtons"
+        v-for="(actBtn, index) in actionButtonList"
         href="#"
         class="flex items-center py-3 px-4 justify-center ring-blue-700 focus:ring"
         aria-label="more options"
-        @click.prevent="clickActionButton($event.currentTarget, actBtn)"
+        @click.prevent="actionButtonManager.clickButton($event.currentTarget, actBtn)"
         :key="index"
       >
         <BaseIcon :path="actBtn.icon" />

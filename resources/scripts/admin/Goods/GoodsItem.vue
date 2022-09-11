@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, defineAsyncComponent } from "vue";
+import { computed, ref, reactive, defineAsyncComponent } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import BaseIcon from "@/admin/components/BaseIcon.vue";
 import {
@@ -8,6 +8,8 @@ import {
   mdiPlaylistEdit,
   mdiViewCarouselOutline,
 } from "@mdi/js";
+import ActionButtons from '@/admin/components/CardBoxRepository/ActionButtons.js'
+import "/resources/css/animate.css/animate.min.css";
 
 const props = defineProps({
   goods: {
@@ -46,30 +48,37 @@ if (isTest && !props.isRecursive) {
 }
 
 // ---------------- end test property --------------//
-const slideDisplay = () => {}
 
-const actionButtons = [
+const actionButtonItems = [
   {
-    id: 'actionView',
+    id: "actionView",
     title: "Просмотр",
     icon: mdiViewCarouselOutline,
     isActive: ref(false),
     click() {
-      console.log('enable view')
+      console.log("enable view");
     },
   },
   {
-    id: 'actionEdit',
+    id: "actionEdit",
     title: "Редактировать",
     icon: mdiPlaylistEdit,
     isActive: ref(false),
     click() {
-      console.log('enable edit')
+      console.log("enable edit");
     },
   },
 ];
 
-const isActiveAction = () => {}
+const actionButtonManager = new ActionButtons(actionButtonItems)
+
+/*const isActiveAction = (id) => {
+  const mapActive = actionButtons.map((btn) => {
+    return { [btn.id]: btn.isActive.value };
+  });
+  return computed(() => mapActive[id].isActive);
+};*/
+console.log(actionButtonManager.refUnfocusAll)
 </script>
 
 <template>
@@ -80,11 +89,36 @@ const isActiveAction = () => {}
     class="mb-2 shadow-sm"
     :icon="mdiShoppingOutline"
     v-if="state.goods"
-    :actionButtons="actionButtons"
+    :actionButtonManager="actionButtonManager"
   >
-    <div class="font-sm text-gray-500">{{ state.goods.description }}</div>
-    <div class="text-stone-500">
-      <BaseIcon :path="mdiCashMultiple" /> Цена: {{ state.goods.price }}
-    </div>
+    <transition
+      enter-active-class="animate__animated animate__slideInLeft"
+      leave-active-class="animate__animated animate__bounceOutRight"
+    >
+      <div v-if="actionButtonManager.refUnfocusAll">
+        <div class="font-sm text-gray-500">{{ state.goods.description }}</div>
+        <div class="text-stone-500">
+          <BaseIcon :path="mdiCashMultiple" /> Цена: {{ state.goods.price }}
+        </div>
+      </div>
+    </transition>
+    
+    <transition
+      enter-active-class="animate__animated animate__slideInLeft"
+      leave-active-class="animate__animated animate__bounceOutRight"
+    >
+      <div v-if="actionButtonManager.isActive('actionView')">
+        View
+      </div>
+    </transition>
+    
+    <transition
+      enter-active-class="animate__animated animate__slideInLeft"
+      leave-active-class="animate__animated animate__bounceOutRight"
+    >
+      <div v-if="actionButtonManager.isActive('actionEdit')">
+        Edit
+      </div>
+    </transition>
   </CardBox>
 </template>

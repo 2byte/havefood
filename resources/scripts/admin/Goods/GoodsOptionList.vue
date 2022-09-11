@@ -58,8 +58,8 @@ const sourceValueDefault = reactive({
   goodsId: ref(props.goodsId),
   optionId: ref(props.optionId),
   dataOptions: ref(props.dataOptions),
-  personal: ref(props.list),
-  all: ref(props.list),
+  personal: computed(() => props.list == 'personal' ? 'personal' : null),
+  all: computed(() => props.list == 'all' ? 'all' : null),
 });
 
 const detectSourceDefault = () => {
@@ -90,22 +90,22 @@ const state = reactive({
 
 const sourceLoaders = {
   goodsId(reload = false) {
-    loadOptions({ source: "goodsId", value: state.sourceValue }, reload);
+    loadOptions({ source: "goodsId", value: state.sourceValue, forceLoad: reload});
     state.statusLoading = isLoadingBySource("goodsId");
     state.dataOptions = listByGoodsId;
   },
   optionId(reload = false) {
-    loadOptions({ source: "optionId", value: state.sourceValue }, reload);
+    loadOptions({ source: "optionId", value: state.sourceValue, forceLoad: reload });
     state.statusLoading = isLoadingBySource("optionId");
     state.dataOptions = listByOptionId;
   },
   personal(reload = false) {
-    loadOptions({ source: "personal" }, reload);
+    loadOptions({ source: "personal", forceLoad: reload});
     state.statusLoading = isLoadingBySource("personal");
     state.dataOptions = listByPersonal;
   },
   all(reload = false) {
-    loadOptions({ source: "all" }, reload);
+    loadOptions({ source: "all", forceLoad: reload });
     state.statusLoading = isLoadingBySource("all");
     state.dataOptions = listByAll;
   },
@@ -164,7 +164,7 @@ const showOptionForm = ref(false);
 
 const listOptionName = computed(() => {
   const loaderNames = {
-    goodsId: `товара`,
+    goodsId: `товара ${goodsOptionStore.goodsData?.name}`,
     optionId: `группы ${props.parentOption?.name}`,
     dataOptions: `группы ${props.parentOption?.name}`,
     personal: `личные`,
@@ -178,6 +178,18 @@ const listOptionName = computed(() => {
 const onCreatedOptionInGroup = () => {
   state.loader(true)
 }
+
+const labelCreateOption = computed(() => {
+  let label = 'Создать опцию';
+  
+  if (props.parentOption) {
+    label += ` в группе ${props.parentOption.name}`
+  } else if (props.goodsId) {
+    label += ` к товару ${goodsOptionStore.goodsData?.name}`
+  }
+  
+  return label
+})
 </script>
 
 <template>
@@ -199,9 +211,10 @@ const onCreatedOptionInGroup = () => {
   </CardBox>
 
   <GoodsOptionForm
-    v-if="showOptionForm && !parentOptionStore.loading"
+    v-if="showOptionForm && !parentOptionStore?.loading"
     :option-id="optionId"
-    :parent-option-data="parentOptionStore.option"
+    :goods-id="goodsId"
+    :parent-option-data="parentOptionStore?.option"
     buttonCloseForm
     @closeForm="showOptionForm = false"
     @created="onCreatedOptionInGroup"
@@ -209,7 +222,7 @@ const onCreatedOptionInGroup = () => {
 
   <BaseButton
     color="success"
-    label="Создать опцию"
+    :label="labelCreateOption"
     :icon="mdiPlus"
     v-if="buttonCreate && !showOptionForm"
     @click="showOptionForm = !showOptionForm"

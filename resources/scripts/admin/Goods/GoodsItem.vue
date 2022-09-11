@@ -2,6 +2,8 @@
 import { computed, ref, reactive, defineAsyncComponent } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import BaseIcon from "@/admin/components/BaseIcon.vue";
+import GoodsView from "@/admin/Goods/GoodsView.vue";
+import GoodsForm from "@/admin/Goods/GoodsForm.vue";
 import {
   mdiCashMultiple,
   mdiShoppingOutline,
@@ -72,13 +74,6 @@ const actionButtonItems = [
 
 const actionButtonManager = new ActionButtons(actionButtonItems)
 
-/*const isActiveAction = (id) => {
-  const mapActive = actionButtons.map((btn) => {
-    return { [btn.id]: btn.isActive.value };
-  });
-  return computed(() => mapActive[id].isActive);
-};*/
-console.log(actionButtonManager.refUnfocusAll)
 </script>
 
 <template>
@@ -117,7 +112,7 @@ console.log(actionButtonManager.refUnfocusAll)
       leave-active-class="animate__animated animate__bounceOutRight"
     >
       <div v-if="actionButtonManager.isActive('actionEdit')">
-        Edit
+        <GoodsForm :goods-data="state.goods" class="-mx-6"/>
       </div>
     </transition>
   </CardBox>

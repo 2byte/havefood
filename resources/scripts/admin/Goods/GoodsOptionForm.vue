@@ -218,6 +218,18 @@ const formGroupModelComputed = computed({
   },
 });
 
+// ---------------- Action for update mode --------------//
+const detectGoodsTypeForUpdate = () => {
+  
+}
+
+watch(componentMode, (newVal) => {
+  if (newVal == 'update') {
+    
+  }
+})
+// ---------------- End action for update mode --------------//
+
 // ---------------- test property --------------//
 const isTest = props.test;
 

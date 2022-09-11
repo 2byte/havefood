@@ -22,8 +22,8 @@ class AdminApiGoodsOptionController extends AdminBaseController
     
     switch ($source) {
       case 'goodsId':
-        $options = GoodsOption::makeOptionTree(Goods::findOrFail($value)->options);
-        $goods = $options[0]->pivot->pivotParent;
+        $goods = Goods::findOrFail($value);
+        $options = GoodsOption::makeOptionTree($goods->options);
       break;
       
       case 'optionId':
@@ -89,7 +89,7 @@ class AdminApiGoodsOptionController extends AdminBaseController
     File::whereRelateType(GoodsOption::MORPH)
       ->whereUserId($request->user()->id)
       ->whereRelateId(0)
-      ->update(['relate_id' => $createdOptionId->id]);
+      ->update(['relate_id' => $createdOptionId]);
 
     return responseApi(['option_id' => $createdOptionId])->success();
   }

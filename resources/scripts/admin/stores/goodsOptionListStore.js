@@ -59,6 +59,7 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
         value,
       })
         .success((data) => {
+          this.goodsData ??= data.goods
           this[keySource] = data.options;
         })
         .complete((ok, data) => {
@@ -66,7 +67,7 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
         })
         .fail((err) => {
           this.errors[keySource] = err;
-          console.log(err)
+          console.log(err, 'load from source', source)
         })
         .run();
     },

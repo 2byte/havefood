@@ -261,6 +261,7 @@ const upload = (event) => {
   <div
     v-if="dropZone"
     class="w-full p-4 border-slate-400 border-2 border-dashed text-slate-500 mb-2"
+    :="$attrs"
   >
     
     <div class="mb-2 font-semibold w-full text-center">

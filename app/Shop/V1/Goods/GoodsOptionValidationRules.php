@@ -24,7 +24,7 @@ class GoodsOptionValidationRules
     {
         $this->rules = [
             'user_id' => 'required:exists:users,id',
-            'parent_id' => 'integer|exists:'. GoodsOption::getModel()->getTable() .',id',
+            'parent_id' => 'nullable|integer|exists:'. GoodsOption::getModel()->getTable() .',id',
             'group' => 'in:1,0',
             'group_variant' => 'required_if:group,1|in:'. GoodsOptionGroupType::enumStringValues(),
             'name' => 'required|min:3|max:255',

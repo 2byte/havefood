@@ -12,6 +12,7 @@ import FormCheckRadioPicker from "@/admin/components/FormCheckRadioPicker.vue";
 import FormFilePicker from "@/admin/components/FormFilePicker.vue";
 import { useCategoriesStore } from "@/admin/stores/categories.js";
 import { useGoodsTypeStore } from "@/admin/stores/goodsTypeStore.js";
+//import { useGoodsStore } from "@/admin/stores/goodsStore.js";
 import { storeToRefs } from "pinia";
 import {
   mdiCashMultiple,
@@ -27,6 +28,9 @@ const props = defineProps({
   category: {
     default: null,
   },
+  /**
+   * create or update
+   * */
   mode: {
     default: "create",
   },
@@ -38,6 +42,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  goodsData: {
+    type: Object,
+    default: null
+  }
 });
 
 const componentMode = ref(props.mode);
@@ -155,6 +163,13 @@ if (props.goodsLoad) {
     })
     .run();
 }
+// update mode from a prop goodsData
+if (props.goodsData) {
+  for (const nameField of Object.keys(props.goodsData)) {
+    form[nameField] = props.goodsData[nameField];
+  }
+  switchMode('update', props.goodsData.id)
+}
 
 const buttonSubmitLabel = computed(() => {
   return componentMode == "create" ? "Создать" : "Сохранить";
@@ -231,7 +246,7 @@ const buttonSubmitLabel = computed(() => {
     <BaseDivider />
 
     <h3 class="text-md font-medium text-slate-500 mb-4">Изображения</h3>
-    <FormFilePicker model="goods" :model_id="form.id" :mode="form.mode" label="Загрузить изображение"/>
+    <FormFilePicker model="goods" :model_id="form.id" :mode="form.mode" label="Загрузить изображение" class="mb-4"/>
     
     <h3 class="text-md font-medium text-slate-500 mb-4">Опции товара</h3>
     <div v-if="componentMode == 'create'" class="text-slate-400 mb-2">
@@ -240,7 +255,7 @@ const buttonSubmitLabel = computed(() => {
     <GoodsOptionRelationships
       v-else
       class="mb-2 -mx-6"
-      :goods-id="goodsId"
+      :goods-id="form.id"
     />
     
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />

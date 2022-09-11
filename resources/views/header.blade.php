@@ -5,7 +5,7 @@
             <div class="row align-items-center">
                 <div class="col-6">
                     <div class="header-top-left">
-                        <span class="pronia-offer">HELLO EVERYONE! 25% Off All Products</span>
+                        <span class="pronia-offer">Внимание акция! Скидка на все продукты 25%</span>
                     </div>
                 </div>
                 <div class="col-6">
@@ -13,7 +13,7 @@
                         <ul class="dropdown-wrap">
                             <li class="dropdown">
                                 <button class="btn btn-link dropdown-toggle ht-btn" type="button" id="currencyButton" data-bs-toggle="dropdown" aria-label="currency" aria-expanded="false">
-                                    USD
+                                    Рубли
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="currencyButton">
                                     <li><a class="dropdown-item" href="#">GBP</a></li>
@@ -22,7 +22,7 @@
                             </li>
                             <li class="dropdown">
                                 <button class="btn btn-link dropdown-toggle ht-btn" type="button" id="languageButton" data-bs-toggle="dropdown" aria-label="language" aria-expanded="false">
-                                    English
+                                    Русский
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="languageButton">
                                     <li><a class="dropdown-item" href="#">French</a></li>
@@ -46,7 +46,7 @@
                             <a href="tel://+00-123-456-789">+00 123 456 789</a>
                         </div>
 
-                        <a href="index.html" class="header-logo">
+                        <a href="/" class="header-logo">
                             <img src="/pronia/assets/images/logo/dark.png" alt="Header Logo">
                         </a>
 
@@ -98,7 +98,7 @@
                         <nav class="main-nav">
                             <ul>
                                 <li class="drop-holder">
-                                    <a href="index.html">Home</a>
+                                    <a href="/">Главная</a>
                                     <ul class="drop-menu">
                                         <li>
                                             <a href="index.html">Home One</a>

@@ -8,6 +8,7 @@ import FormFilePicker from "@/admin/components/FormFilePicker.vue";
 import BaseButton from "@/admin/components/BaseButton.vue";
 import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 import NotificationBar from "@/admin/components/NotificationBar.vue";
+import { useGoodsOptionListStore } from '@/admin/stores/goodsOptionListStore.js'
 import {
   loadingGoodsTypes,
   goodsTypeOptions,
@@ -218,16 +219,22 @@ const formGroupModelComputed = computed({
   },
 });
 
-// ---------------- Action for update mode --------------//
-const detectGoodsTypeForUpdate = () => {
+// ---------------- Action for update and create --------------//
+
+/**
+ * Actions for creating mode
+ * */
+const detectGoodsTypeForCreating = () => {
+  const goodsOptionListStore = useGoodsOptionListStore()
   
+  form.goods_type = goodsOptionListStore.goodsData?.goods_type
 }
 
-watch(componentMode, (newVal) => {
-  if (newVal == 'update') {
-    
-  }
-})
+
+if (componentMode.value == 'create') {
+  detectGoodsTypeForCreating()
+}
+
 // ---------------- End action for update mode --------------//
 
 // ---------------- test property --------------//

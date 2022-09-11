@@ -55,7 +55,8 @@ class AdminGoodsController extends Controller
       
       $return['goods_id'] = $goods->id;
     } else {
-      $goods = Goods::findOrFail($request->id)->update($fields);
+      $goods = Goods::findOrFail($request->id);
+      $goods->update($fields);
     }
     
     File::whereRelateType(Goods::MORPH)

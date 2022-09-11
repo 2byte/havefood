@@ -2,6 +2,7 @@
 import { computed, ref, reactive, defineAsyncComponent } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import BaseIcon from "@/admin/components/BaseIcon.vue";
+import PreviewImages from "@/admin/components/PreviewImages.vue";
 import GoodsView from "@/admin/Goods/GoodsView.vue";
 import GoodsForm from "@/admin/Goods/GoodsForm.vue";
 import {
@@ -10,7 +11,7 @@ import {
   mdiPlaylistEdit,
   mdiViewCarouselOutline,
 } from "@mdi/js";
-import ActionButtons from '@/admin/components/CardBoxRepository/ActionButtons.js'
+import ActionButtons from "@/admin/components/CardBoxRepository/ActionButtons.js";
 import "/resources/css/animate.css/animate.min.css";
 
 const props = defineProps({
@@ -72,8 +73,17 @@ const actionButtonItems = [
   },
 ];
 
-const actionButtonManager = new ActionButtons(actionButtonItems)
+const actionButtonManager = new ActionButtons(actionButtonItems);
 
+const previews = computed(() => {
+  return reactive(state.goods.preview_of_sizes.map((image) => {
+    return {
+      imageObj: image.small.url,
+      id: image.small.id,
+      complete: true
+    };
+  }));
+});
 </script>
 
 <template>
@@ -91,28 +101,27 @@ const actionButtonManager = new ActionButtons(actionButtonItems)
       leave-active-class="animate__animated animate__bounceOutRight"
     >
       <div v-if="actionButtonManager.refUnfocusAll">
+        <PreviewImages :images="previews" />
         <div class="font-sm text-gray-500">{{ state.goods.description }}</div>
         <div class="text-stone-500">
           <BaseIcon :path="mdiCashMultiple" /> Цена: {{ state.goods.price }}
         </div>
       </div>
     </transition>
-    
+
     <transition
       enter-active-class="animate__animated animate__slideInLeft"
       leave-active-class="animate__animated animate__bounceOutRight"
     >
-      <div v-if="actionButtonManager.isActive('actionView')">
-        View
-      </div>
+      <div v-if="actionButtonManager.isActive('actionView')">View</div>
     </transition>
-    
+
     <transition
       enter-active-class="animate__animated animate__slideInLeft"
       leave-active-class="animate__animated animate__bounceOutRight"
     >
       <div v-if="actionButtonManager.isActive('actionEdit')">
-        <GoodsForm :goods-data="state.goods" class="-mx-6"/>
+        <GoodsForm :goods-data="state.goods" class="-mx-6" />
       </div>
     </transition>
   </CardBox>

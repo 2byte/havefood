@@ -58,7 +58,7 @@ watch(props.images, (newVal) => {
 
 <template>
   <!--<div class="grid grid-cols-2 justify-center gap-4 mb-4">-->
-  <div class="gap-2 columns-2 md:columns-3 lg:columns-4 mb-4 space-y-2">
+  <div v-if="images.length" class="gap-2 columns-2 md:columns-3 lg:columns-4 mb-4 space-y-2">
     <div v-for="(image, index) in images" :key="index" class="relative p-1">
       <div class="absolute inset-0 text-4xl font-bold text-black/80 flex justify-center items-center" v-if="image?.uploading">
         {{ image.uploadPercent }}%

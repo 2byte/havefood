@@ -9,7 +9,8 @@ import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 import NotificationBar from "@/admin/components/NotificationBar.vue";
 import Api from "@/admin/libs/Api.js";
 import {
-  mdiFolder
+  mdiFolder,
+  mdiPlus
 } from '@mdi/js'
 
 import {
@@ -79,18 +80,31 @@ const submit = () => {
 // ---------------- end submit --------------//
 
 const labelButton = ref("Создать");
+const title = ref("Создание категории");
 
 // ---------------- update mode --------------//
 
 watch(() => state.mode, (newMode) => {
+  if (newMode == 'update') {
   labelButton.value = 'Сохранить'
+  title.value = 'Редактирование категории'
+  } else {
+    labelButton.value = 'Создать'
+    title.value = 'Создание категории'
+  }
 })
+
+const createNew = () => {
+  form.name = ''
+  state.categoryId = null
+  switchMode('create')
+}
 
 </script>
 
 <template>
   <CardBox
-    title="Создание категории"
+    :title="title"
     form
     @submit.prevent="submit"
   >
@@ -121,6 +135,15 @@ watch(() => state.mode, (newMode) => {
         color="success"
         :label="labelButton"
         :loader="loaderSubmit"
+      />
+      
+      <BaseButton
+        type="submit"
+        color="success"
+        label="Создать еще одну"
+        :icon="mdiPlus"
+        v-if="state.mode == 'update'"
+        @click.prevent="createNew"
       />
 
       <BaseButton

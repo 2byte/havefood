@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { config } from 'dotenv'
+/*import { config } from 'dotenv'
 
 if (process.env.TEST == 'true') {
   config();
-}
+}*/
 
 export class Api {
     
@@ -57,12 +57,12 @@ export class Api {
       this.requestSendForm = formParams
       this.axiosParams = axiosParams
       
-      if (process?.env?.TEST == 'true') {
+      /*if (process?.env?.TEST == 'true') {
         this.apiTestServer = process.env.APP_URL
         this.axiosParams.baseURL = this.apiTestServer.replace('localhost', '127.0.0.1')
-      } else {
+      } else {*/
         this.axiosParams.baseURL = '/'
-      }
+      //}
       
       if (Object.keys(axiosParams).length) {
         Object.assign(this.axiosParams, axiosParams)
@@ -272,13 +272,13 @@ function createRequestApi(url, methodRequest, formParams, axiosParams) {
     }
     
     instApi.fail((err) => {
-      if (process?.env?.TEST != 'true') {
+      //if (process?.env?.TEST != 'true') {
         alert(err);
-      } else {
+      /*} else {
         if (process?.env?.APP_DEBUG) {
           console.log('error request api', err)
         }
-      }
+      }*/
     });
     
     if (createRequestApi.withoutRun) {
@@ -303,9 +303,9 @@ export const sendFile = function createRequestApiSendFile(url, fields) {
   
   const instApi = createRequestApi(...createRequestApiArgs)
   
-  if (process?.env?.TEST == 'true') {
+  /*if (process?.env?.TEST == 'true') {
     instApi.withRightBoss()
-  }
+  }*/
   
   return instApi
 }

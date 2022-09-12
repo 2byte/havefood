@@ -31,7 +31,7 @@ const { listCategories } = storeToRefs(useCategoriesStore())
 
 fetchAllCategories()
 
-watch(listCategories, (categories) => {
+/*watch(listCategories, (categories) => {
     menuItems[3][0].menu.push(...categories.map((category) => {
         return {
             label: `${category.name} (${category.count_goods})`,
@@ -40,7 +40,7 @@ watch(listCategories, (categories) => {
             route: ['admin.list-goods', [category.id]],
         }
     }));
-})
+})*/
 </script>
 
 <template>

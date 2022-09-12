@@ -1,40 +1,57 @@
 import {
-    mdiAccountCircle,
-    mdiMonitor,
-    mdiGithub,
-    mdiLock,
-    mdiAlertCircle,
-    mdiMonitorShimmer,
-    mdiSquareEditOutline,
-    mdiTable,
-    mdiViewList,
-    mdiTelevisionGuide,
-    mdiResponsive,
-    mdiPalette,
-    mdiAllInclusive
-} from '@mdi/js'
+  mdiAccountCircle,
+  mdiMonitor,
+  mdiGithub,
+  mdiLock,
+  mdiAlertCircle,
+  mdiMonitorShimmer,
+  mdiSquareEditOutline,
+  mdiTable,
+  mdiViewList,
+  mdiTelevisionGuide,
+  mdiResponsive,
+  mdiPalette,
+  mdiAllInclusive,
+  mdiFolderCog,
+  mdiAppleKeyboardOption
+} from "@mdi/js";
 
 export default [
-    'Главное',
-    [{
-        route: 'admin.index',
-        icon: mdiMonitor,
-        label: 'Лобби'
-    }],
-    'Магазин',
-    [{
-        label: 'Категории товаров',
-        icon: mdiViewList,
-        expanded: true,
-        menu: [{
-            icon: mdiAllInclusive,
-            label: 'Все товары'
+  "Главное",
+  [
+    {
+      route: "admin.index",
+      icon: mdiMonitor,
+      label: "Лобби",
+    },
+  ],
+  "Магазин",
+  [
+    {
+      label: 'Управление категориями',
+      icon: mdiFolderCog,
+      route: 'admin.list-categories'
+    },
+    {
+      label: 'Управление опциями товаров',
+      icon: mdiAppleKeyboardOption
+    },
+    {
+      label: "Категории товаров",
+      icon: mdiViewList,
+      expanded: true,
+      menu: [
+        {
+          icon: mdiAllInclusive,
+          label: "Все товары",
         },
-            {
-                label: 'Категория 1'
-            }]
-    }],
-    /*'Examples',
+        {
+          label: "Категория 1",
+        },
+      ],
+    },
+  ],
+  /*'Examples',
   [
     {
       route: 'tables',
@@ -104,4 +121,4 @@ export default [
       target: '_blank'
     }
   ]*/
-]
+];

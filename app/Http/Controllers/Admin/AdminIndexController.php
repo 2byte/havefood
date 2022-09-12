@@ -30,6 +30,11 @@ class AdminIndexController extends AdminBaseController
         ]);
     }
     
+    public function listCategories(Request $request)
+    {
+      return Inertia::render('ListCategories');
+    }
+    
     /**
      * Test page for goods components
      * */

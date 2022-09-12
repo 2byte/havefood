@@ -1,6 +1,5 @@
 <script setup>
-import { computed, watch, ref } from "vue";
-import { useForm, Link, Head } from "@inertiajs/inertia-vue3";
+import { reactive, ref, watch, computed } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import FormField from "@/admin/components/FormField.vue";
 import FormControl from "@/admin/components/FormControl.vue";
@@ -9,22 +8,42 @@ import BaseButton from "@/admin/components/BaseButton.vue";
 import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 import NotificationBar from "@/admin/components/NotificationBar.vue";
 import Api from "@/admin/libs/Api.js";
-// Загрузка данных по api
-// загружаются типы товаров, это хранилище pinia, пока все что нужно знать
-// что данные будут в goodsTypeOptions а статус загрузки loadingGoodsTypes = true если загружено
+import {
+  mdiFolder
+} from '@mdi/js'
+
 import {
   loadingGoodsTypes,
   goodsTypeOptions,
 } from "@/admin/Goods/Repositories/goodsTypeRepository.js";
 
-const props = defineProps({});
+const props = defineProps({
+  buttonCloseForm: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const title = "Заголовок карточки";
+const emit = defineEmits(["created", "close-form", "updated"]);
+
+const state = reactive({
+  categoryId: null,
+  mode: "create",
+});
+
+const switchMode = (newMode, categoryId) => {
+  if (state.mode != newMode) {
+    state.mode = newMode;
+  }
+  if (categoryId) {
+    state.categoryId = categoryId;
+  }
+};
 
 // Данные формы привязывает по модели формы
 const form = reactive({
+  id: computed(() => state.categoryId),
   name: null,
-  description: null,
 });
 
 // ---------------- submit --------------//
@@ -45,48 +64,43 @@ const submit = () => {
     // Передаем ссылку куда будут загружен массив с ошибками из апи
     .setErrors(errorsFromApi)
     .success((data) => {
-      notificationSave.value = data?.option_id
-        ? "Опция успешно создана"
-        : "Опция успешно сохранена";
+      notificationSave.value = data?.id
+        ? "Категория успешно создана"
+        : "Категория успешно сохранена";
 
-      if (data?.option_id) {
-        refOptionId.value = data.option_id;
+      if (state.mode == "create") {
+        switchMode("update", data.id);
+        emit("created");
+      } else {
+        emit("updated");
       }
-
-      // Режим компонента, перкключаем в режим редактирования
-      //switchMode("update");
-      // Генерируем событие о создании
-      //emit("created");
-    });
+    }).run();
 };
 // ---------------- end submit --------------//
+
+const labelButton = ref("Создать");
+
+// ---------------- update mode --------------//
+
+watch(() => state.mode, (newMode) => {
+  labelButton.value = 'Сохранить'
+})
+
 </script>
 
 <template>
-  <!-- и так все компоненты юзают CardBox компонент-->
-  <!-- так как у нас будет форма передаем form свойство компоненту -->
-  <!-- свойство loader показывает картинку загрузчик -->
-  <CardBox :title="title" form @submit="submit" :loader="loaderSubmit">
-    <!-- ошибки от апи выброшенные валидатором -->
+  <CardBox
+    title="Создание категории"
+    form
+    @submit.prevent="submit"
+  >
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" class="-mt-6" />
-    <!-- 
-    Тут мы используем компоненты создания формы
-    можно посмотреть resources/scripts/admin/Goods/GoodsCreator.vue
-    -->
-    <!--
-    Создание форм с помощью компонентов
-      <FormField label="Имя товара">
+
+    <FormField label="Имя категории">
       <FormControl
         v-model="form.name"
-        :icon="mdiShoppingOutline"
-        placeholder="Бургер"
-      />
-      <FormControl
-        v-model="form.category_id"
         :icon="mdiFolder"
-        :options="categoryOptions"
-        placeholder="Выберите категорию"
-        :loader="loadingCategories"
+        placeholder="Напитки"
       />
     </FormField>
     <FormField label="Тип товара">
@@ -96,37 +110,26 @@ const submit = () => {
         :loader="loadingGoodsTypes"
       />
     </FormField>
-    <FormField label="Описание товара">
-      <FormControl
-        v-model="form.description"
-        :icon="mdiBookInformationVariant"
-        type="textarea"
-        placeholder="Описание товара"
+
+    <NotificationBar color="success" timeout="5000" v-if="notificationSave" @dismiss="notificationSave = null">
+      {{ notificationSave }}
+    </NotificationBar>
+
+    <div class="flex justify-between">
+      <BaseButton
+        type="submit"
+        color="success"
+        :label="labelButton"
+        :loader="loaderSubmit"
       />
-    </FormField>
-    <FormField label="Цена">
-      <FormControl
-        v-model="form.price"
-        :icon="mdiCashMultiple"
-        placeholder="100.00"
+
+      <BaseButton
+        type="submit"
+        v-if="buttonCloseForm"
+        color="danger"
+        label="Отмена"
+        @click.prevent="$emit('close-form')"
       />
-    </FormField>
-    <FormField label="Стикер">
-      <FormCheckRadioPicker
-        v-model="form.sticker"
-        name="sticker"
-        type="radio"
-        :options="stickerOptions"
-      />
-    </FormField>
-    <FormField label="Скрыт">
-      <FormCheckRadioPicker
-        v-model="switchHiddenValue"
-        name="sample-switch"
-        type="switch"
-        :options="switchHidden"
-      />
-    </FormField>
-    -->
+    </div>
   </CardBox>
 </template>

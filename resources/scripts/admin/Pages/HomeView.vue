@@ -10,7 +10,8 @@ import {
   mdiMonitorCellphone,
   mdiReload,
   mdiGithub,
-  mdiChartPie
+  mdiChartPie,
+  mdiPlus
 } from '@mdi/js'
 import * as chartConfig from '@/admin/components/Charts/chart.config.js'
 import LineChart from '@/admin/components/Charts/LineChart.vue'
@@ -20,11 +21,12 @@ import SectionHeroBar from '@/admin/components/SectionHeroBar.vue'
 import CardBoxWidget from '@/admin/components/CardBoxWidget.vue'
 import CardBox from '@/admin/components/CardBox.vue'
 import TableSampleClients from '@/admin/components/TableSampleClients.vue'
-import NotificationBar from '@/admin/components/NotificationBar.vue'
+//import NotificationBar from '@/admin/components/NotificationBar.vue'
 import BaseButton from '@/admin/components/BaseButton.vue'
 import CardBoxTransaction from '@/admin/components/CardBoxTransaction.vue'
 import CardBoxClient from '@/admin/components/CardBoxClient.vue'
 import SectionTitleBarSub from '@/admin/components/SectionTitleBarSub.vue'
+import GoodsForm from '@/admin/Goods/GoodsForm.vue'
 import LayoutAuthenticated from '@/admin/layouts/LayoutAuthenticated.vue'
 
 const titleStack = ref(['Admin', 'Dashboard'])
@@ -44,6 +46,8 @@ const mainStore = useMainStore()
 const clientBarItems = computed(() => mainStore.clients.slice(0, 3))
 
 const transactionBarItems = computed(() => mainStore.history.slice(0, 3))
+
+const showGoodsForm = ref(false)
 </script>
 <script>
     export default {
@@ -56,26 +60,12 @@ const transactionBarItems = computed(() => mainStore.history.slice(0, 3))
     <SectionTitleBar :title-stack="titleStack" />
     <SectionHeroBar>Админ панель</SectionHeroBar>
     <SectionMain>
-      <NotificationBar
-        color="info"
-        :icon="mdiGithub"
-      >
-        Please star this project on
-        <a
-          href="https://github.com/justboil/admin-one-vue-tailwind"
-          class="underline"
-          target="_blank"
-        >GitHub</a>
-        <template #right>
-          <BaseButton
-            href="https://github.com/justboil/admin-one-vue-tailwind"
-            :icon="mdiGithub"
-            label="GitHub"
-            target="_blank"
-            small
-          />
-        </template>
-      </NotificationBar>
+      
+      <CardBox title="Что сделать?">
+        <GoodsForm v-if="showGoodsForm" button-close-form @closeForm="showGoodsForm = false"/>
+        <BaseButton v-if="!showGoodsForm" label="Создать товар" :icon="mdiPlus" color="success" @click="showGoodsForm = !showGoodsForm"/>
+      </CardBox>
+      
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
         <CardBoxWidget
           trend="12%"
@@ -83,7 +73,7 @@ const transactionBarItems = computed(() => mainStore.history.slice(0, 3))
           color="text-emerald-500"
           :icon="mdiAccountMultiple"
           :number="512"
-          label="Clients"
+          label="Клиенты"
         />
         <CardBoxWidget
           trend="12%"
@@ -92,16 +82,16 @@ const transactionBarItems = computed(() => mainStore.history.slice(0, 3))
           :icon="mdiCartOutline"
           :number="7770"
           prefix="$"
-          label="Sales"
+          label="Продажи"
         />
         <CardBoxWidget
-          trend="Overflow"
+          trend="Перевыполнен"
           trend-type="alert"
           color="text-red-500"
           :icon="mdiChartTimelineVariant"
           :number="256"
           suffix="%"
-          label="Performance"
+          label="Показатель месяца"
         />
       </div>
 
@@ -132,11 +122,11 @@ const transactionBarItems = computed(() => mainStore.history.slice(0, 3))
 
       <SectionTitleBarSub
         :icon="mdiChartPie"
-        title="Trends overview"
+        title="График активности продаж"
       />
 
       <CardBox
-        title="Performance"
+        title="Продажи"
         :icon="mdiFinance"
         :header-icon="mdiReload"
         class="mb-6"

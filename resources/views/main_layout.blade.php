@@ -38,12 +38,8 @@
     
     <div class="main-wrapper">
         @include('header')
-        @include('goods.goods_list')
-        @include('banners')
-        {{--@include('goods.new_goods')--}}
-        {{--@include('testimonial')--}}
-        {{--@include('brand')--}}
-        {{--@include('blog')--}}
+        
+        @yield('content')
         
         <div class="section-space-bottom-100"></div>
         @include('footer')

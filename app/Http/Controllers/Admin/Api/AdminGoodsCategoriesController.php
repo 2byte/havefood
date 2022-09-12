@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Api;
 use App\Http\Controllers\Admin\AdminBaseController;
 use Illuminate\Http\Request;
 use App\Models\GoodsCategory;
+use App\Shop\Goods\Enums\GoodsType;
 
 class AdminGoodsCategoriesController extends AdminBaseController
 {
@@ -40,7 +41,24 @@ class AdminGoodsCategoriesController extends AdminBaseController
     public function store(Request $request)
     {
         //
-        return responseApi()->success();
+        $validatedAttrs = $request->validate([
+          'id' => 'nullable|exists:goods_categories,id',
+          'name' => 'required|min:3',
+          'goods_types' => 'in:'. GoodsType::enumStringValues()
+        ]);
+        
+        $return = [];
+        
+        if ($request->id) {
+          GoodsCategory::findOrFail($request->id)
+            ->update($validatedAttrs);
+        } else {
+          $category = GoodsCategory::create($validatedAttrs);
+          
+          $return['id'] = $category->id;
+        }
+        
+        return responseApi($return)->success();
     }
 
     /**

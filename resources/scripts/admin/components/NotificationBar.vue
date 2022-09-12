@@ -19,6 +19,8 @@ const props = defineProps({
   timeout: false
 })
 
+const emit = defineEmits(['dismiss'])
+
 const componentClass = computed(() => props.outline
   ? colorsOutline[props.color]
   : [colorsBg[props.color], colorsBorders[props.color]])
@@ -35,7 +37,10 @@ const hasRightSlot = computed(() => slots.right)
 
 onMounted(() => {
   if (props.timeout) {
-    setTimeout(() => { dismiss() }, props.timeout)
+    setTimeout(() => { 
+      dismiss() 
+      emit('dismiss')
+    }, props.timeout)
   }
 })
 </script>

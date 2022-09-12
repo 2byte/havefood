@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Shop\Goods\Enums\GoodsType;
 use Illuminate\Support\Facades\DB;
 use App\Shop\V1\Goods\GoodsManager;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Goods extends BaseModel
 {
@@ -46,14 +47,34 @@ class Goods extends BaseModel
   ];
   //public $imagePreviewSize = [300, 300];
 
+  public function shortDesc(): Attribute {
+    return new Attribute(
+      get: fn ($value) => 
+        mb_substr($this->description, 0, 70)
+    );
+  }
+  
   public function category() {
     return $this->belongsTo(GoodsCategory::class);
   }
 
   public static function getList($categoryId = null) {
-    //$query = static::query();
-
-    //$query->when($categoryId, fn () => $query->whereCategory)
+    $query = static::query()->with('previews');
+    
+    $query->when($categoryId, function ($query, $categoryId) {
+      $query->whereCategoryId($categoryId);
+    });
+    
+    $goods = $query->whereHidden(0)
+      ->orderBy('id', 'desc')
+      ->paginate(5);
+      
+    // make preview_of_sizes attribute
+    $goods->each(fn ($goodsItem) => 
+      $goodsItem->setAttribute('preview_of_sizes', $goodsItem->previewSizes)
+    );
+    
+    return $goods;
   }
 
   public function scopeSortByFresh($query) {

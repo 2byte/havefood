@@ -11,7 +11,11 @@ class GoodsCategory extends Model
     use HasFactory;
     
     public $table = 'goods_categories';
-    public $guarded = [];
+    public $fillable = [
+      'name',
+      'sortpos',
+      'goods_type',
+    ];
     
     protected $casts = [ 'goods_type' => GoodsType::class ];
     

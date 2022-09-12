@@ -45,8 +45,14 @@ const props = defineProps({
   goodsData: {
     type: Object,
     default: null
-  }
+  },
+  buttonCloseForm: {
+    type: Boolean,
+    default: false,
+  },
 });
+
+const emit = defineEmits(["close-form"]);
 
 const componentMode = ref(props.mode);
 const goodsId = ref(props.goodsId);
@@ -91,7 +97,7 @@ const stickerOptions = {
 const switchHidden = { 1: "Да" };
 
 const form = reactive({
-  id: goodsId.value,
+  id: goodsId,
   name: null,
   category_id: categoryIdSelected,
   description: null,
@@ -264,12 +270,21 @@ const buttonSubmitLabel = computed(() => {
       {{ notificationSave }}
     </NotificationBar>
 
-    <BaseButton
-      type="submit"
-      color="info"
-      :label="buttonSubmitLabel"
-      :loader="loaderSubmit"
-      loader-type="circle2"
-    />
+    <div class="flex justify-between">
+      <BaseButton
+        type="submit"
+        color="info"
+        :label="buttonSubmitLabel"
+        :loader="loaderSubmit"
+        loader-type="circle2"
+      />
+      <BaseButton
+        type="submit"
+        v-if="buttonCloseForm"
+        color="danger"
+        label="Отмена"
+        @click.prevent="$emit('close-form')"
+      />
+    </div>
   </CardBox>
 </template>

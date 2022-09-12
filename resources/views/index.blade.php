@@ -2,7 +2,7 @@
 
 @section('content')
 <!-- Begin Slider Area -->
-<div class="slider-area">
+{{--<div class="slider-area">
 
     <!-- Main Slider -->
     <div class="swiper-container main-slider swiper-arrow with-bg_white">
@@ -124,7 +124,13 @@
             </div>
         </div>
     </div>
-</div>
+</div>--}}
 <!-- Shipping Area End Here -->
 
+@include('goods.goods_list')
+@include('banners')
+{{--@include('goods.new_goods')--}}
+{{--@include('testimonial')--}}
+{{--@include('brand')--}}
+{{--@include('blog')--}} 
 @stop

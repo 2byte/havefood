@@ -44,6 +44,18 @@ class BaseModel extends Model
         $this->getImagePreviews($this->previews)
     );
   }
+  
+  public function smallPreview(): Attribute {
+    if (isset($this->preview_of_sizes) && $this->preview_of_sizes->isNotEmpty()) {
+      return new Attribute(
+        get: fn ($value) => $this->preview_of_sizes->first()['small']['url']
+      );
+    }
+    
+    return new Attribute(
+      get: fn ($value) => null
+    );
+  }
 
   public function files() {
     return $this->morphMany(File::class, 'relate');

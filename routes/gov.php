@@ -30,6 +30,7 @@ Route::middleware(['auth', 'auth.role:boss,admin,manager'])
       Route::get('goods-option-list', 'goodsOptionList')->name('goods.goodsOptionList');
       Route::get('goods-option-form', 'goodsOptionForm')->name('goods.goodsOptionForm');
       Route::get('goods-item', 'goodsItem')->name('goods.item');
+      Route::get('goods-category-form', 'goodsCategoryForm')->name('goods.categoryForm');
     });
   });
 });

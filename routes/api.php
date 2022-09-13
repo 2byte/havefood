@@ -33,6 +33,7 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
   ->group(function () {
     Route::get('/', 'index')->name('all');
     Route::post('store', 'store')->name('store');
+    Route::post('delete', 'delete')->name('delete');
   });
 
   Route::prefix('goods')

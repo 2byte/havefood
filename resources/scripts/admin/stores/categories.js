@@ -9,9 +9,9 @@ export const useCategoriesStore = defineStore("categories", {
     error: null,
   }),
   actions: {
-    async fetchAllCategories(forceLoad = true) {
+    async fetchAllCategories(forceLoad = false) {
       if (!forceLoad && this.listCategories.length > 0) {
-        if (this.loading) this.loading.false;
+        if (this.loading) this.loading = false;
 
         return Promise.resolve();
       }
@@ -29,5 +29,12 @@ export const useCategoriesStore = defineStore("categories", {
         })
         .run();
     },
+    removeById(id) {
+      this.listCategories.forEach((item, i) => {
+        if (item.id == id) {
+          this.listCategories.splice(i, 1);
+        }
+      })
+    }
   },
 });

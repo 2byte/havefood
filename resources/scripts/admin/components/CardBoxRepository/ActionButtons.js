@@ -3,21 +3,21 @@ import { ref } from 'vue'
 
 export default class ActionButtons {
   
-  #stateFocusButtons = null
-  #buttons = [];
-  #isUnfocusAll = ref(true)
+  stateFocusButtons = null
+  buttons = [];
+  isUnfocusAll = ref(true)
 
   constructor(arrayButtons) {
-    this.#buttons = arrayButtons;
-    this.#stateFocusButtons = new Map()
+    this.buttons = arrayButtons;
+    this.stateFocusButtons = new Map()
   }
 
-  get buttons() {
-    return this.#buttons;
+  get dataButtons() {
+    return this.buttons;
   }
   
   get refUnfocusAll() {
-    return this.#isUnfocusAll.value
+    return this.isUnfocusAll.value
   }
   
   isActive(id) {
@@ -26,34 +26,34 @@ export default class ActionButtons {
 
   clickButton(el, btn) {
     const isFocusElem = () => {
-      return this.#stateFocusButtons.has(el) && this.#stateFocusButtons.get(el);
+      return this.stateFocusButtons.has(el) && this.stateFocusButtons.get(el);
     };
     const focusElem = () => {
-      this.#stateFocusButtons.set(el, true);
-      this.#isUnfocusAll.value = false
+      this.stateFocusButtons.set(el, true);
+      this.isUnfocusAll.value = false
     };
 
     const unfocusElem = () => {
       el.blur();
-      this.#stateFocusButtons.set(el, false);
+      this.stateFocusButtons.set(el, false);
 
       // is not active all buttons
-      const countNotIsActive = this.#buttons.filter(
+      const countNotIsActive = this.buttons.filter(
         (val) => !val.isActive.value
       );
 
-      if (countNotIsActive.length == this.#buttons.length) {
-        this.#isUnfocusAll.value = true
+      if (countNotIsActive.length == this.buttons.length) {
+        this.isUnfocusAll.value = true
       }
     };
 
     const unfocusOtherwise = () => {
-      this.#stateFocusButtons.forEach((val, elem) => {
+      this.stateFocusButtons.forEach((val, elem) => {
         if (elem != el) {
-          this.#stateFocusButtons.set(elem, false);
+          this.stateFocusButtons.set(elem, false);
         }
       });
-      this.#buttons.forEach((arrItemBtn) => {
+      this.buttons.forEach((arrItemBtn) => {
         if (arrItemBtn.id != btn.id) {
           btnSetIsActive(arrItemBtn, false);
         }

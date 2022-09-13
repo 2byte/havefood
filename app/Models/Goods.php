@@ -182,4 +182,11 @@ class Goods extends BaseModel
   public function makeOptionSortDown($optionId) {
     return $this->makeOptionSortUp($optionId, 'down');
   }
+  
+  public function delete()
+  {
+    $this->files->each->delete();
+    
+    parent::delete();
+  }
 }

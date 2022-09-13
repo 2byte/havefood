@@ -44,7 +44,7 @@ class AdminGoodsCategoriesController extends AdminBaseController
         $validatedAttrs = $request->validate([
           'id' => 'nullable|exists:goods_categories,id',
           'name' => 'required|min:3',
-          'goods_types' => 'in:'. GoodsType::enumStringValues()
+          'goods_type' => 'in:'. GoodsType::enumStringValues()
         ]);
         
         $return = [];
@@ -53,6 +53,9 @@ class AdminGoodsCategoriesController extends AdminBaseController
           GoodsCategory::findOrFail($request->id)
             ->update($validatedAttrs);
         } else {
+          $sortpos = GoodsCategory::orderBy('sortpos', 'desc')->value('sortpos') + 1;
+          $validatedAttrs['sortpos'] = $sortpos;
+          
           $category = GoodsCategory::create($validatedAttrs);
           
           $return['id'] = $category->id;
@@ -61,6 +64,17 @@ class AdminGoodsCategoriesController extends AdminBaseController
         return responseApi($return)->success();
     }
 
+    public function delete(Request $request) 
+    {
+      $id = $request->id;
+      
+      $category = GoodsCategory::with('goods')->findOrFail($id);
+      
+      $category->goods->each->delete();
+      
+      return responseApi()->success();
+    }
+    
     /**
      * Display the specified resource.
      *

@@ -74,7 +74,7 @@ const submit = e => {
   emit('submit', e)
 }
 
-const actionButtonList = props.actionButtonManager?.buttons
+const actionButtonList = props.actionButtonManager?.dataButtons
 </script>
 
 <template>

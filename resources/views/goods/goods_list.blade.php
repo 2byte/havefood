@@ -35,7 +35,7 @@
                 <div class="product-item">
                   @if (!is_null($item->small_preview))
                   <div class="product-img">
-                    <a href="{{ url('#') }}">
+                    <a href="{{ url('#') }}" data-bs-toggle="modal" data-bs-target="#quickModal">
                       <img class="primary-img" src="{{ $item->small_preview }}" alt="Product Images">
                       {{--<img class="primary-img" src="/pronia/assets/images/product/medium-size/1-1-270x300.jpg" alt="Product Images">
                       <img class="secondary-img" src="/pronia/assets/images/product/medium-size/1-2-270x300.jpg" alt="Product Images">--}}

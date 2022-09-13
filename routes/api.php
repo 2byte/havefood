@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Api\ {
   AdminApiGoodsOptionController,
   AdminApiFileController
 };
+use App\Http\Controllers\GoodsApiUserController;
 use App\Http\Controllers\LocalController;
 
 /*
@@ -69,6 +70,13 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
     Route::get('get-goods-types', 'getGoodsTypes');
   });
 });
+
+Route::controller(GoodsApiUserController::class)
+  ->prefix('user/goods')
+  ->name('user.goods.')
+  ->group(function () {
+    GoodsApiUserController::get('get', 'get')->name('get');
+  });
 
 if (app()->isLocal()) {
   Route::controller(LocalController::class)

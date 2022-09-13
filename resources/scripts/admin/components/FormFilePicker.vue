@@ -201,6 +201,7 @@ const upload = (event) => {
       })
         .setErrors(errorsUpload)
         .onUploadProgress((ev) => {
+          console.log('upload', ev.loaded, ev.total)
           previewData.uploadPercent =
             Math.round((ev.loaded * 100) / ev.total);
         })

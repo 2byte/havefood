@@ -49,6 +49,8 @@
               <p class="short-desc">
                 {{ $goods->description }}
               </p>
+              
+              <form id="form-goods-options">
               @foreach ($goods->option_tree as $option)
                 @if (!$option->group)
                 <div class="selector-wrap">
@@ -93,6 +95,7 @@
                   @endif
                 @endif
               @endforeach
+              </form>
               
               <ul class="quantity-with-btn">
                 <li class="quantity">
@@ -150,10 +153,16 @@
 <!-- Modal Area End Here -->
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const modal = new bootstrap.Modal('#quickModal')
-    
-    modal.show()
-  })
+class CalcGoodsOrder {
+  constructor(form) {
+    this.form = form
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const modal = new bootstrap.Modal('#quickModal')
+  
+  modal.show()
+})
 </script>
 @stop

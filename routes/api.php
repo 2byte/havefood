@@ -75,7 +75,7 @@ Route::controller(GoodsApiUserController::class)
   ->prefix('user/goods')
   ->name('user.goods.')
   ->group(function () {
-    GoodsApiUserController::get('get', 'get')->name('get');
+    Route::get('get', 'get')->name('get');
   });
 
 if (app()->isLocal()) {

@@ -8,7 +8,7 @@ use App\Shop\Goods\Enums\GoodsType;
 use App\Shop\Goods\Enums\GoodsOptionPriceType;
 use App\Shop\Goods\Enums\GoodsOptionGroupType;
 
-class GoodsOption extends Model
+class GoodsOption extends BaseModel
 {
   use HasFactory, Traits\UploadFileTrait;
 
@@ -34,7 +34,7 @@ class GoodsOption extends Model
   protected $casts = [
     'goods_type' => GoodsType::class,
     'price_type' => GoodsOptionPriceType::class,
-    'group_type' => GoodsOptionGroupType::class,
+    'group_variant' => GoodsOptionGroupType::class,
   ];
 
   const MORPH = 'goodsoption';

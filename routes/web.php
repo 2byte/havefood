@@ -20,6 +20,7 @@ Route::controller(HomeController::class)
     ->name('home.')
     ->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('goods-view', 'goodsView')->name('goods.view');
     });
 
 /*Route::get('/', function () {

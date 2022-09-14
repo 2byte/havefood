@@ -3,6 +3,10 @@
 namespace App\Console\Commands\DevUtils;
 
 use Illuminate\Console\Command;
+use App\Models\User;
+use App\Models\Goods;
+use App\Models\GoodsOption;
+use App\Shop\Goods\Enums\GoodsType;
 
 class DevTestUtils extends Command
 {
@@ -11,7 +15,7 @@ class DevTestUtils extends Command
      *
      * @var string
      */
-    protected $signature = 'devtest';
+    protected $signature = 'devtest {--make-fake-option}';
 
     /**
      * The console command description.
@@ -27,6 +31,47 @@ class DevTestUtils extends Command
      */
     public function handle()
     {
-        return 0;
+      if ($this->option('make-fake-option')) {
+        $this->makeFakeOptions();
+      }
+      
+      return 0;
     }
+    
+    public function makeFakeOptions()
+    {
+      $goodsOptionManager = new \App\Shop\V1\Goods\GoodsOptionManager(GoodsOption::getModel());
+      
+      $user =  User::find(12);
+      
+      $group = $goodsOptionManager->createGroup([
+        'name' => 'Новая опция',
+        'description' => 'Описание некой группы',
+        'user_id' => $user->id,
+        'group_variant' => 'radio'
+      ]);
+      
+      $attributes = [
+        'name' => 'Лук',
+        'parent_id' => $group->getModel()->id,
+        'user_id' => $user->id,
+        'price' => 100
+      ];
+     
+      $suboption = $goodsOptionManager->createOption($attributes, $user);
+      
+      Goods::find(16)->attachOption($group->getModel()->id, $user->id);
+      
+      $attributes = [
+        'name' => 'Чиснок',
+        'parent_id' => $group->getModel()->id,
+        'user_id' => $user->id,
+        'price' => 100
+      ];
+     
+      $suboption = $goodsOptionManager->createOption($attributes, $user);
+      
+      $this->info('OK');
+    }
+  
 }

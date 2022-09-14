@@ -107,6 +107,13 @@ class Goods extends BaseModel
       'set_user_id' => $userId
     ]);
   }
+  
+  public function makeOptionTreeAttribute()
+  {
+    if ($this->options->isNotEmpty()) {
+      $this->setAttribute('option_tree', GoodsOption::makeOptionTree($this->options));
+    }
+  }
 
   public function makeOptionSortUp($optionId,
     $direction = 'up'): bool

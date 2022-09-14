@@ -18,4 +18,13 @@ class HomeController extends Controller
     
     return view('index', $tplData);
   }
+  
+  public function goodsView(Request $request) {
+    
+    $goods = Goods::with('previews', 'options.files')->find($request->id);
+    
+    $goods->makeOptionTreeAttribute();
+    
+    return view('goods.modal_view_goods', compact('goods'));
+  }
 }

@@ -30,14 +30,6 @@ class BaseModel extends Model
     ]);
   }
   
-  public function previews() {
-    $previews = $this->files()
-      ->whereType(FiletypeEnum::Img)
-      ->orderBy('sortpos', 'asc');
-      
-    return $previews;
-  }
-  
   public function previewSizes(): Attribute {
     return new Attribute(
       get: fn ($value) => 
@@ -45,6 +37,9 @@ class BaseModel extends Model
     );
   }
   
+  /**
+   * using for Goods::getList()
+   * */
   public function smallPreview(): Attribute {
     if (isset($this->preview_of_sizes) && $this->preview_of_sizes->isNotEmpty()) {
       return new Attribute(
@@ -59,6 +54,12 @@ class BaseModel extends Model
 
   public function files() {
     return $this->morphMany(File::class, 'relate');
+  }
+  
+  public function previews() {
+    return $this->morphMany(File::class, 'relate')
+      ->whereType(FiletypeEnum::Img)
+      ->orderBy('sortpos', 'asc');
   }
   
   public function filesSorted() {

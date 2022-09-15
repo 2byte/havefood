@@ -153,9 +153,49 @@
 <!-- Modal Area End Here -->
 
 <script>
+const optionsData = {{ Js::from($goods->options) }};
+
+const mapOptions = optionsData.map((option) => {
+  return option.childs ? [option, option.childs] : option
+}).flat(2);
+
 class CalcGoodsOrder {
-  constructor(form) {
-    this.form = form
+  
+  amount = 0;
+  count = 0;
+  
+  formElem
+  form = null;
+  mapOptions = []
+  
+  constructor(formElem, mapOptions) {
+    this.formElem = formElem
+    this.form = new FormData(formElem);
+    this.mapOptions = mapOptions
+    
+    this.addFormListener(this.formHandler)
+  }
+  
+  findOption(id) {
+    return this.mapOptions.find((item) => item.id == id)
+  }
+  
+  formHandler() {
+    console.log(this.form.keys())
+    this.form.keys().forEach();
+  }
+  
+  addFormListener(cb) {
+    const formItems = [
+      ...this.formElem.querySelectorAll('input'),
+      ...this.formElem.querySelectorAll('select')
+    ]
+    
+    formItems.forEach((item) => {
+      item.addEventListener('change', (ev)  => {
+        cb.call(this);
+      })
+    })
   }
 }
 
@@ -163,6 +203,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const modal = new bootstrap.Modal('#quickModal')
   
   modal.show()
+  
+  const calc = new CalcGoodsOrder(document.getElementById('form-goods-options'), mapOptions);
 })
 </script>
 @stop

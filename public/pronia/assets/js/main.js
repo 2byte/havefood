@@ -802,7 +802,7 @@
     /*  Nice Select
 /*----------------------------------------*/
     if ($('.nice-select').elExists()) {
-        $('.nice-select').niceSelect();
+        $('.nice-select').niceSelect('update');
     }
 
     /*----------------------------------------*/

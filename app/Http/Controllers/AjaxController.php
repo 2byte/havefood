@@ -10,7 +10,8 @@ class AjaxController extends Controller
   //
   public function index(Request $request) {
     
-    
     return view('index', $tplData);
   }
+  
+  
 }

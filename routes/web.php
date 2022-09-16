@@ -3,7 +3,10 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\{
+  HomeController,
+  AjaxController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +24,13 @@ Route::controller(HomeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('goods-view', 'goodsView')->name('goods.view');
+    });
+    
+Route::controller(AjaxController::class)
+    ->prefix('ajax')
+    ->name('ajax.')
+    ->group(function () {
+        Route::get('get-goods-html-body-modal', 'getGoodsHtmlBodyModal')->name('goods.modal.body');
     });
 
 /*Route::get('/', function () {

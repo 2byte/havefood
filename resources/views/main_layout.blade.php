@@ -43,7 +43,6 @@
         
         <div class="section-space-bottom-100"></div>
         @include('footer')
-        {{--@include('goods.modal_view_goods')--}}
 
         <!-- Begin Scroll To Top -->
         <a class="scroll-to-top" href="">

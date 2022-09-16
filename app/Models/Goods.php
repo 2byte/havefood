@@ -110,6 +110,8 @@ class Goods extends BaseModel
   
   public function makeOptionTreeAttribute()
   {
+    $this->setAttribute('option_tree', collect());
+    
     if ($this->options->isNotEmpty()) {
       $this->setAttribute('option_tree', GoodsOption::makeOptionTree($this->options));
     }

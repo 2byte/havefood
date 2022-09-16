@@ -19,6 +19,9 @@ class HomeController extends Controller
     return view('index', $tplData);
   }
   
+  /**
+   * Test page modal for Goods view
+   **/
   public function goodsView(Request $request) {
     
     $goods = Goods::with('previews', 'options.files')->find($request->id);

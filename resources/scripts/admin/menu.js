@@ -45,9 +45,6 @@ export default [
           icon: mdiAllInclusive,
           label: "Все товары",
         },
-        {
-          label: "Категория 1",
-        },
       ],
     },
   ],

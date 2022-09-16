@@ -31,16 +31,20 @@ const { listCategories } = storeToRefs(useCategoriesStore())
 
 fetchAllCategories()
 
-/*watch(listCategories, (categories) => {
-    menuItems[3][0].menu.push(...categories.map((category) => {
-        return {
-            label: `${category.name} (${category.count_goods})`,
-            icon: mdiFolder,
-            //route: 'admin.list-goods',
-            route: ['admin.list-goods', [category.id]],
-        }
-    }));
-})*/
+watch(listCategories, (categories) => {
+  const menuRef = menuItems[3][2];
+  
+  if (menuRef.length) return;
+  
+  menuRef.menu.push(...categories.map((category) => {
+      return {
+          label: `${category.name} (${category.count_goods})`,
+          icon: mdiFolder,
+          //route: 'admin.list-goods',
+          route: ['admin.list-goods', [category.id]],
+      }
+  }));
+})
 </script>
 
 <template>

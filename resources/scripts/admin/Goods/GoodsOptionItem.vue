@@ -71,8 +71,10 @@ const clickSetting = () => {
           <div :class="titleClasses">Тип группы</div>
           <div :class="cellValClasses">{{ prepData.groupVariant }}</div>
         </template>
+        <template v-if="option.description">
         <div :class="titleClasses">Описание</div>
-        <div :class="cellValClasses">{{ option.description }}</div>
+        <div :class="cellValClasses" >{{ option.description }}</div>
+        </template>
         <div :class="titleClasses">Цена</div>
         <div :class="cellValClasses">{{ prepData.price }}</div>
         <div :class="titleClasses" v-if="option.note">Заметка</div>

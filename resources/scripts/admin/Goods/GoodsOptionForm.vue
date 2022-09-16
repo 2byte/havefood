@@ -62,7 +62,7 @@ const props = defineProps({
   },
   showChildOptonList: {
     type: Boolean,
-    default: false
+    default: true
   }
 });
 
@@ -360,6 +360,7 @@ if (isTest) {
     v-if="isModeUpdate && form.group && showChildOptonList"
     :option-id="refOptionId"
     :empty-message="`В группе ${form.name} ещё нет опций`"
+    :parent-option="form"
     button-create
   />
   

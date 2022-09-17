@@ -9,6 +9,10 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
     listByOptionId: [],
     listByPersonal: [],
     listByAll: [],
+    referencesByGoodsId: [],
+    referencesByOptionId: [],
+    referencesByPersonal: [],
+    referencesByAll: [],
     sourceValue: null,
     goodsData: null,
     statusLoading: {
@@ -32,6 +36,7 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
 
       const sourceName = this.makeNameStorage(source);
       const keySource = `listBy${sourceName}`
+      const keySourceReferences = `referencesBy${sourceName}`
       
       this.statusLoading[keySource] = true
       
@@ -61,6 +66,7 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
         .success((data) => {
           this.goodsData ??= data.goods
           this[keySource] = data.options;
+          this[keySourceReferences] = data.references;
         })
         .complete((ok, data) => {
           this.statusLoading[keySource] = false
@@ -77,5 +83,8 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
     isLoadingBySource(source) {
       return toRef(this.statusLoading, `listBy${this.makeNameStorage(source)}`);
     },
+    isAttachedOption(optionId, goodsId) {
+      return this.referencesByGoodsId.find((item) => item.option_id == optionId && item.goods_id == goodsId);
+    }
   },
 });

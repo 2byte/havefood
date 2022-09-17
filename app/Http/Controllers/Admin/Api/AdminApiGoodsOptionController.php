@@ -9,6 +9,7 @@ use App\Models\GoodsOption;
 use App\Models\File;
 use App\Shop\V1\Goods\GoodsOptionValidationRules;
 use App\Shop\V1\Goods\GoodsOptionManager;
+use Illuminate\Support\Facades\DB;
 
 class AdminApiGoodsOptionController extends AdminBaseController
 {
@@ -24,10 +25,12 @@ class AdminApiGoodsOptionController extends AdminBaseController
       case 'goodsId':
         $goods = Goods::findOrFail($value);
         $options = GoodsOption::makeOptionTree($goods->options);
+        $references = DB::table('goods_ref_options')->whereGoodsId($value)->get();
       break;
       
       case 'optionId':
         $options = GoodsOption::findOrFail($value)->optionChilds;
+        $references = DB::table('goods_ref_options')->whereOptionId($value)->get();
       break;
 
       case 'personal':
@@ -37,6 +40,7 @@ class AdminApiGoodsOptionController extends AdminBaseController
             ->orderBy('id', 'desc')
             ->get()
         );
+        $references = DB::table('goods_ref_options')->whereOwnUserId($request->user()->id)->get();
       break;
       
       case 'all':
@@ -45,10 +49,11 @@ class AdminApiGoodsOptionController extends AdminBaseController
             ->orderBy('id', 'desc')
             ->get()
         );
+        $references = DB::table('goods_ref_options')->get();
       break;
     }
 
-    return responseApi(compact('goods', 'options'))->success();
+    return responseApi(compact('goods', 'options', 'references'))->success();
   }
   
   public function getGoodsOptionFirst(Request $request)

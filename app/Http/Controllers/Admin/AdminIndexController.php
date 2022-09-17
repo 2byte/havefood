@@ -22,16 +22,10 @@ class AdminIndexController extends AdminBaseController
       $category = null;
       
       if (!is_null($categoryId)) {
-        
         $category = GoodsCategory::find($categoryId);
-          
-        if (!is_null($category)) {
-          $goods = $category->goods()->sortByFresh()->paginate(10);
-        }
-      
-      } else {
-        $goods = Goods::sortByFresh()->paginate(15);
       }
+      
+      $goods = Goods::getList(categoryId: $categoryId);
       
       return Inertia::render('ListGoods', [
           'category' => $category, 

@@ -15,6 +15,13 @@ const { listByGoodsId, listByOptionId, listByPersonal, listByAll, parentOptionSt
   storeToRefs(goodsOptionStore);
 
 const props = defineProps({
+  /**
+   * Opened goods data
+   * */
+  openedGoods: {
+    type: Number,
+    default: null
+  },
   goodsId: {
     default: null,
   },
@@ -206,6 +213,7 @@ const labelCreateOption = computed(() => {
       v-for="option in state.dataOptions"
       :key="option.id"
       :option="option"
+      :openedGoods="openedGoods"
       class="-mx-6 last:border-b-0"
     />
   </CardBox>

@@ -4,10 +4,15 @@ import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
 import { mdiCog } from "@mdi/js";
+import { useGoodsOptionListStore } from '@/admin/stores/goodsOptionListStore.js'
 import "/resources/css/animate.css/animate.min.css";
 
 const props = defineProps({
   option: Object,
+  openedGoods: {
+    type: Number,
+    default: null
+  }
 });
 
 const prepData = {
@@ -37,6 +42,17 @@ const clickSetting = () => {
   showEditForm.value = !showEditForm.value;
   showInfo.value = false;
 };
+
+const isRootOption = !props.option.parent_id
+
+const optionListStore = useGoodsOptionListStore()
+const isAttachedToOpenedGoods = computed(() => {
+  if (!props.openedGoods) {
+    return false
+  }
+  
+  return optionListStore.isAttachedOption(props.option.id, props.openedGoods.id)
+})
 </script>
 
 <template>
@@ -67,6 +83,15 @@ const clickSetting = () => {
       appear
     >
       <div class="flex flex-col" v-if="showInfo">
+        <div v-if="openedGoods && isRootOption">
+          <div v-if="isAttachedToOpenedGoods">
+            Опция прикреплена к товару {{ openedGoods.name }}
+          </div>
+          <div v-else>
+            Прикрепить опцию
+          </div>
+        </div>
+        
         <template v-if="option.group">
           <div :class="titleClasses">Тип группы</div>
           <div :class="cellValClasses">{{ prepData.groupVariant }}</div>

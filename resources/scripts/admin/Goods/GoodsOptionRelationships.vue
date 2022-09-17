@@ -11,10 +11,12 @@ import { mdiPlus } from "@mdi/js";
 import "/resources/css/animate.css/animate.min.css";
 
 const props = defineProps({
+  openedGoods: {
+    type: Object,
+    default: null
+  },
   goodsId: Number,
 });
-
-const isCreateOption = ref(false);
 
 const showListOption = reactive({
   goodsId: false,
@@ -80,7 +82,7 @@ const navActiveColors = 'bg-zinc-200 border-zinc-300 text-zinc-600'
       leave-active-class="animate__animated animate__bounceOutRight"
     >
       <div v-if="showListOption.personal">
-        <GoodsOptionList list="personal" buttonCreate/>
+        <GoodsOptionList list="personal" :openedGoods="openedGoods" buttonCreate/>
       </div>
     </transition>
     

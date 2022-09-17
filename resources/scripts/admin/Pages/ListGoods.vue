@@ -7,6 +7,8 @@ import CardBox from "@/admin/components/CardBox.vue";
 import BaseIcon from "@/admin/components/BaseIcon.vue";
 import LayoutAuthenticated from "@/admin/layouts/LayoutAuthenticated.vue";
 import Paginate from "@/admin/components/Paginate.vue";
+import GoodsItem from "@/admin/Goods/GoodsItem.vue";
+import NotificationBar from "@/admin/components/NotificationBar.vue";
 import { mdiCashMultiple, mdiShoppingOutline } from "@mdi/js";
 
 const titleStack = ref(["Админ панель", "Товары"]);
@@ -34,21 +36,12 @@ export default {
   </div>
 
   <SectionMain>
-    <CardBox
-      v-for="good in goods.data"
-      :title="good.name"
-      :key="good.id"
-      class="mb-2 shadow-sm"
-      :icon="mdiShoppingOutline"
-    >
-      <div class="font-sm text-gray-500">
-        {{ good.description }}
-      </div>
-      <div class="text-stone-500">
-        <BaseIcon :path="mdiCashMultiple" /> Цена: {{ good.price }}
-      </div>
-    </CardBox>
-
+    <GoodsItem v-for="goodsItem in goods.data" :goods="goodsItem" :key="goodsItem.id" />
+    
+    <NotificationBar v-if="!goods.data.length" color="info">
+      В данной категории пока нет товара
+    </NotificationBar>
+    
     <Paginate :links="goods.links" />
   </SectionMain>
 </template>

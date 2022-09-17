@@ -26,7 +26,7 @@ const props = defineProps({
 });
 
 const state = reactive({
-  goods: ref(props.goods),
+  goods: props.goods,
 });
 
 // ---------------- test property --------------//
@@ -109,14 +109,18 @@ const previews = computed(() => {
         </div>
       </div>
     </transition>
-
+    <!-- end default -->
+    
+    <!-- View -->
     <transition
       enter-active-class="animate__animated animate__slideInLeft"
       leave-active-class="animate__animated animate__bounceOutRight"
     >
       <div v-if="actionButtonManager.isActive('actionView')">View</div>
     </transition>
-
+    <!-- end View -->
+    
+    <!-- action edit -->
     <transition
       enter-active-class="animate__animated animate__slideInLeft"
       leave-active-class="animate__animated animate__bounceOutRight"
@@ -125,5 +129,6 @@ const previews = computed(() => {
         <GoodsForm :goods-data="state.goods" class="-mx-6" />
       </div>
     </transition>
+    <!-- end action -->
   </CardBox>
 </template>

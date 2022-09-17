@@ -262,6 +262,7 @@ const buttonSubmitLabel = computed(() => {
       v-else
       class="mb-2 -mx-6"
       :goods-id="form.id"
+      :opened-goods="form"
     />
     
     <DisplayErrors v-if="errorsFromApi" :errors="errorsFromApi" />

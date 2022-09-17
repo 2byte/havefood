@@ -58,16 +58,16 @@ class Goods extends BaseModel
     return $this->belongsTo(GoodsCategory::class);
   }
 
-  public static function getList($categoryId = null) {
+  public static function getList($categoryId = null, $hidden = null) {
     $query = static::query()->with('previews');
     
     $query->when($categoryId, function ($query, $categoryId) {
       $query->whereCategoryId($categoryId);
     });
     
-    $goods = $query->whereHidden(0)
+    $goods = $query->when(!is_null($hidden), fn ($query, $hidden) => $query->whereHidden($hidden))
       ->orderBy('id', 'desc')
-      ->paginate(5);
+      ->paginate(15);
       
     // make preview_of_sizes attribute
     $goods->each(fn ($goodsItem) => 

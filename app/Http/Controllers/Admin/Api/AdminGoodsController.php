@@ -72,6 +72,12 @@ class AdminGoodsController extends Controller
     $id = $request->id;
     $typeList = $request->input('type_list', 'singleGoods');
     
+    // get list goods
+    if ($typeList != 'singleGoods') {
+      
+    }
+    
+    // get one goods
     if (is_null($id) && $typeList == 'singleGoods') {
       throw ValidationException::withMessages([
         'message' => 'Incorrect the id'

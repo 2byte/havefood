@@ -3440,6 +3440,11 @@ blockquote p {
           justify-content: center;
 }
 
+@media (max-width: 1024px) {
+  .product-tab-nav li+li {
+    margin-top: 1em;
+  }
+}
 @media (max-width: 767px) {
   .product-tab-nav.tab-style-1 {
     padding-top: 30px;

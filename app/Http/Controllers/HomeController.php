@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Goods;
+use App\Models\GoodsCategory;
 
 class HomeController extends Controller
 {
@@ -12,8 +13,13 @@ class HomeController extends Controller
     
     $goods = Goods::getList($request->input('category_id')); 
     
+    $categories = GoodsCategory::orderBy('sortpos', 'asc')->get();
+    
+    $goods->appends($request->only('category_id'));
+    
     $tplData = [
-      'goods' => $goods
+      'goods'      => $goods,
+      'categories' => $categories
     ];
     
     return view('index', $tplData);

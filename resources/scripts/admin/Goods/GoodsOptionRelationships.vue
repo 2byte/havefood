@@ -45,6 +45,7 @@ const navActiveColors = 'bg-zinc-200 border-zinc-300 text-zinc-600'
           class="inline-block border border-solid px-4 py-2 shadow-sm font-semibold hover:bg-zinc-200 hover:border-zinc-300 hover:text-zinc-600"
           :class="{[navDefaultColors]: !showListOption.goodsId, [navActiveColors]: showListOption.goodsId}"
           @click.prevent="setShowList('goodsId')"
+          v-if="goodsId"
         >
           Опции к товару
         </li>
@@ -92,15 +93,5 @@ const navActiveColors = 'bg-zinc-200 border-zinc-300 text-zinc-600'
       </div>
     </transition>
     
-    <!--
-    <GoodsOptionForm v-if="isCreateOption" :goods-id="goodsId" class="mb-2" />
-
-    <BaseButton
-      color="success"
-      label="Создать опцию"
-      :icon="mdiPlus"
-      @click="isCreateOption = true"
-    />
-    -->
   </CardBox>
 </template>

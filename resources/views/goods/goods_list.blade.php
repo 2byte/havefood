@@ -9,10 +9,18 @@
         
         <ul class="nav product-tab-nav tab-style-1" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-            <a class="active" id="featured-tab" data-bs-toggle="tab" href="#featured" role="tab" aria-controls="featured" aria-selected="true">
+            <a @class(['active' => !request('category_id')]) href="{{ url('/') }}" role="tab">
               Все
             </a>
+            {{--<a class="active" id="featured-tab" data-bs-toggle="tab" href="#featured" role="tab" aria-controls="featured" aria-selected="true">
+              Все
+            </a>--}}
           </li>
+          @foreach ($categories as $category)
+          <li class="nav-item" role="presentation">
+            <a @class(['active' => $category->id == request('category_id')]) @if ($category->id == request('category_id')) aria-current="page" @endif href="{{ url('/?category_id='. $category->id) }}">{{ $category->name }} <span class="bagde badge-secondary">{{ $category->count_goods }}</span></a>
+          </li>
+          @endforeach
           <li class="nav-item" role="presentation">
             <a id="bestseller-tab" data-bs-toggle="tab" href="#bestseller" role="tab" aria-controls="bestseller" aria-selected="false">
               Лучшие
@@ -30,7 +38,7 @@
           <div class="tab-pane fade show active" id="featured" role="tabpanel" aria-labelledby="featured-tab">
             <div class="product-item-wrap row">
               
-              @foreach ($goods as $item)
+              @forelse ($goods as $item)
               <div class="col-xl-3 col-md-4 col-sm-6">
                 <div class="product-item">
                   @if (!is_null($item->small_preview))
@@ -79,7 +87,13 @@
                   </div>
                 </div>
               </div>
-              @endforeach
+              @empty
+              <div class="col-xl-3 col-md-4 col-sm-6">
+                <div class="product-item">
+                  Нет товара
+                </div>
+              </div>
+              @endforelse
               
             </div>
           </div>

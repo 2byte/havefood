@@ -34,7 +34,8 @@ export default [
     },
     {
       label: 'Управление опциями товаров',
-      icon: mdiAppleKeyboardOption
+      icon: mdiAppleKeyboardOption,
+      route: 'admin.options'
     },
     {
       label: "Категории товаров",
@@ -44,6 +45,7 @@ export default [
         {
           icon: mdiAllInclusive,
           label: "Все товары",
+          route: 'admin.list-goods'
         },
       ],
     },

@@ -18,16 +18,25 @@ class AdminIndexController extends AdminBaseController
     
     public function listGoods(Request $request, $categoryId = null)
     {
+      
+      $category = null;
+      
+      if (!is_null($categoryId)) {
+        
         $category = GoodsCategory::find($categoryId);
-        
+          
         if (!is_null($category)) {
-            $goods = $category->goods()->sortByFresh()->paginate(10);
+          $goods = $category->goods()->sortByFresh()->paginate(10);
         }
-        
-        return Inertia::render('ListGoods', [
-            'category' => $category, 
-            'goods' => $goods
-        ]);
+      
+      } else {
+        $goods = Goods::sortByFresh()->paginate(15);
+      }
+      
+      return Inertia::render('ListGoods', [
+          'category' => $category, 
+          'goods' => $goods
+      ]);
     }
     
     public function listCategories(Request $request)
@@ -35,25 +44,8 @@ class AdminIndexController extends AdminBaseController
       return Inertia::render('ListCategories');
     }
     
-    /**
-     * Test page for goods components
-     * */
-    public function goodsItem(Request $request)
+    public function options()
     {
-        return Inertia::render('FormFilePickerTest', [
-          'goods-id' => (int)$request->goods_id
-        ]);
-    }
-    
-    public function formFilePickerTest(Request $request)
-    {
-        return Inertia::render('TestPages/FormFilePickerTest', [
-          'goods-id' => (int)$request->goods_id
-        ]);
-    }
-    
-    public function categoryTest(Request $request)
-    {
-        return Inertia::render('CategoryTest', []);
+      return Inertia::render('Options');
     }
 }

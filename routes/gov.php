@@ -14,6 +14,7 @@ Route::middleware(['auth', 'auth.role:boss,admin,manager'])
     Route::get('/', 'index')->name('index');
     Route::get('/list-goods/{category_id?}', 'listGoods')->name('list-goods');
     Route::get('/list-categories/', 'listCategories')->name('list-categories');
+    Route::get('/options', 'options')->name('options');
 
     // Test pages (old tests)
     /*Route::get('goods-item-test', 'goodsItem')->name('goods-item-test');

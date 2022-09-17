@@ -127,6 +127,7 @@
 </div>--}}
 <!-- Shipping Area End Here -->
 
+@include('nav_categories')
 @include('goods.goods_list')
 @include('banners')
 {{--@include('goods.new_goods')--}}

@@ -145,3 +145,13 @@ function getPathFilesByModel(App\Models\BaseModel $file, array|bool $withPreview
   
   return $returnData;
 }
+
+function getGoodsCategories() {
+  static $categories = null;
+  
+  if (is_null($categories)) {
+    $categories = App\Models\GoodsCategory::orderBy('sortpos', 'asc')->get();
+  }
+  
+  return $categories;
+}

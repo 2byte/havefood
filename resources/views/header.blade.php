@@ -62,7 +62,7 @@
                                         <i class="pe-7s-users"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="settingButton">
-                                        <li><a class="dropdown-item" href="">My account</a></li>
+                                        <li><a class="dropdown-item" href="">Мой аккаунт</a></li>
                                         <li><a class="dropdown-item" href="{{ route('login') }}">Вход | регистрация</a>
                                         </li>
                                     </ul>

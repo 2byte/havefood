@@ -70,16 +70,13 @@
                 </span>
               </a>
               <ul class="sub-menu">
+                @foreach (getGoodsCategories() as $category)
                 <li>
-                  <a href="index.html">
-                    <span class="mm-text">Home One</span>
+                  <a href="{{ url('/?category_id='. $category->id) }}">
+                    <span class="mm-text">{{ $category->name }} ({{ $category->count_goods }})</span>
                   </a>
                 </li>
-                <li>
-                  <a href="index-2.html">
-                    <span class="mm-text">Home Two</span>
-                  </a>
-                </li>
+                @endforeach
               </ul>
             </li>
           </ul>

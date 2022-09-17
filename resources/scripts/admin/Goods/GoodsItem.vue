@@ -96,6 +96,7 @@ const previews = computed(() => {
     v-if="state.goods"
     :actionButtonManager="actionButtonManager"
   >
+    <!-- Default -->
     <transition
       enter-active-class="animate__animated animate__slideInLeft"
       leave-active-class="animate__animated animate__bounceOutRight"

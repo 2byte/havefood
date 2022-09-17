@@ -13,7 +13,7 @@ class HomeController extends Controller
     
     $goods = Goods::getList($request->input('category_id')); 
     
-    $categories = GoodsCategory::orderBy('sortpos', 'asc')->get();
+    $categories = getGoodsCategories();
     
     $goods->appends($request->only('category_id'));
     

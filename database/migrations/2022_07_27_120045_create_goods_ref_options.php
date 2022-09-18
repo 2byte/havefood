@@ -18,15 +18,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('goods_id')
                 ->constrained('goods')
-                ->onUpdateCascade()
-                ->onDeleteCascade();
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
                 
             $table->unsignedInteger('option_id');
             $table->foreign('option_id')
                 ->references('id')
                 ->on('goods_options')
-                ->onUpdateCascade()
-                ->onDeleteCascade();
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
                 
             $table->unsignedBigInteger('own_user_id');
             $table->unsignedBigInteger('set_user_id');

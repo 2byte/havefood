@@ -96,6 +96,47 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
           }
         })
       }
+    },
+    // Remove option from storage
+    removeOption(optionId) {
+      // remove option from lists
+      const lists = [
+        'listByGoodsId',
+        'listByOptionId',
+        'listByPersonal',
+        'listByAll'
+      ]
+      
+      for (const listKey of lists) {
+        this[listKey].forEach((item, i) => {
+          if (item.id == optionId) {
+            this[listKey].splice(i, 1)
+          }
+          if (item?.childs) {
+            item.childs.forEach((childItem, indexChild) => {
+              if (childItem.id == optionId) {
+                this[listKey][i].childs.splice(indexChild, 1)
+              }
+            })
+          }
+        })
+      }
+      
+      // remove options from references
+      const listReferences = [
+        'referencesByGoodsId',
+        'referencesByOptionId',
+        'referencesByPersonal',
+        'referencesByAll',
+      ]
+      
+      for (const listKey of listReferences) {
+        this[listKey].forEach((item, i) => {
+          if (item.option_id == optionId) {
+            this[listKey].splice(i, 1)
+          }
+        })
+      }
     }
   },
 });

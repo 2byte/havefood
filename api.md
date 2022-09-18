@@ -25,10 +25,16 @@
     - all
   - {value} - значение для источника
     - id модели если goodsId или optionId
+
 - POST /api/gov/goods/option/first
   - {id}
 
 ## /api/gov/option/attach
+- {option_id}
+- {goods_id}
+
+## /api/gov/option/delete
+- {id}
 
 
 ## /api/gov/file

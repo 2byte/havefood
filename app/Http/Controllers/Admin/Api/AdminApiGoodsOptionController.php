@@ -81,6 +81,23 @@ class AdminApiGoodsOptionController extends AdminBaseController
     
     return responseApi()->success();
   }
+  
+  public function delete(Request $request) 
+  {
+    $id = $request->id;
+    
+    $option = GoodsOption::findOrFail($id);
+    
+    if ($option->group) {
+      $option->optionChilds->each->files->each->delete();
+      $option->optionChilds->each->delete();
+    }
+    
+    $option->files->each->delete();
+    $option->delete();
+    
+    return responseApi()->success();
+  }
 
   public function store(Request $request) {
 

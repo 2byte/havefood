@@ -3,13 +3,14 @@ import { computed, watch, ref } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
-import { mdiCog, mdiAttachment, mdiAttachmentCheck, mdiAttachmentMinus } from "@mdi/js";
+import { mdiCog, mdiAttachment, mdiAttachmentCheck, mdiAttachmentMinus, mdiClose } from "@mdi/js";
 import { useGoodsOptionListStore } from '@/admin/stores/goodsOptionListStore.js'
 import "/resources/css/animate.css/animate.min.css";
 import BaseIcon from '@/admin/components/BaseIcon.vue'
 import BaseButton from '@/admin/components/BaseButton.vue'
 import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 import Api from '@/admin/libs/Api.js'
+import ActionButtons from "@/admin/components/CardBoxRepository/ActionButtons.js";
 
 const props = defineProps({
   option: Object,
@@ -49,6 +50,7 @@ const clickSetting = () => {
 
 const isRootOption = !props.option.parent_id
 
+// ---------- attach option --------- //
 const optionListStore = useGoodsOptionListStore()
 const isAttachedToOpenedGoods = computed(() => {
   if (!props.openedGoods) {
@@ -72,6 +74,34 @@ const attach = (optionId, goodsId, attach = true) => {
     })
     .run()
 }
+
+// ------------ end attach option ------------ //
+
+const deleteOption = () => {
+  
+  Api('goods/option/delete', 'post', {id: props.option.id})
+    .success((data) => {
+      optionListStore.removeOption(props.option.id)
+    })
+    .run()
+}
+
+const actionButtonItems = [
+  {
+    id: "actionDel",
+    title: "Удалить",
+    icon: mdiClose,
+    isActive: ref(false),
+    click() {
+      if (confirm('Удалить опцию?')) {
+        deleteOption()
+      }
+    },
+  },
+];
+
+const actionButtonManager = new ActionButtons(actionButtonItems);
+
 </script>
 
 <template>
@@ -80,6 +110,7 @@ const attach = (optionId, goodsId, attach = true) => {
     :headerIcon="mdiCog"
     @header-icon-click="clickSetting"
     class="relative"
+    :action-button-manager="actionButtonManager"
   >
     <transition
       enter-active-class="animate__animated animate__slideInLeft"

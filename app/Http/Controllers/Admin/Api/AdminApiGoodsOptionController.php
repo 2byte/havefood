@@ -23,19 +23,19 @@ class AdminApiGoodsOptionController extends AdminBaseController
     
     switch ($source) {
       case 'goodsId':
-        $goods = Goods::findOrFail($value);
+        $goods = Goods::with('options.previews')->findOrFail($value);
         $options = GoodsOption::makeOptionTree($goods->options);
         $references = DB::table('goods_ref_options')->whereGoodsId($value)->get();
       break;
       
       case 'optionId':
-        $options = GoodsOption::findOrFail($value)->optionChilds;
+        $options = GoodsOption::with('previews')->findOrFail($value)->optionChilds;
         $references = DB::table('goods_ref_options')->whereOptionId($value)->get();
       break;
 
       case 'personal':
         $options = GoodsOption::makeOptionTree(
-          GoodsOption::root()
+          GoodsOption::with('previews')->root()
             ->whereUserId($request->user()->id)
             ->orderBy('id', 'desc')
             ->get()
@@ -45,7 +45,7 @@ class AdminApiGoodsOptionController extends AdminBaseController
       
       case 'all':
         $options = GoodsOption::makeOptionTree(
-          GoodsOption::root()
+          GoodsOption::with('previews')->root()
             ->orderBy('id', 'desc')
             ->get()
         );

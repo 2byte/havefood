@@ -78,10 +78,17 @@ class GoodsOption extends BaseModel
      )
    }
    * */
-  public static function makeOptionTree($options) {
+  public static function makeOptionTree($options, $makePreviews = true) {
     // load all options
     $stockOptions = $options;
-
+    
+    // making previews
+    if ($makePreviews) {
+      $options->each(function ($option) {
+        $this->makePreviewAttribute($option);
+      });
+    }
+    
     // load all a childs
     $stockOptions->each(function ($option) use ($stockOptions) {
       if ($option->group) {
@@ -93,6 +100,7 @@ class GoodsOption extends BaseModel
       }
     });
     
+    // Sort by pivot table sortpos
     if (isset($stockOptions[0]) && $stockOptions[0]->pivot) {
       $sortedOptionWithGroups = $stockOptions->sortBy(function ($option) {
         return $option->pivot->sortpos;
@@ -106,5 +114,12 @@ class GoodsOption extends BaseModel
     }
     
     return $stockOptions;
+  }
+  
+  public function makePreviewAttribute(self $option)
+  {
+    if ($option->previews->isNotEmpty()) {
+      $option->setAttribute('preview_of_sizes',  $option->getImagePreviews($option->previews));
+    }
   }
 }

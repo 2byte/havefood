@@ -13,10 +13,19 @@ import { mdiCashMultiple, mdiShoppingOutline } from "@mdi/js";
 
 const titleStack = ref(["Админ панель", "Товары"]);
 
-defineProps({
+const props = defineProps({
   category: Object,
   goods: Object,
 });
+
+const deleted = (goodsId) => {
+  props.goods.data.forEach((item, i) => {
+    if (item.id == goodsId) {
+      console.log(props.goods.data[i])
+      props.goods.data.splice(i, 1)
+    }
+  })
+}
 </script>
 <script>
 export default {
@@ -36,7 +45,7 @@ export default {
   </div>
 
   <SectionMain>
-    <GoodsItem v-for="goodsItem in goods.data" :goods="goodsItem" :key="goodsItem.id" />
+    <GoodsItem v-for="goodsItem in goods.data" :goods="goodsItem" :key="goodsItem.id" @deleted="deleted"/>
     
     <NotificationBar v-if="!goods.data.length" color="info">
       В данной категории пока нет товара

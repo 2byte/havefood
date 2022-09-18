@@ -42,6 +42,7 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
   ->name('goods.')
   ->group(function () {
     Route::post('store', 'store')->name('store');
+    Route::post('delete', 'delete')->name('delete');
     Route::post('get', 'get')->name('get');
 
     Route::prefix('option')

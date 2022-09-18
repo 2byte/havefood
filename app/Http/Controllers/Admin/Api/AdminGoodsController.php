@@ -67,6 +67,15 @@ class AdminGoodsController extends Controller
     return responseApi()->success($return);
   }
   
+  public function delete(Request $request)
+  {
+    $id = $request->id;
+    
+    Goods::findOrFail($id)->delete();
+    
+    return responseApi()->success();
+  }
+  
   public function get(Request $request)
   {
     $id = $request->id;

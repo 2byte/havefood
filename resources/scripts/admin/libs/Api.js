@@ -14,6 +14,7 @@ export class Api {
       '/api/gov/categories/store',
       '/api/gov/categories/delete',
       '/api/gov/goods/store',
+      '/api/gov/goods/delete',
       '/api/gov/goods/get',
       '/api/gov/goods/option/get',
       '/api/gov/goods/option/get/first',

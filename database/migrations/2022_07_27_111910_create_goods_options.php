@@ -19,13 +19,13 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained()
-                ->onUpdateCascade()
+                ->cascadeOnUpdate();
                 ->nullOnDelete();
             $table->unsignedInteger('parent_id')
                 ->nullable()
                 ->constrained('goods_options')
-                ->onUpdateCascade()
-                ->onDeleteCascade();
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
                 
             $table->boolean('group')->default(0);
             $table->enum('group_variant', ['checkbox', 'radio'])->default('checkbox');

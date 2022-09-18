@@ -10,8 +10,10 @@ import {
   mdiShoppingOutline,
   mdiPlaylistEdit,
   mdiViewCarouselOutline,
+  mdiClose
 } from "@mdi/js";
 import ActionButtons from "@/admin/components/CardBoxRepository/ActionButtons.js";
+import Api from '@/admin/libs/Api.js';
 import "/resources/css/animate.css/animate.min.css";
 
 const props = defineProps({
@@ -24,6 +26,8 @@ const props = defineProps({
     default: false,
   },
 });
+
+const emit = defineEmits(['deleted'])
 
 const state = reactive({
   goods: props.goods,
@@ -51,8 +55,26 @@ if (isTest && !props.isRecursive) {
 }
 
 // ---------------- end test property --------------//
+const deleteFile = () => {
+  Api('goods/delete', 'post', {id: state.goods.id})
+    .success((data) => {
+      emit('deleted', state.goods.id)
+    })
+    .run()
+}
 
 const actionButtonItems = [
+  {
+    id: "actionDelete",
+    title: "Удалить",
+    icon: mdiClose,
+    isActive: ref(false),
+    click() {
+      if (confirm('Удалить товар?')) {
+        deleteFile()
+      }
+    },
+  },
   {
     id: "actionView",
     title: "Просмотр",

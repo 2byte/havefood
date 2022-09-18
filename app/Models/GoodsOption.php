@@ -84,18 +84,22 @@ class GoodsOption extends BaseModel
     
     // making previews
     if ($makePreviews) {
-      $options->each(function ($option) {
-        $this->makePreviewAttribute($option);
-      });
+      $options->each->makePreviewAttribute();
     }
     
     // load all a childs
-    $stockOptions->each(function ($option) use ($stockOptions) {
+    $stockOptions->each(function ($option) use ($stockOptions, $makePreviews) {
       if ($option->group) {
         $childOptions = static::query()->whereParentId($option->id)
         ->orderBy('sortpos', 'asc')
         ->get()
         ->whenEmpty(fn () => collect());
+        
+        // previews for childs options
+        if ($makePreviews) {
+          $childOptions->each->makePreviewAttribute();
+        }
+        
         $option->setAttribute('childs', $childOptions);
       }
     });
@@ -116,10 +120,14 @@ class GoodsOption extends BaseModel
     return $stockOptions;
   }
   
-  public function makePreviewAttribute(self $option)
+  public function makePreviewAttribute()
   {
-    if ($option->previews->isNotEmpty()) {
-      $option->setAttribute('preview_of_sizes',  $option->getImagePreviews($option->previews));
+    $previews = collect();
+    
+    if ($this->previews->isNotEmpty()) {
+      $previews = $this->getImagePreviews($this->previews);
     }
+    
+    $this->setAttribute('preview_of_sizes',  $previews);
   }
 }

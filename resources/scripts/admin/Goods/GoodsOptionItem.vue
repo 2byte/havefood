@@ -1,5 +1,5 @@
 <script setup>
-import { computed, watch, ref } from "vue";
+import { computed, ref, reactive } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
@@ -11,6 +11,7 @@ import BaseButton from '@/admin/components/BaseButton.vue'
 import DisplayErrors from "@/admin/components/DisplayErrors.vue";
 import Api from '@/admin/libs/Api.js'
 import ActionButtons from "@/admin/components/CardBoxRepository/ActionButtons.js";
+import PreviewImages from '@/admin/components/PreviewImages.vue';
 
 const props = defineProps({
   option: Object,
@@ -102,6 +103,16 @@ const actionButtonItems = [
 
 const actionButtonManager = new ActionButtons(actionButtonItems);
 
+// ------------ previews ------------ //
+const previews = computed(() => {
+  return reactive(props.option.preview_of_sizes.map((image) => {
+    return {
+      imageObj: image.small.url,
+      id: image.small.id,
+      complete: true
+    };
+  }));
+});
 </script>
 
 <template>
@@ -152,6 +163,8 @@ const actionButtonManager = new ActionButtons(actionButtonItems);
           </div>
         </div>
         <!-- End attachment a option to goods -->
+        
+        <PreviewImages :images="previews" />
         
         <template v-if="option.group">
           <div :class="titleClasses">Тип группы</div>

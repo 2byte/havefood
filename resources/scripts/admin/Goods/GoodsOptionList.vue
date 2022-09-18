@@ -19,7 +19,7 @@ const props = defineProps({
    * Opened goods data
    * */
   openedGoods: {
-    type: Number,
+    type: Object,
     default: null
   },
   goodsId: {

@@ -18,6 +18,7 @@ export class Api {
       '/api/gov/goods/option/get',
       '/api/gov/goods/option/get/first',
       '/api/gov/goods/option/store',
+      '/api/gov/goods/option/attach',
       '/api/gov/file/upload',
       '/api/gov/file/get/previews',
       '/api/gov/file/delete',

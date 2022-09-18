@@ -14,7 +14,8 @@
   - {id} - получить один товара
   - {type\_list} - получить список товаров default=singleGoods
   - {...} - дополнительные параметры для фильтра
-  
+
+## /api/gov/option - Работа с опциями товаров
 - POST /api/gov/goods/option/get получение дерева опций в отсортированном виде
   - Поля
   - {source} - источник
@@ -26,6 +27,9 @@
     - id модели если goodsId или optionId
 - POST /api/gov/goods/option/first
   - {id}
+
+## /api/gov/option/attach
+
 
 ## /api/gov/file
 - POST /api/gov/file/upload

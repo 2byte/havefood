@@ -73,7 +73,7 @@ const navActiveColors = 'bg-zinc-200 border-zinc-300 text-zinc-600'
       appear
     >
       <div v-if="showListOption.goodsId">
-        <GoodsOptionList :goods-id="goodsId" buttonCreate/>
+        <GoodsOptionList :goods-id="goodsId" :openedGoods="openedGoods" buttonCreate/>
       </div>
     </transition>
     
@@ -91,7 +91,7 @@ const navActiveColors = 'bg-zinc-200 border-zinc-300 text-zinc-600'
       leave-active-class="animate__animated animate__bounceOutRight"
     >
       <div v-if="showListOption.all">
-        <GoodsOptionList list="all" buttonCreate/>
+        <GoodsOptionList list="all" :openedGoods="openedGoods" buttonCreate/>
       </div>
     </transition>
     

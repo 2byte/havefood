@@ -51,6 +51,7 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
       Route::post('get/first', 'getGoodsOptionFirst')->name('get.first');
       Route::post('get', 'getGoodsOptions')->name('get');
       Route::post('store', 'store')->name('store');
+      Route::post('attach', 'attach')->name('attach');
     });
   });
 

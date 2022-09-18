@@ -64,6 +64,23 @@ class AdminApiGoodsOptionController extends AdminBaseController
     
     return responseApi($option)->success();
   }
+  
+  public function attach(Request $request) 
+  {
+    $attach = $request->input('attach', false);
+    $goodsId = $request->goods_id;
+    $optionId = $request->option_id;
+    
+    $goods = Goods::findOrFail($goodsId);
+    
+    if ($attach) {
+      $goods->attachOption($optionId, $request->user()->id);
+    } else {
+      $goods->options()->detach($optionId);
+    }
+    
+    return responseApi()->success();
+  }
 
   public function store(Request $request) {
 

@@ -3,14 +3,18 @@ import { computed, watch, ref } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
-import { mdiCog } from "@mdi/js";
+import { mdiCog, mdiAttachment, mdiAttachmentCheck, mdiAttachmentMinus } from "@mdi/js";
 import { useGoodsOptionListStore } from '@/admin/stores/goodsOptionListStore.js'
 import "/resources/css/animate.css/animate.min.css";
+import BaseIcon from '@/admin/components/BaseIcon.vue'
+import BaseButton from '@/admin/components/BaseButton.vue'
+import DisplayErrors from "@/admin/components/DisplayErrors.vue";
+import Api from '@/admin/libs/Api.js'
 
 const props = defineProps({
   option: Object,
   openedGoods: {
-    type: Number,
+    type: Object,
     default: null
   }
 });
@@ -53,6 +57,21 @@ const isAttachedToOpenedGoods = computed(() => {
   
   return optionListStore.isAttachedOption(props.option.id, props.openedGoods.id)
 })
+
+const isLoaderAttachment = ref(false)
+const errorsAttachment = ref(null)
+
+const attach = (optionId, goodsId, attach = true) => {
+  isLoaderAttachment.value = true
+  
+  Api('goods/option/attach', 'post', {goods_id: goodsId, option_id: optionId, attach: !!attach})
+    .setLoader(isLoaderAttachment)
+    .setErrors(errorsAttachment)
+    .success((data) => {
+      optionListStore.attachOption(optionId, goodsId, attach)
+    })
+    .run()
+}
 </script>
 
 <template>
@@ -83,14 +102,25 @@ const isAttachedToOpenedGoods = computed(() => {
       appear
     >
       <div class="flex flex-col" v-if="showInfo">
-        <div v-if="openedGoods && isRootOption">
-          <div v-if="isAttachedToOpenedGoods">
+        
+        <!-- Attachment a option to goods -->
+        <div v-if="openedGoods && isRootOption" class="-mx-6 -mt-6 mb-2 md:w-6/12">
+          <DisplayErrors
+            v-if="errorsAttachment"
+            :errors="errorsAttachment"
+          />
+          <div v-if="isAttachedToOpenedGoods" class="bg-blue-100 p-4 text-blue-500">
+            <BaseIcon :path="mdiAttachmentCheck"/>
             Опция прикреплена к товару {{ openedGoods.name }}
+            <BaseButton color="danger" @click.prevent="attach(option.id, openedGoods.id, false)" :label="`Открепить от товара ${openedGoods.name}`" :loader="isLoaderAttachment" small/>
           </div>
-          <div v-else>
-            Прикрепить опцию
+          <div v-else class="bg-green-100 p-4 text-green-500">
+            <BaseIcon :path="mdiAttachment"/>
+            Опция готова к прикреплению
+            <BaseButton color="success" @click.prevent="attach(option.id, openedGoods.id)" :label="`Прикрепить к товару ${openedGoods.name}`" :icon="mdiAttachment" :loader="isLoaderAttachment" small/>
           </div>
         </div>
+        <!-- End attachment a option to goods -->
         
         <template v-if="option.group">
           <div :class="titleClasses">Тип группы</div>

@@ -85,6 +85,17 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
     },
     isAttachedOption(optionId, goodsId) {
       return this.referencesByGoodsId.find((item) => item.option_id == optionId && item.goods_id == goodsId);
+    },
+    attachOption(option_id, goods_id, attach = true) {
+      if (attach) {
+        this.referencesByGoodsId.push({option_id, goods_id})
+      } else {
+        this.referencesByGoodsId.forEach((item, i) => {
+          if (item.option_id == option_id) {
+            this.referencesByGoodsId.splice(i, 1)
+          }
+        })
+      }
     }
   },
 });

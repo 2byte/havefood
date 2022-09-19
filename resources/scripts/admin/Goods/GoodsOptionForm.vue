@@ -347,7 +347,7 @@ if (isTest) {
       />
 
       <BaseButton
-        type="submit"
+        type="button"
         v-if="buttonCloseForm"
         color="danger"
         label="Отмена"

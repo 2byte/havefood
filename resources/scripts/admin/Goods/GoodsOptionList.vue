@@ -218,8 +218,11 @@ const labelCreateOption = computed(() => {
     />
   </CardBox>
 
-  <GoodsOptionForm
+  <!--
     v-if="showOptionForm && !parentOptionStore?.loading"
+  -->
+  <GoodsOptionForm
+    v-if="showOptionForm"
     :option-id="optionId"
     :goods-id="goodsId"
     :parent-option-data="parentOptionStore?.option"
@@ -233,7 +236,7 @@ const labelCreateOption = computed(() => {
     :label="labelCreateOption"
     :icon="mdiPlus"
     v-if="buttonCreate && !showOptionForm"
-    @click="showOptionForm = !showOptionForm"
+    @click.prevent="showOptionForm = !showOptionForm"
     class="w-min mt-2"
   />
 </template>

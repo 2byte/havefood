@@ -105,7 +105,7 @@ const actionButtonManager = new ActionButtons(actionButtonItems);
 
 // ------------ previews ------------ //
 const previews = computed(() => {
-  return reactive(props.option.preview_of_sizes.map((image) => {
+  return reactive(props.option?.preview_of_sizes.map((image) => {
     return {
       imageObj: image.small.url,
       id: image.small.id,

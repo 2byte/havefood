@@ -29,7 +29,7 @@ class AdminApiGoodsOptionController extends AdminBaseController
       break;
       
       case 'optionId':
-        $options = GoodsOption::with('previews')->findOrFail($value)->optionChilds;
+        $options = GoodsOption::makeOptionTree(GoodsOption::with('previews')->findOrFail($value)->optionChilds);
         $references = DB::table('goods_ref_options')->whereOptionId($value)->get();
       break;
 

@@ -69,18 +69,19 @@
             </select>
           </div>
           @else
-            @foreach ($option->childs as $childOpt)
-              <div class="selector-wrap">
-                <div class="selector-title h-auto">
-                  <b>{{ $option->name }}</b>
-                  <div class="d-flex align-items-center form-check mb-0">
-                  <input class="form-check-input" type="checkbox" id="opt-{{ $childOpt->id }}" name="{{ $childOpt->id }}" value="true">
-                  <label class="form-check-label ms-2 pt-1" for="opt-{{ $childOpt->id }}">{{ $childOpt->name }} @if($childOpt->price_type->value == 'single') + @else = @endif <b>{{ $childOpt->price }} ₽ </b></label>
-                  </div>
-                  <small class="text-muted">{{ $childOpt->description }}</small>
+            <div class="selector-wrap">
+              <div class="selector-title h-auto">
+                <b>{{ $option->name }}</b>
+                <small class="text-muted">{{ $option->description }}</small>
+                @foreach ($option->childs as $childOpt)
+                <div class="d-flex align-items-center form-check mb-0">
+                <input class="form-check-input" type="checkbox" id="opt-{{ $childOpt->id }}" name="{{ $childOpt->id }}" value="true">
+                <label class="form-check-label ms-2 pt-1" for="opt-{{ $childOpt->id }}">{{ $childOpt->name }} @if($childOpt->price_type->value == 'single') + @else = @endif <b>{{ $childOpt->price }} ₽ </b></label>
                 </div>
+                <small class="text-muted">{{ $childOpt->description }}</small>
+                @endforeach
               </div>
-            @endforeach
+            </div>
         @endif
       @endif
     @endforeach

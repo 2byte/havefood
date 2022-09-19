@@ -70,7 +70,7 @@
                   </div>
                   @endif
                   <div class="product-content">
-                    <a class="product-name" href="shop.html">{{ $item->name }}</a>
+                    <a class="product-name" href="#goods-view" data-bs-toggle="modal" data-bs-target="#quickModal" data-goods-id="{{ $item->id }}">{{ $item->name }}</a>
                     {{ $item->short_desc }}
                     <div class="price-box pb-1">
                       <span class="new-price">{{ $item->price }} ₽</span>

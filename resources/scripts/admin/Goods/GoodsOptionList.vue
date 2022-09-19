@@ -96,12 +96,12 @@ const state = reactive({
 });
 
 const sourceLoaders = {
-  goodsId(reload = false) {
+  goodsId(reload = true) {
     loadOptions({ source: "goodsId", value: state.sourceValue, forceLoad: reload});
     state.statusLoading = isLoadingBySource("goodsId");
     state.dataOptions = listByGoodsId;
   },
-  optionId(reload = false) {
+  optionId(reload = true) {
     loadOptions({ source: "optionId", value: state.sourceValue, forceLoad: reload });
     state.statusLoading = isLoadingBySource("optionId");
     state.dataOptions = listByOptionId;

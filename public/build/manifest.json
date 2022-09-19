@@ -599,12 +599,12 @@
     "file": "assets/Welcome.6d8fdbfa.css",
     "src": "resources/scripts/Pages/Welcome.css"
   },
-  "resources/scripts/admin/adminApp.css": {
-    "file": "assets/adminApp.98f8526d.css",
-    "src": "resources/scripts/admin/adminApp.css"
-  },
   "ActionButtons.css": {
     "file": "assets/ActionButtons.cf768824.css",
     "src": "ActionButtons.css"
+  },
+  "resources/scripts/admin/adminApp.css": {
+    "file": "assets/adminApp.98f8526d.css",
+    "src": "resources/scripts/admin/adminApp.css"
   }
 }

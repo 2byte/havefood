@@ -225,7 +225,12 @@ const applySortParams = (sourceRunnedLoader, options) => {
 
 applySortParams(state.sourceRunnedLoader,  state.dataOptions);
 
+const runApplySortParams = () => {
+  applySortParams(state.sourceRunnedLoader,  state.dataOptions);
+}
+
 watch(() => state.dataOptions, (options) => {
+  console.log('watch', options)
   applySortParams(state.sourceRunnedLoader, options)
 })
 </script>
@@ -246,6 +251,7 @@ watch(() => state.dataOptions, (options) => {
       :option="option"
       :openedGoods="openedGoods"
       class="-mx-6 last:border-b-0"
+      @sorted="state.loader(true), runApplySortParams()"
     />
   </CardBox>
 

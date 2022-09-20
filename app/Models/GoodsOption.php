@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Shop\Goods\Enums\GoodsType;
 use App\Shop\Goods\Enums\GoodsOptionPriceType;
 use App\Shop\Goods\Enums\GoodsOptionGroupType;
+use Illuminate\Support\Facades\DB;
 
 class GoodsOption extends BaseModel
 {
@@ -129,5 +130,77 @@ class GoodsOption extends BaseModel
     }
     
     $this->setAttribute('preview_of_sizes',  $previews);
+  }
+  
+  public static function makeSort($direction = 'up', $optionId, $goodsId = null)
+  {
+    $option = GoodsOption::findOrFail($optionId);
+
+    // sort in group
+    if (!is_null($option->parent_id)) {
+      if (
+        ($direction == 'up' && $option->sortpos == 0) ||
+        (
+          $direction == 'down' && $option->sortpos == $option->optionChilds()->count() - 1
+        )
+      ) {
+        return false;
+      }
+
+      $queryTarget = GoodsOption::whereParentId($option->parent_id);
+
+      if ($direction == 'up') {
+        $queryTarget->whereSortpos($option->sortpos - 1)
+        ->increment('sortpos');
+      } else {
+        $queryTarget->whereSortpos($option->sortpos + 1)
+        ->decrement('sortpos');
+      }
+
+      if ($direction == 'up') {
+        $option->decrement('sortpos');
+      } else {
+        $option->increment('sortpos');
+      }
+
+      return true;
+    }
+
+    // Sort for pivot with attached to goods
+    $goods = Goods::findOrFail($goodsId);
+    
+    $optionPivot = DB::table('goods_ref_options')
+    ->whereGoodsId($goodsId)
+    ->whereOptionId($optionId)
+    ->first();
+
+    if ($direction == 'up' && $optionPivot->sortpos == 0) return false;
+    if (
+      $direction == 'down' && $optionPivot->sortpos == $goods->options()->count() - 1
+    ) {
+      return false;
+    }
+
+    $queryTarget = DB::table('goods_ref_options')
+    ->whereGoodsId($goods->id);
+
+    if ($direction == 'up') {
+      $queryTarget->whereSortpos($optionPivot->sortpos - 1)
+      ->increment('sortpos', 1);
+    } else {
+      $queryTarget->whereSortpos($optionPivot->sortpos + 1)
+      ->decrement('sortpos', 1);
+    }
+
+    $queryCurrent = DB::table('goods_ref_options')
+    ->whereId($optionPivot->id);
+
+    if ($direction == 'up') {
+      $queryCurrent->decrement('sortpos');
+    } else {
+      $queryCurrent->increment('sortpos');
+    }
+
+    return true;
   }
 }

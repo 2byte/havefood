@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, reactive } from "vue";
+import { computed, ref, toRef, reactive } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
@@ -28,6 +28,8 @@ const props = defineProps({
     default: null,
   },
 });
+
+const emit = defineEmits(['sorted'])
 
 const prepData = {
   price:
@@ -61,6 +63,7 @@ const isRootOption = !props.option.parent_id;
 
 // ---------- attach option --------- //
 const optionListStore = useGoodsOptionListStore();
+
 const isAttachedToOpenedGoods = computed(() => {
   if (!props.openedGoods) {
     return false;
@@ -131,8 +134,30 @@ const previews = computed(() => {
 });
 
 // ------------ Sorting ------------ //
-const sort = (type) => {
-  Api('')
+const sort = (direction) => {
+  Api('goods/option/sort', 'post', {
+    option_id: props.option.id, 
+    goods_id: props.openedGoods?.id,
+    direction
+  })
+    .success((data) => {
+      
+      // manual sort for child a option
+      if (!isRootOption) {
+        try {
+          optionListStore.manualSortChild(
+            direction, 
+            props.option.id,
+            props.option.parent_id
+          )
+        } catch (err) {
+          console.error(err)
+        }
+      }
+      
+      emit('sorted')
+    })
+    .run()
 }
 // ------------ end Sorting ------------ //
 </script>
@@ -169,8 +194,8 @@ const sort = (type) => {
         
         <!-- sorting -->
         <div v-if="option.sortParams" class="bg-gray-50 -mt-6 -mx-6 p-4 text-zinc-500 md:w-6/12">
-          <a href="#" v-if="option.sortParams.up" class="hover:text-zinc-600" @click.prevent="sort('up')">Вверх <BaseIcon :path="mdiArrowUpBoldOutline" /></a>
-          <a href="#" v-if="option.sortParams.down" class="hover:text-zinc-600" @click.prenent="sort('down')">Вниз <BaseIcon :path="mdiArrowDownBoldOutline" /></a>
+          <a v-if="option.sortParams.up" class="hover:text-zinc-600" @click.prevent="sort('up')">Вверх <BaseIcon :path="mdiArrowUpBoldOutline" /></a>
+          <a v-if="option.sortParams.down" class="hover:text-zinc-600" @click.prenent="sort('down')">Вниз <BaseIcon :path="mdiArrowDownBoldOutline" /></a>
         </div>
         <!-- end sorting -->
         

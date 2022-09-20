@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
       Route::post('store', 'store')->name('store');
       Route::post('delete', 'delete')->name('delete');
       Route::post('attach', 'attach')->name('attach');
+      Route::post('sort', 'sort')->name('sort');
     });
   });
 

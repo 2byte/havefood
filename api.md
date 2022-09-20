@@ -39,6 +39,10 @@
 ## /api/gov/option/delete
 - {id}
 
+## /api/gov/option/sort
+- {option_id}
+- {goods_id}
+- {type} - up|down
 
 ## /api/gov/file
 - POST /api/gov/file/upload

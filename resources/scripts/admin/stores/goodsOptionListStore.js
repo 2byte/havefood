@@ -137,6 +137,29 @@ export const useGoodsOptionListStore = defineStore("goodsOptionList", {
           }
         })
       }
-    }
+    },
+    manualSortChild(direction, optionId, parentOptionId, ) {
+      for (const [i, item] of this.listByGoodsId.entries()) {
+        if (item.id == parentOptionId) {
+          
+          for (let [iChild, child] of item.childs.entries()) {
+            if (child.id == optionId) {
+              const prevElemIndex = direction == 'up' ? iChild - 1 : iChild + 1;
+              
+              const prevItem = item.childs[prevElemIndex];
+              
+              item.childs.splice(iChild, 1, prevItem)
+              item.childs.splice(prevElemIndex, 1, child)
+              
+              // reset sortpos for all child options
+              this.listByGoodsId[i].childs.forEach((item, iChild) => this.listByGoodsId[i].childs[iChild].sortpos = iChild)
+              break;
+            }
+          }
+          
+          break;
+        }
+      }
+    } 
   },
 });

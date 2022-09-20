@@ -132,4 +132,15 @@ class AdminApiGoodsOptionController extends AdminBaseController
 
     return responseApi(['option_id' => $createdOptionId])->success();
   }
+  
+  public function sort(Request $request) 
+  {
+    $optionId = $request->option_id;
+    $goodsId = $request->goods_id;
+    $direction = $request->direction;
+    
+    GoodsOption::makeSort($direction, $optionId, $goodsId);
+    
+    return responseApi()->success();
+  }
 }

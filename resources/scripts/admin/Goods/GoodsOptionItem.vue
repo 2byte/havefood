@@ -129,6 +129,12 @@ const previews = computed(() => {
     })
   );
 });
+
+// ------------ Sorting ------------ //
+const sort = (type) => {
+  Api('')
+}
+// ------------ end Sorting ------------ //
 </script>
 
 <template>
@@ -160,11 +166,18 @@ const previews = computed(() => {
       appear
     >
       <div class="flex flex-col" v-if="showInfo">
-
+        
+        <!-- sorting -->
+        <div v-if="option.sortParams" class="bg-gray-50 -mt-6 -mx-6 p-4 text-zinc-500 md:w-6/12">
+          <a href="#" v-if="option.sortParams.up" class="hover:text-zinc-600" @click.prevent="sort('up')">Вверх <BaseIcon :path="mdiArrowUpBoldOutline" /></a>
+          <a href="#" v-if="option.sortParams.down" class="hover:text-zinc-600" @click.prenent="sort('down')">Вниз <BaseIcon :path="mdiArrowDownBoldOutline" /></a>
+        </div>
+        <!-- end sorting -->
+        
         <!-- Attachment a option to goods -->
         <div
           v-if="openedGoods && isRootOption"
-          class="-mx-6 -mt-6 mb-2 md:w-6/12"
+          class="-mx-6 mb-2 md:w-6/12"
         >
           <DisplayErrors v-if="errorsAttachment" :errors="errorsAttachment" />
           <div
@@ -195,13 +208,6 @@ const previews = computed(() => {
           </div>
         </div>
         <!-- End attachment a option to goods -->
-        
-        <!-- sorting -->
-        <div v-if="option.sortParams" class="bg-gray-100 -mt-2 -mx-6 p-4 text-gray-500 md:w-6/12">
-          <a href="#" v-if="option.sortParams.up">Вверх <BaseIcon :path="mdiArrowUpBoldOutline" /></a>
-          <a href="#" v-if="option.sortParams.down">Вниз <BaseIcon :path="mdiArrowDownBoldOutline" /></a>
-        </div>
-        <!-- end sorting -->
 
         <PreviewImages :images="previews" />
 

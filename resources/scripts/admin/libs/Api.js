@@ -21,6 +21,7 @@ export class Api {
       '/api/gov/goods/option/store',
       '/api/gov/goods/option/delete',
       '/api/gov/goods/option/attach',
+      '/api/gov/goods/option/sort',
       '/api/gov/file/upload',
       '/api/gov/file/get/previews',
       '/api/gov/file/delete',

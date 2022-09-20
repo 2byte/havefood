@@ -3,22 +3,30 @@ import { computed, ref, reactive } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionList from "@/admin/Goods/GoodsOptionList.vue";
 import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
-import { mdiCog, mdiAttachment, mdiAttachmentCheck, mdiAttachmentMinus, mdiClose } from "@mdi/js";
-import { useGoodsOptionListStore } from '@/admin/stores/goodsOptionListStore.js'
+import { useGoodsOptionListStore } from "@/admin/stores/goodsOptionListStore.js";
 import "/resources/css/animate.css/animate.min.css";
-import BaseIcon from '@/admin/components/BaseIcon.vue'
-import BaseButton from '@/admin/components/BaseButton.vue'
+import BaseIcon from "@/admin/components/BaseIcon.vue";
+import BaseButton from "@/admin/components/BaseButton.vue";
 import DisplayErrors from "@/admin/components/DisplayErrors.vue";
-import Api from '@/admin/libs/Api.js'
+import Api from "@/admin/libs/Api.js";
 import ActionButtons from "@/admin/components/CardBoxRepository/ActionButtons.js";
-import PreviewImages from '@/admin/components/PreviewImages.vue';
+import PreviewImages from "@/admin/components/PreviewImages.vue";
+import {
+  mdiCog,
+  mdiAttachment,
+  mdiAttachmentCheck,
+  mdiAttachmentMinus,
+  mdiClose,
+  mdiArrowUpBoldOutline,
+  mdiArrowDownBoldOutline,
+} from "@mdi/js";
 
 const props = defineProps({
   option: Object,
   openedGoods: {
     type: Object,
-    default: null
-  }
+    default: null,
+  },
 });
 
 const prepData = {
@@ -49,43 +57,49 @@ const clickSetting = () => {
   showInfo.value = false;
 };
 
-const isRootOption = !props.option.parent_id
+const isRootOption = !props.option.parent_id;
 
 // ---------- attach option --------- //
-const optionListStore = useGoodsOptionListStore()
+const optionListStore = useGoodsOptionListStore();
 const isAttachedToOpenedGoods = computed(() => {
   if (!props.openedGoods) {
-    return false
+    return false;
   }
-  
-  return optionListStore.isAttachedOption(props.option.id, props.openedGoods.id)
-})
 
-const isLoaderAttachment = ref(false)
-const errorsAttachment = ref(null)
+  return optionListStore.isAttachedOption(
+    props.option.id,
+    props.openedGoods.id
+  );
+});
+
+const isLoaderAttachment = ref(false);
+const errorsAttachment = ref(null);
 
 const attach = (optionId, goodsId, attach = true) => {
-  isLoaderAttachment.value = true
-  
-  Api('goods/option/attach', 'post', {goods_id: goodsId, option_id: optionId, attach: !!attach})
+  isLoaderAttachment.value = true;
+
+  Api("goods/option/attach", "post", {
+    goods_id: goodsId,
+    option_id: optionId,
+    attach: !!attach,
+  })
     .setLoader(isLoaderAttachment)
     .setErrors(errorsAttachment)
     .success((data) => {
-      optionListStore.attachOption(optionId, goodsId, attach)
+      optionListStore.attachOption(optionId, goodsId, attach);
     })
-    .run()
-}
+    .run();
+};
 
 // ------------ end attach option ------------ //
 
 const deleteOption = () => {
-  
-  Api('goods/option/delete', 'post', {id: props.option.id})
+  Api("goods/option/delete", "post", { id: props.option.id })
     .success((data) => {
-      optionListStore.removeOption(props.option.id)
+      optionListStore.removeOption(props.option.id);
     })
-    .run()
-}
+    .run();
+};
 
 const actionButtonItems = [
   {
@@ -94,8 +108,8 @@ const actionButtonItems = [
     icon: mdiClose,
     isActive: ref(false),
     click() {
-      if (confirm('Удалить опцию?')) {
-        deleteOption()
+      if (confirm("Удалить опцию?")) {
+        deleteOption();
       }
     },
   },
@@ -105,13 +119,15 @@ const actionButtonManager = new ActionButtons(actionButtonItems);
 
 // ------------ previews ------------ //
 const previews = computed(() => {
-  return reactive(props.option?.preview_of_sizes.map((image) => {
-    return {
-      imageObj: image.small.url,
-      id: image.small.id,
-      complete: true
-    };
-  }));
+  return reactive(
+    props.option?.preview_of_sizes.map((image) => {
+      return {
+        imageObj: image.small.url,
+        id: image.small.id,
+        complete: true,
+      };
+    })
+  );
 });
 </script>
 
@@ -144,35 +160,58 @@ const previews = computed(() => {
       appear
     >
       <div class="flex flex-col" v-if="showInfo">
-        
+
         <!-- Attachment a option to goods -->
-        <div v-if="openedGoods && isRootOption" class="-mx-6 -mt-6 mb-2 md:w-6/12">
-          <DisplayErrors
-            v-if="errorsAttachment"
-            :errors="errorsAttachment"
-          />
-          <div v-if="isAttachedToOpenedGoods" class="bg-blue-100 p-4 text-blue-500">
-            <BaseIcon :path="mdiAttachmentCheck"/>
+        <div
+          v-if="openedGoods && isRootOption"
+          class="-mx-6 -mt-6 mb-2 md:w-6/12"
+        >
+          <DisplayErrors v-if="errorsAttachment" :errors="errorsAttachment" />
+          <div
+            v-if="isAttachedToOpenedGoods"
+            class="bg-blue-100 p-4 text-blue-500"
+          >
+            <BaseIcon :path="mdiAttachmentCheck" />
             Опция прикреплена к товару {{ openedGoods.name }}
-            <BaseButton color="danger" @click.prevent="attach(option.id, openedGoods.id, false)" :label="`Открепить от товара ${openedGoods.name}`" :loader="isLoaderAttachment" small/>
+            <BaseButton
+              color="danger"
+              @click.prevent="attach(option.id, openedGoods.id, false)"
+              :label="`Открепить от товара ${openedGoods.name}`"
+              :loader="isLoaderAttachment"
+              small
+            />
           </div>
           <div v-else class="bg-green-100 p-4 text-green-500">
-            <BaseIcon :path="mdiAttachment"/>
+            <BaseIcon :path="mdiAttachment" />
             Опция готова к прикреплению
-            <BaseButton color="success" @click.prevent="attach(option.id, openedGoods.id)" :label="`Прикрепить к товару ${openedGoods.name}`" :icon="mdiAttachment" :loader="isLoaderAttachment" small/>
+            <BaseButton
+              color="success"
+              @click.prevent="attach(option.id, openedGoods.id)"
+              :label="`Прикрепить к товару ${openedGoods.name}`"
+              :icon="mdiAttachment"
+              :loader="isLoaderAttachment"
+              small
+            />
           </div>
         </div>
         <!-- End attachment a option to goods -->
         
+        <!-- sorting -->
+        <div v-if="option.sortParams" class="bg-gray-100 -mt-2 -mx-6 p-4 text-gray-500 md:w-6/12">
+          <a href="#" v-if="option.sortParams.up">Вверх <BaseIcon :path="mdiArrowUpBoldOutline" /></a>
+          <a href="#" v-if="option.sortParams.down">Вниз <BaseIcon :path="mdiArrowDownBoldOutline" /></a>
+        </div>
+        <!-- end sorting -->
+
         <PreviewImages :images="previews" />
-        
+
         <template v-if="option.group">
           <div :class="titleClasses">Тип группы</div>
           <div :class="cellValClasses">{{ prepData.groupVariant }}</div>
         </template>
         <template v-if="option.description">
-        <div :class="titleClasses">Описание</div>
-        <div :class="cellValClasses" >{{ option.description }}</div>
+          <div :class="titleClasses">Описание</div>
+          <div :class="cellValClasses">{{ option.description }}</div>
         </template>
         <div :class="titleClasses">Цена</div>
         <div :class="cellValClasses">{{ prepData.price }}</div>
@@ -180,8 +219,12 @@ const previews = computed(() => {
         <div :class="cellValClasses" v-if="option.note">{{ option.note }}</div>
       </div>
     </transition>
-    
-    <GoodsOptionList v-if="option.childs?.length" :dataOptions="option.childs" :parentOption="option" is-recursive/>
-    
+
+    <GoodsOptionList
+      v-if="option.childs?.length"
+      :dataOptions="option.childs"
+      :parentOption="option"
+      is-recursive
+    />
   </CardBox>
 </template>

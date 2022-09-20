@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed, watch, ref, defineAsyncComponent } from "vue";
+import { reactive, computed, watch, ref, toRef, defineAsyncComponent } from "vue";
 import CardBox from "@/admin/components/CardBox.vue";
 import GoodsOptionItem from "@/admin/Goods/GoodsOptionItem.vue";
 import GoodsOptionForm from "@/admin/Goods/GoodsOptionForm.vue";
@@ -163,10 +163,6 @@ if (isTest && !props.isRecursive) {
 
 const title = ref("");
 
-/*watch(goodsData, (data) => {
-  title.value = ` ${data.name}`;
-});*/
-
 const showOptionForm = ref(false);
 
 const listOptionName = computed(() => {
@@ -196,6 +192,41 @@ const labelCreateOption = computed(() => {
   }
   
   return label
+})
+
+// ---------------- sorting option for goods and suboptions--------------//
+
+const countOptionComputed = computed(() => {
+  return state.dataOptions.length
+})
+
+const makeSortParams = (option, lastPosition = false) => {
+  const sort = {up: false, down: false}
+  
+  if (option.sortpos == 0 && !lastPosition) {
+    sort.down = true
+  } else if (option.sortpos > 0 && !lastPosition) {
+    sort.up = true
+    sort.down = true
+  } else if (option.sortpos > 0 && lastPosition) {
+    sort.up = true
+  }
+  
+  option.sortParams = sort
+}
+
+const applySortParams = (sourceRunnedLoader, options) => {
+  const sourceLoaderTarget = ['goodsId', 'dataOptions']
+  
+  if (sourceLoaderTarget.includes(sourceRunnedLoader) && options.length) {
+    state.dataOptions.forEach((option, i) => makeSortParams(option, option.sortpos == countOptionComputed.value - 1))
+  }
+}
+
+applySortParams(state.sourceRunnedLoader,  state.dataOptions);
+
+watch(() => state.dataOptions, (options) => {
+  applySortParams(state.sourceRunnedLoader, options)
 })
 </script>
 

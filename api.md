@@ -8,6 +8,11 @@
 ## /api/gov/different разное
 - /api/gov/different/get-goods-types Возвращает типы товаров
 
+## /api/gov/categories - работа с категориями товаров
+- /api/categories/store - создание, редактирование категории товара POST
+- /api/categories/delete - удаление каткатегории товара POST
+- /api/categories/sort - удаление каткатегории товара POST
+
 ## /api/gov/goods - работа с товарами
 - /api/gov/goods/store - создание, редактирование товара POST
 - POST /api/gov/goods/get - получение товара

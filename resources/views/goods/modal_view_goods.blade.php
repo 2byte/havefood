@@ -63,6 +63,7 @@
               </small>
             </span>
             <select name="{{ $option->id }}" class="nice-select wide border-bottom-0 rounded-0">
+              <option value="0">Сделайте выбор</option>
               @foreach ($option->childs as $childOpt)
               <option value="{{ $childOpt->id }}">{{ $childOpt->name }} @if($childOpt->price_type->value == 'single') + @else = @endif {{ $childOpt->price }}</option>
               @endforeach

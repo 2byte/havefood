@@ -230,7 +230,6 @@ const runApplySortParams = () => {
 }
 
 watch(() => state.dataOptions, (options) => {
-  console.log('watch', options)
   applySortParams(state.sourceRunnedLoader, options)
 })
 </script>

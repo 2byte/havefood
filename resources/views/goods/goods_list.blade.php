@@ -176,6 +176,9 @@ class CalcGoodsOrder {
     this.priceGoods = +this.goodsData.price;
     
     for (const key of this.form.keys()) {
+      // skip select without value
+      if (this.form.get(key) == '0') continue;
+      
       // single option
       if (this.form.get(key) == 'true') {
         this.amount += +this.findOption(key).price

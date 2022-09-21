@@ -60,6 +60,7 @@ const setCategoryButtons = (list) => {
   });
 };
 
+// ------------ sorting ------------ //
 const makeSortParams = (categoryData, lastPosition) => {
   const sort = { up: false, down: false };
 
@@ -81,7 +82,13 @@ const applySortParams = (listCatsgories, total) => {
   );
 };
 
-const sort = (direction, categoryId) => {};
+const sort = (direction, categoryId) => {
+  Api('categories/sort', 'post', {direction, category_id: categoryId})
+    .success((data) => {
+      
+    })
+    .run()
+};
 
 watch(list, (newList) => {
   setCategoryButtons(newList);

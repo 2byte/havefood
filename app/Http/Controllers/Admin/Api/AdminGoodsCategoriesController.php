@@ -75,9 +75,12 @@ class AdminGoodsCategoriesController extends AdminBaseController
       return responseApi()->success();
     }
     
-    public function sort()
+    public function sort(Request $request)
     {
-        //
+        $direction = $request->direction;
+        $categoryId = $request->category_id;
+        
+        return responseApi()->success();
     }
 
     /**

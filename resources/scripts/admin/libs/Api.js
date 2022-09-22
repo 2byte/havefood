@@ -13,6 +13,7 @@ export class Api {
       '/api/gov/categories',
       '/api/gov/categories/store',
       '/api/gov/categories/delete',
+      '/api/gov/categories/sort',
       '/api/gov/goods/store',
       '/api/gov/goods/delete',
       '/api/gov/goods/get',

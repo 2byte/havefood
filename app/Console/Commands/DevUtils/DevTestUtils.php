@@ -15,7 +15,7 @@ class DevTestUtils extends Command
      *
      * @var string
      */
-    protected $signature = 'devtest {--make-fake-option}';
+    protected $signature = 'devtest {--make-fake-option} {--sort}';
 
     /**
      * The console command description.
@@ -33,6 +33,9 @@ class DevTestUtils extends Command
     {
       if ($this->option('make-fake-option')) {
         $this->makeFakeOptions();
+      }
+      if ($this->option('sort')) {
+        $this->sort();
       }
       
       return 0;
@@ -73,5 +76,15 @@ class DevTestUtils extends Command
       
       $this->info('OK');
     }
-  
+    
+    public function sort()
+    {
+      $categories = \App\Models\GoodsCategory::all();
+      
+      foreach ($categories as $i => $cat) {
+        $cat->update(['sortpos' => $i]);
+      }
+      
+      $this->info('OK');
+    }
 }

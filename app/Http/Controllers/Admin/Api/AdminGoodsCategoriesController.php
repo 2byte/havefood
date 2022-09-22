@@ -80,6 +80,8 @@ class AdminGoodsCategoriesController extends AdminBaseController
         $direction = $request->direction;
         $categoryId = $request->category_id;
         
+        GoodsCategory::sort($direction, $categoryId);
+        
         return responseApi()->success();
     }
 

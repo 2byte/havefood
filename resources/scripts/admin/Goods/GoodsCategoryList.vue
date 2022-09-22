@@ -85,7 +85,8 @@ const applySortParams = (listCatsgories, total) => {
 const sort = (direction, categoryId) => {
   Api('categories/sort', 'post', {direction, category_id: categoryId})
     .success((data) => {
-      
+      categoriesStore.loading = true
+      fetchAllCategories(true)
     })
     .run()
 };

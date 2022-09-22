@@ -29,4 +29,35 @@ class GoodsCategory extends Model
     {
         return static::query()->orderyBy('sortpos', 'asc')->get();
     }
+    
+    public static function sort($direction, $categoryId)
+    {
+      $lastSortpos = static::query()->orderBy('sortpos', 'desc')->take(1)->value('sortpos');
+      
+      $category = static::findOrFail($categoryId);
+      
+      $sortposUp = [];
+      
+      if ($direction == 'down' && $category->sortpos >= 0 && $category->sortpos != $lastSortpos) {
+        static::query()->whereSortpos($category->sortpos + 1)
+          ->update([
+            'sortpos' => $category->sortpos
+          ]);
+        static::query()->find($category->id)
+          ->update([
+            'sortpos' => $category->sortpos + 1
+          ]);
+      } elseif ($direction == 'up' && $category->sortpos > 0 && $category->sortpos != $lastSortpos) {
+        static::query()->whereSortpos($category->sortpos - 1)
+          ->update([
+            'sortpos' => $category->sortpos
+          ]);
+        static::query()->find($category->id)
+          ->update([
+            'sortpos' => $category->sortpos - 1
+          ]);
+      }
+      
+      return true;
+    }
 }

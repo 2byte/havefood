@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->nullable()
                 ->constrained()
-                ->cascadeOnUpdate();
+                ->cascadeOnUpdate()
                 ->nullOnDelete();
             $table->unsignedInteger('parent_id')
                 ->nullable()

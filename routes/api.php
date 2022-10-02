@@ -7,7 +7,8 @@ use App\Http\Controllers\Admin\Api\ {
   AdminDifferentController,
   AdminGoodsController,
   AdminApiGoodsOptionController,
-  AdminApiFileController
+  AdminApiFileController, 
+  AdminApiUserController
 };
 use App\Http\Controllers\GoodsApiUserController;
 use App\Http\Controllers\LocalController;
@@ -67,6 +68,13 @@ Route::middleware(['auth:sanctum', 'auth.role:boss,admin,manager'])
     Route::post('get', 'get')->name('get');
     Route::post('get/previews', 'getPreviews')->name('get.previews');
     Route::post('delete', 'delete')->name('delete');
+  });
+  
+  Route::prefix('user')
+  ->controller(AdminApiUserController::class)
+  ->name('user.')
+  ->group(function () {
+    Route::post('list', 'list')->name('list');
   });
 
   Route::controller(AdminDifferentController::class)

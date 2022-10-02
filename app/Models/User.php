@@ -43,4 +43,15 @@ class User extends BaseAuthenticatableModel
     {
       return $this->hasMany(GoodsOption::class)->whereNull('parent_id');
     }
+    
+    public static function getList($countResult = 15) 
+    {
+      $queryUsers = static::query();
+      
+      $queryUsers->orderBy('id', 'desc');
+      
+      $users = $queryUsers->paginate($countResult);
+      
+      return $users;
+    }
 }

@@ -1,0 +1,1 @@
+import{x as o,G as s,J as a}from"./vue.m.1a5bfe17.js";const n=["type"],c={__name:"Button",props:{type:{type:String,default:"submit"}},setup(t){return(e,r)=>(o(),s("button",{type:t.type,class:"shadow-outline-gray"},[a(e.$slots,"default")],8,n))}};export{c as _};

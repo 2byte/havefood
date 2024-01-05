@@ -1,0 +1,302 @@
+Техническое описание прогресса разработки.
+
+Работа с товаром
+Готово основное ядро по работе с товаром.
+
+# Таблица хранящая товар goods
+- id
+- user_id - пользователь создавший товар
+- category_id - ид категория
+- name - имя товара
+- description - описание
+- price - цена
+- sticker - стикер (новинка, хит, бонус и т.д.)
+- count_photos - количество фото
+- goods_type (pizza, halfpizza, burger, other) тип товара
+- hidden - скрыт (допустим нет в наличии пока)
+- created_at - дата и время создания
+- updated_at - дата и время обновления
+
+Категории товаров
+Таблица
+- id
+- user_id
+- name
+- count_photos
+- count_goods
+- sortpos
+- goods_type
+- created_at
+- updated_at
+
+Модель App\Models\Goods
+Количество фото не ограниченно.
+
+Каждый товар имеет опции либо группы опций.
+
+## Таблица содержащая опции к товарам goods_options
+- id
+- user_id - пользователь создавший опцию
+- parent_id - айди опции которая является группой опций
+- group - tinyint (1 - группа, 0 - опция) если это опция группа
+- group_variant - enum(checkbox, radio) тип опций в группе выбор одного или нескольких вариантов сразу.
+- name - (имя опции / группы)
+- description - (Описание)
+- note - примечание для админов
+- goods_type (common, pizza, halfpizza, burger) тип товара
+- price - decimal - цена
+- price_type - enum(goods, single) - тип цены, goods первоначальная цена товара, single + к стоимости товара
+- sortpos - индекс для сортировки
+- count_photos - количество фото
+- default - tinyint метка опции по умолчанию
+- hidden - скрыта
+- updated_at - дата и время обновления данных
+- created_at - дата и время создания опции
+
+Опции могут создаваться различными юзерами администрации. Опции могут быть привязаны к разным товарам одновременно. К примеру опция "с луком" может быть привязана к разным товарам мясной продукции.
+Цена опции может быть двух типов.
+- Первый это стоимость опции прибавляется к сумме стоимости товара
+    К примеру, опция "с соусом" стоимостью 100р прибавляет к стоимости товара за 300 + 100р за соус
+- Второй это стоимость опции назначается стоимостью товара
+    К примеру, от размера пиццы зависит стоимость товара. Тут используется группа опций с вариативным типом. Стоимость опции назначает цену товара.
+
+Опции могут быть одиночными "с луком, с сыром, с соусом" с типом стоимости как одиночной (+ к стоимости товара) так и товарной (= стоимость товара)
+Группы опций имеют два типа, вариативный и списковый. Вариативный - используется для создания к примеру размера пиццы, гдн есть выбор только одного вартанта (маленькая, большая, средняя). Списковый - возможно выбирать все опции в списке.
+Группы опций так же имеют тип стоимости "одиночный + к стоимости товара" и "товарный = стоимость товара"
+
+Опции товаров прикрепляются к товарам связью многие ко многим. Товар может иметь много опций и одна опция может принадлежать ко многим товарам.
+При прикреплении опции к товару, сохраняется айди пользователя который прткрепил опцию к товару и айди  владельца опции. Имеетс сортировка опций прикрепленных к товару. Сортировать опции в группе, может только владелец (так пока подразумевается).
+Модель App\Models\GoodsOption
+Классы по работе с опциями, группами
+App\Shop\V1\Goods{
+    GoodsManager
+    GoodsOptionGroup
+    GoodsOptionValidationRules
+    GoodsOption
+    GoodsOptionManager
+    GoodsValidationRules
+}
+
+Енамсы (типы товаров, опций, групп) - необходимо определить все возможные
+App\Shop\Goods\Enums{
+    GoodsOptionGroupType
+    GoodsType
+    GoodsOptionPriceType
+}
+
+Изображения прикрепляемые к товарам, опциям. Используется полиморфная связь один ко многим.
+Файлы прикрепляются к товарам и в дальнейшем могут прикрепляться к чему угодно с помощью подключаемого компонента vuejs FormFilePicker.vue. Загружаемые файлы отправляются с помощью ajax на апи и помечаются как не закрепленные за какой-либо сущностью в данном случаи товар. Когда мы добавляем товара к нему прикрепляются ожидаемые файлы. Компонент вью PreviewImages.vue слкжит для отображения прогресса загружаемых изображений. В момент когда грузятся изображения, показана превью и процент загрузки. Так же компонент PreviewImages вывод изображения которые в ожидании прткрепления. Например, мы создавали товар или опцию к которым загружаем изображение, и закрыли страницу не создав товар, когда мы вернемся снова к созданию товара или опции, то увидим изображения которые которын могут быть прикреплены.
+
+Таблица files
+
+- id
+- user_id - пользователь
+- relate_id - айди родителя
+- relate_type - модель родителя
+- filename - имя файла
+- type - enum(img, file) - тип изображение, файл
+- filesize - размер в кб
+- sortpos - индекс сортировки
+- created_at - дата и время
+- updated_at - дата и время обновления
+
+Енамс App\Shop\Enums\FiletypeEnums
+
+Изображения сохраняются в размере 300х300 и 600х600
+
+Каждая модель может иметь много файлов, связь один ко многим полиморфная.
+Имеется UploadTrait trait использующийся в моделях которые могут иметь файлы. При расширении функций аплоад файлов может быть прикреплен к любой модели.
+
+UploadTrait - может валидировать загружаемый файл на размер изображения, для этого в моделе должен быть метод uploadImageDimension = [300, 300] содержащий размер x и y
+
+хранение файлов
+{$model->uploadDir}/{user_id}/{namefile}
+
+helper реализации пути к файлу для шаблона assetModelFile($modelItem)
+```
+function assetModel($modelItem) {
+  return assets('static/files/'. $modelItem->uploadDir .'/'. $modelItem->user_id .'/'. str_replac('_', '/', $modelItem->filename);
+}
+```
+
+Загрузка файлов осуществляется с помощью ajax. Файлы отправляется по api /api/gov/file/upload.
+
+Пользователи таблица users
+
+- id
+- name
+- phone
+- password
+- email_verified_at
+- role
+- remember_token
+- updated_at
+- created_at
+
+Пользователи делятся на роли (boss, admin, manager, courier, user)
+
+Все пользователи имеющие роль выше user имеют доступ в панель управления /gov (goverment) где распределены права на действия соответствующие роли.
+
+Реализовано босс и админ
+
+Админ панель SPA которое взаимодействует с бэком по api
+
+# Карта
+## /api/gov
+Имя роута gov.api.*
+
+## /api/gov/categories  - работа с категориями товаров
+Возвращает список категорий
+
+## /api/gov/different разное
+- /api/gov/different/get-goods-types Возвращает типы товаров
+
+## /api/gov/categories - работа с категориями товаров
+- /api/categories/store - создание, редактирование категории товара POST
+- /api/categories/delete - удаление каткатегории товара POST
+- /api/categories/sort - удаление каткатегории товара POST
+
+## /api/gov/goods - работа с товарами
+- /api/gov/goods/store - создание, редактирование товара POST
+- POST /api/gov/goods/get - получение товара
+  - {id} - получить один товара
+  - {type\_list} - получить список товаров default=singleGoods
+  - {...} - дополнительные параметры для фильтра
+
+- /api/gov/goods/delete - удаление товара
+  - {id} - id товара
+
+## /api/gov/option - Работа с опциями товаров
+- POST /api/gov/goods/option/get получение дерева опций в отсортированном виде
+  - Поля
+  - {source} - источник
+    - goodsId
+    - optionId
+    - presonal
+    - all
+  - {value} - значение для источника
+    - id модели если goodsId или optionId
+
+- POST /api/gov/goods/option/first
+  - {id}
+
+## /api/gov/option/attach
+- {option_id}
+- {goods_id}
+
+## /api/gov/option/delete
+- {id}
+
+## /api/gov/option/sort
+- {option_id}
+- {goods_id}
+- {type} - up|down
+
+## /api/gov/file
+- POST /api/gov/file/upload
+  - model
+  - files[]
+- POST /api/gov/file/get
+  - relate_type
+  - relate_id
+- POST /api/gov/file/get/previews
+  - relate_type
+  - relate_id
+- POST /api/gov/file/delete
+  - id
+
+## GET /api/local/auth-boss
+  Авторизация api боссом
+
+
+js класс для работы с api находится resources/scripts/admin/libs/Api.js
+
+Использование
+
+```
+import {Api from '@/admin/libs/Api.js'
+
+Api(url, methodRequest, formParams, axiosParams)
+  .success((responseDataJson) => {})
+  .fail((error) => {})
+  .complete((ok, responseDataJson) => {
+    if (ok) {}
+  })
+  .setLoader(vueRefOnCompleteRequest)
+  .setErrors(vueRefOnCompleteRequestErrorObject)
+  .run()
+
+import { sendFile } from '@/admin/libs/Api.js'
+
+sendFile(url, formParams)
+  .onUploadProgress()
+  .success((responseData) => {})
+  .fail((responseData) => {})
+  .run()
+```
+
+vuejs приложение для витрины точка входа resources/scripts/mainApp.js
+vuejs приложение для админ панели точка входа resources/scripts/
+
+Приложение витрины находится resources/scripts
+
+Компоненты vuejs в components/
+Layouts/ макеты
+Pages/ страницы авторизации, регистрации, восстановления доступа, там же планировался лк юзера
+
+Приложение админ панели точка входа resources/scripts/admin/adminApp.js
+
+components/ - компоненты админ панели
+    AsideMenu.vue  боковое меню                                Loader.vue анимационный загрузчик из 3 видов
+    AsideMenuItem.vue   пункт бокового меню                    NavBar.vue навигация
+    AsideMenuList.vue список бокового меню                     NavBarItem.vue пункт навигации
+    BaseButton.vue  Основа всех кнопок                         NavBarItemLabel.vue Лейблы в навигации
+    BaseButtons.vue   Основа группы кнопок                     NavBarMenu.vue выпадающее меню в навигации
+    BaseDivider.vue   Элемент разделительная черта             NavBarSearch.vue поиск в навигации
+    BaseIcon.vue    Основа svg иконки                          NotificationBar.vue уведомления в навигации
+    BaseLevel.vue    Основа слоя с элементами                  NotificationBarInCard.vue уведомления в карточке
+    CardBox.vue    Карточка                                    NumberDynamic.vue живые счетчики
+    CardBoxClient.vue    Карточка с юзером                     OverlayLayer.vue поверхностный слой затемнения
+    CardBoxModal.vue   всплывающее окно                        Paginate.vue разбиение страниц
+    CardBoxRepository/  - Дополнительные функции карточки      PillTag.vue Тэги
+    CardBoxTransaction.vue Карточка с транзакциями             PillTagTrend.vue Тэги из брендов
+    CardBoxWidget.vue   Карточка виджет                        PreviewImages.vue Предпросмотр загруженных изображений
+    Charts/      График                                        SectionBottomOtherPages.vue Секция для подвала остальных страниц
+    DisplayErrors.vue   Вывод ошибок формы                     SectionFullScreen.vue Секция на весь экран
+    FooterBar.vue    Подвал                                    SectionHeroBar.vue навигация по подразделам
+    FormCheckRadioPicker.vue Формы с переключателями           SectionMain.vue Основа секций
+    FormControl.vue  Основа всех форм                          SectionTitle.vue Заголовок секций
+    FormControlIcon.vue   Иконка формы                         SectionTitleBar.vue Заголовок в секции
+    FormField.vue   Группа форма с лэйблом                     SectionTitleBarSub.vue Заголовок в подсекции
+    FormFilePicker.vue  Формы выбора файла                     TableCheckboxCell.vue Переключатель в таблице
+    FormFilePickerTest.vue Тест формы выбора файла             TableSampleClients.vue адаптивная таблица с юзерами
+    FormTestSetting.vue  Форма настройки формы для теста       UserAvatar.vue Аватар юзера
+    FormValidationErrors.vue Вывод ошибок формы                UserAvatarCurrentUser.vue Аватар текущего юзера
+    IconRounded.vue  Иконка с закругленными краями             UserCard.vue Карточка с юзером
+    JustboilLogo.vue Лого в шапке
+
+css/ - подключение tailwind и другие стили
+    Goods/ - компоненты по работе с товаром и категориями
+        GoodsCategoryForm.vue  Форма редактирования и создания категорий товара
+        GoodsOptionForm.vue  Форма создания и редактирования опций е товарам
+        GoodsView.vue Предпросмотр товара
+        GoodsCategoryList.vue Список категорий
+        GoodsOptionItem.vue Опция
+        Repositories/  Различная логика для компонентов
+        GoodsForm.vue Форма создания и редактирования товара
+        GoodsOptionList.vue Список опций товара
+        Tests/ Тесты компонентов
+        GoodsItem.vue Товар
+        GoodsOptionRelationships.vue Опции прткрепленнын к товару
+
+layouts/ - макеты
+libs/ - библиотеки, например по работе с api
+    Api.js класс работы с апи вместе с аплоадом файлов по api
+    Api.md Документация к классу работы с api
+Pages/ - все страницы
+stores/ - хранилища pinia
+
+
+Тут еще много чего можно описывать, на это много уходит времени, и зачем сейчас это надо.
+
+Сейчас готовы товары, опции с группами опций к товарам и их редактирование, сортировка, прикрепление изображений, категории и работа с ними. Пользовательская часть, регистрация, авторизация, восстановление доступа. Витрина с выводом категорий товаров и просмотр товара с опциями и оформлением товара и подсчетом стоимости. Для пользователей используется набор полей из первоначального тз. Сейчас как оказывается нужно переписать витрину на vuejs и подготовить SPA приложение витрины вместе с api.

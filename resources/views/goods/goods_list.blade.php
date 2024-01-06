@@ -6,7 +6,7 @@
     </div>
     <div class="row">
       <div class="col-lg-12">
-        
+
         <ul class="nav product-tab-nav tab-style-1" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
             <a @class(['active' => !request('category_id')]) href="{{ url('/') }}" role="tab">
@@ -32,12 +32,12 @@
             </a>
           </li>
         </ul>
-        
+
         <div class="tab-content" id="myTabContent">
 
           <div class="tab-pane fade show active" id="featured" role="tabpanel" aria-labelledby="featured-tab">
             <div class="product-item-wrap row">
-              
+
               @forelse ($goods as $item)
               <div class="col-xl-3 col-md-4 col-sm-6">
                 <div class="product-item">
@@ -94,7 +94,7 @@
                 </div>
               </div>
               @endforelse
-              
+
             </div>
           </div>
 
@@ -103,9 +103,9 @@
 
           <div class="tab-pane fade" id="latest" role="tabpanel" aria-labelledby="latest-tab">
           </div>
-          
+
         </div>
-        
+
         {{ $goods->links() }}
       </div>
     </div>
@@ -123,8 +123,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="modal-wrap row">
-          
+        <div class="modal-wrap row flex-column">
+
           <div class="preloader-activate preloader-active open_tm_preloader">
               <div class="preloader-area-wrap">
                   <div class="spinner d-flex justify-content-center align-items-center h-100">
@@ -134,9 +134,9 @@
                   </div>
               </div>
           </div>
-          
-          <div id="content-ajax"></div>
-          
+
+          <div id="content-ajax" class="row"></div>
+
         </div>
       </div>
     </div>
@@ -145,40 +145,40 @@
 
 <script>
 class CalcGoodsOrder {
-  
+
   priceGoods = 0
   amount = 0;
   count = 1;
-  
+
   formElem
   form = null;
   mapOptions = []
   goodsData = {}
   formItems = []
   cbListenerAmount = null
-  
+
   constructor(formElem, goodsData, mapOptions) {
     this.formElem = formElem
     this.mapOptions = mapOptions
     this.goodsData = goodsData
     this.addFormListener(this.formHandler)
   }
-  
+
   findOption(id) {
     return this.mapOptions.find((item) => item.id == id)
   }
-  
+
   // calc price a goods
   formHandler() {
     this.amount = 0;
     this.form = new FormData(this.formElem);
-    
+
     this.priceGoods = +this.goodsData.price;
-    
+
     for (const key of this.form.keys()) {
       // skip select without value
       if (this.form.get(key) == '0') continue;
-      
+
       // single option
       if (this.form.get(key) == 'true') {
         this.amount += +this.findOption(key).price
@@ -192,42 +192,42 @@ class CalcGoodsOrder {
         }
       }
     }
-    
+
     this.amount += this.priceGoods;
-    
+
     if (this.count > 1) {
       this.amount *= this.count
     }
-    
+
     if (this.cbListenerAmount) {
       this.cbListenerAmount(this.amount)
     }
   }
-  
+
   run() {
     this.formHandler()
-    
+
     return calc;
   }
-  
+
   multiplyOnQuantity(count) {
     this.count = count
-    
+
     this.formHandler();
   }
-  
+
   listenerAmount(cb) {
     this.cbListenerAmount = cb
   }
-  
+
   addFormListener(cb) {
     const formItems = [
       ...this.formElem.querySelectorAll('input'),
       ...this.formElem.querySelectorAll('select')
     ];
-    
+
     this.formItems = formItems;
-    
+
     formItems.forEach((item) => {
       item.addEventListener('change', (ev)  => {
         cb.call(this);
@@ -240,7 +240,7 @@ const viewGoodsModal = document.getElementById('quickModal');
 
 const preloaderToggle = () => {
   const preloadWrap = document.querySelector('#quickModal .preloader-activate');
-  
+
   if (preloadWrap.classList.contains('loaded')) {
     preloadWrap.classList.remove('loaded');
     preloadWrap.classList.add('preloader-active');
@@ -253,35 +253,35 @@ const preloaderToggle = () => {
 let amountOrder = 0;
 
 const calc = (goodsData, options) => {
-  
+
   const mapOptions = options.map((option) => {
     return option.childs ? [option, option.childs] : option
   }).flat(2);
-    
+
   const calc = new CalcGoodsOrder(document.getElementById('form-goods-options'), goodsData, mapOptions);
-  
+
   const inputQuantityGoods = document.querySelector('.cart-plus-minus-box')
-  
+
   const multiplyPrice = () => {
     calc.multiplyOnQuantity(inputQuantityGoods.value);
   }
-  
+
   inputQuantityGoods.addEventListener('change', function (env) {
       multiplyPrice();
   });
-  
+
   document.querySelector('.cart-plus-minus > .inc').addEventListener('click', (ev) => {
     multiplyPrice();
   })
   document.querySelector('.cart-plus-minus > .dec').addEventListener('click', (ev) => {
     multiplyPrice();
   })
-  
+
   calc.listenerAmount((amount) => {
     document.getElementById('price-order').textContent = amount
     amountOrder = amount
   })
-  
+
   return calc;
 }
 
@@ -294,11 +294,11 @@ const clickAddCart = () => {
 
 viewGoodsModal.addEventListener('show.bs.modal', function (event) {
   preloaderToggle()
-  
+
   const eventElem = event.relatedTarget;
-  
+
   const elemForPaste = viewGoodsModal.querySelector('#content-ajax')
-  
+
   $.ajax({
     url: '/ajax/get-goods-html-body-modal',
     method: 'get',
@@ -306,13 +306,13 @@ viewGoodsModal.addEventListener('show.bs.modal', function (event) {
     dataType: 'json'
   })
   .done((res) => {
-    
+
     elemForPaste.innerHTML = res.data.modal_body;
-    
+
     addGoodsQuantityButtons();
-    
+
     calc(res.data.goods, res.data.options).run()
-    
+
     clickAddCart()
   })
   .fail((jqXHR, textStatus) => {
@@ -321,7 +321,7 @@ viewGoodsModal.addEventListener('show.bs.modal', function (event) {
   }).always(() => {
     preloaderToggle()
   })
-  
+
 })
 </script>
 <!-- Modal Area End Here -->

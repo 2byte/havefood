@@ -333,6 +333,7 @@
                         options: calcGoodsOrder.selectedGoodsOptions,
                         count: calcGoodsOrder.count,
                         total_amount: calcGoodsOrder.amount,
+                        _token: csrfToken,
                     }
                 }).done((res) => {
                     if (res.success) {

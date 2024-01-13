@@ -78,6 +78,7 @@
     <script src="/assets/js/Cart.js"></script>
 
     <script>
+    csrfToken = '{{ csrf_token() }}'
     Cart = Cart.init();
 
     window.Cart = Cart

@@ -84,7 +84,7 @@ class Cart {
             const req = await fetch('/ajax/remove-product-cart', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({id}),
+                body: JSON.stringify({id, _token: csrfToken}),
             });
 
             const result = await req.json();

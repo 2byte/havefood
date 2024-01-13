@@ -17,12 +17,12 @@ class HandleInertiaRequests extends Middleware
 
     public function handle(Request $request, \Closure $next)
     {
-        $prefixes = ['gov', 'gov/test'];
-      
-        if(in_array($request->route()->getPrefix(), $prefixes)) { 
-            $this->rootView = 'admin.admin_app'; 
-        } 
-        
+        $prefixes = ['/gov', '/gov/test'];
+
+        if(in_array($request->route()->getPrefix(), $prefixes)) {
+            $this->rootView = 'admin.admin_app';
+        }
+
         return parent::handle($request, $next);
     }
     /**

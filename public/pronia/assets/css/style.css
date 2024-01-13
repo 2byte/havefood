@@ -2,10 +2,10 @@
     Template Name: Pronia - Plant Store Bootstrap 5 Template
     Version: 1.0
 -----------------------------------------------------------------------------------
-    
+
     CSS INDEX
     ===================
-	
+
     01. Template default CSS
     02. Animation
     03. Header
@@ -2028,11 +2028,15 @@ blockquote p {
   -webkit-align-items: center;
       -ms-flex-align: center;
           align-items: center;
+    width: max-content;
+}
+.header-logo img {
+    height: 6rem;
 }
 
 @media (max-width: 479px) {
   .header-logo {
-    width: 140px;
+    width: 120px;
   }
 }
 
@@ -6725,9 +6729,9 @@ blockquote p {
   margin-bottom: 30px;
 }
 
-.checkbox-form .checkout-form-list input[type='text'],
-.checkbox-form .checkout-form-list input[type='password'],
-.checkbox-form .checkout-form-list input[type='email'] {
+.checkbox-form .checkout-form-list input[type="text"],
+.checkbox-form .checkout-form-list input[type="password"],
+.checkbox-form .checkout-form-list input[type="email"] {
   border: 1px solid #dee2e6;
   background: #ffffff;
   border-radius: 0;

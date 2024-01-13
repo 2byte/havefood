@@ -8,11 +8,12 @@
                         <span class="pronia-offer">Внимание акция! Скидка на все продукты 25%</span>
                     </div>
                 </div>
-                <div class="col-6">
+                {{-- <div class="col-6">
                     <div class="header-top-right">
                         <ul class="dropdown-wrap">
                             <li class="dropdown">
-                                <button class="btn btn-link dropdown-toggle ht-btn" type="button" id="currencyButton" data-bs-toggle="dropdown" aria-label="currency" aria-expanded="false">
+                                <button class="btn btn-link dropdown-toggle ht-btn" type="button" id="currencyButton"
+                                    data-bs-toggle="dropdown" aria-label="currency" aria-expanded="false">
                                     Рубли
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="currencyButton">
@@ -21,7 +22,8 @@
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <button class="btn btn-link dropdown-toggle ht-btn" type="button" id="languageButton" data-bs-toggle="dropdown" aria-label="language" aria-expanded="false">
+                                <button class="btn btn-link dropdown-toggle ht-btn" type="button" id="languageButton"
+                                    data-bs-toggle="dropdown" aria-label="language" aria-expanded="false">
                                     Русский
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="languageButton">
@@ -32,7 +34,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -41,24 +43,31 @@
             <div class="row align-items-center">
                 <div class="col-lg-12">
                     <div class="header-middle-wrap position-relative">
+
+                        <div class="row flex-nowrap justify-start align-items-center">
+                            <a href="/" class="header-logo">
+                                <img src="/assets/images/logo.png" alt="Header Logo">
+                            </a>
+
+                            <div class="fs-3" style="color:#abd373;">MoreCrabov.Ru</div>
+                        </div>
                         <div class="header-contact d-none d-lg-flex">
                             <i class="pe-7s-call"></i>
                             <a href="tel://+00-123-456-789">+00 123 456 789</a>
                         </div>
 
-                        <a href="/" class="header-logo">
-                            <img src="/pronia/assets/images/logo/dark.png" alt="Header Logo">
-                        </a>
-
                         <div class="header-right">
                             <ul>
                                 <li>
-                                    <a href="#exampleModal" class="search-btn bt" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <a href="#exampleModal" class="search-btn bt" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
                                         <i class="pe-7s-search"></i>
                                     </a>
                                 </li>
                                 <li class="dropdown d-none d-lg-block">
-                                    <button class="btn btn-link dropdown-toggle ht-btn p-0" type="button" id="settingButton" data-bs-toggle="dropdown" aria-label="setting" aria-expanded="false">
+                                    <button class="btn btn-link dropdown-toggle ht-btn p-0" type="button"
+                                        id="settingButton" data-bs-toggle="dropdown" aria-label="setting"
+                                        aria-expanded="false">
                                         <i class="pe-7s-users"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="settingButton">
@@ -99,16 +108,16 @@
                             <ul>
                                 <li class="drop-holder">
                                     <a href="/">Главная</a>
-                                    <ul class="drop-menu">
+                                    {{-- <ul class="drop-menu">
                                         <li>
                                             <a href="index.html">Home One</a>
                                         </li>
                                         <li>
                                             <a href="index-2.html">Home Two</a>
                                         </li>
-                                    </ul>
+                                    </ul> --}}
                                 </li>
-                                <li class="megamenu-holder">
+                                {{-- <li class="megamenu-holder">
                                     <a href="shop.html">Shop</a>
                                     <ul class="drop-menu megamenu">
                                         <li>
@@ -147,7 +156,8 @@
                                                     <a href="single-product.html">Single Product Default</a>
                                                 </li>
                                                 <li>
-                                                    <a href="single-product-affiliate.html">Single Product Affiliate</a>
+                                                    <a href="single-product-affiliate.html">Single Product
+                                                        Affiliate</a>
                                                 </li>
                                                 <li>
                                                     <a href="single-product-sale.html">Single Product Sale</a>
@@ -181,22 +191,22 @@
                                             </ul>
                                         </li>
                                     </ul>
-                                </li>
+                                </li> --}}
                                 <li class="drop-holder">
-                                    <a href="blog.html">Blog</a>
+                                    <a href="blog.html">Блог</a>
                                     <ul class="drop-menu">
                                         <li>
-                                            <a href="blog-listview.html">Blog List View</a>
+                                            <a href="blog-listview.html">Рецепты</a>
                                         </li>
                                         <li>
-                                            <a href="blog-detail.html">Blog Detail</a>
+                                            <a href="blog-detail.html">Видео</a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="about.html">About Us</a>
+                                    <a href="about.html">О нас</a>
                                 </li>
-                                <li class="drop-holder">
+                                {{-- <li class="drop-holder">
                                     <a href="#">Pages</a>
                                     <ul class="drop-menu">
                                         <li>
@@ -206,9 +216,9 @@
                                             <a href="404.html">Error 404</a>
                                         </li>
                                     </ul>
-                                </li>
+                                </li> --}}
                                 <li>
-                                    <a href="contact.html">Contact Us</a>
+                                    <a href="contact.html">Контакты</a>
                                 </li>
                             </ul>
                         </nav>
@@ -222,28 +232,29 @@
             <div class="header-nav position-relative">
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-6">
-
-                        <a href="index.html" class="header-logo">
-                            <img src="/pronia/assets/images/logo/dark.png" alt="Header Logo">
-                        </a>
-
+                        <div class="row flex-nowrap justify-start align-items-center">
+                            <a href="index.html" class="header-logo">
+                                <img src="/assets/images/logo3.png" alt="Header Logo">
+                            </a>
+                            <div class="fs-3" style="color:#abd373;">MoreCrabov.Ru</div>
+                        </div>
                     </div>
                     <div class="col-lg-6 d-none d-lg-block">
                         <div class="main-menu">
                             <nav class="main-nav">
                                 <ul>
                                     <li class="drop-holder">
-                                        <a href="index.html">Home</a>
-                                        <ul class="drop-menu">
+                                        <a href="/">Главная</a>
+                                        {{-- <ul class="drop-menu">
                                             <li>
                                                 <a href="index.html">Home One</a>
                                             </li>
                                             <li>
                                                 <a href="index-2.html">Home Two</a>
                                             </li>
-                                        </ul>
+                                        </ul> --}}
                                     </li>
-                                    <li class="megamenu-holder">
+                                    {{-- <li class="megamenu-holder">
                                         <a href="shop.html">Shop</a>
                                         <ul class="drop-menu megamenu">
                                             <li>
@@ -262,7 +273,8 @@
                                                         <a href="shop-list-fullwidth.html">Shop List Fullwidth</a>
                                                     </li>
                                                     <li>
-                                                        <a href="shop-list-left-sidebar.html">Shop List Left Sidebar</a>
+                                                        <a href="shop-list-left-sidebar.html">Shop List Left
+                                                            Sidebar</a>
                                                     </li>
                                                     <li>
                                                         <a href="shop-list-right-sidebar.html">Shop List Right
@@ -319,22 +331,22 @@
                                                 </ul>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li> --}}
                                     <li class="drop-holder">
-                                        <a href="blog.html">Blog</a>
+                                        <a href="blog.html">Блог</a>
                                         <ul class="drop-menu">
                                             <li>
-                                                <a href="blog-listview.html">Blog List View</a>
+                                                <a href="blog-listview.html">Рецепты</a>
                                             </li>
                                             <li>
-                                                <a href="blog-detail.html">Blog Detail</a>
+                                                <a href="blog-detail.html">Видео</a>
                                             </li>
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="about.html">About Us</a>
+                                        <a href="#">О нас</a>
                                     </li>
-                                    <li class="drop-holder">
+                                    {{-- <li class="drop-holder">
                                         <a href="#">Pages</a>
                                         <ul class="drop-menu">
                                             <li>
@@ -344,9 +356,9 @@
                                                 <a href="404.html">Error 404</a>
                                             </li>
                                         </ul>
-                                    </li>
+                                    </li> --}}
                                     <li>
-                                        <a href="contact.html">Contact Us</a>
+                                        <a href="contact.html">Контакты</a>
                                     </li>
                                 </ul>
                             </nav>
@@ -356,12 +368,15 @@
                         <div class="header-right">
                             <ul>
                                 <li>
-                                    <a href="#exampleModal" class="search-btn bt" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <a href="#exampleModal" class="search-btn bt" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal">
                                         <i class="pe-7s-search"></i>
                                     </a>
                                 </li>
                                 <li class="dropdown d-none d-lg-block">
-                                    <button class="btn btn-link dropdown-toggle ht-btn p-0" type="button" id="stickysettingButton" data-bs-toggle="dropdown" aria-label="setting" aria-expanded="false">
+                                    <button class="btn btn-link dropdown-toggle ht-btn p-0" type="button"
+                                        id="stickysettingButton" data-bs-toggle="dropdown" aria-label="setting"
+                                        aria-expanded="false">
                                         <i class="pe-7s-users"></i>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="stickysettingButton">
@@ -378,7 +393,7 @@
                                 <li class="minicart-wrap me-3 me-lg-0">
                                     <a href="#miniCart" class="minicart-btn toolbar-btn">
                                         <i class="pe-7s-shopbag"></i>
-                                        <span class="quantity">3</span>
+                                        <span class="quantity">0</span>
                                     </a>
                                 </li>
                                 <li class="mobile-menu_wrap d-block d-lg-none">
@@ -398,14 +413,19 @@
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content modal-bg-dark">
                 <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-tippy="Close" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        data-tippy="Close" data-tippy-inertia="true" data-tippy-animation="shift-away"
+                        data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="modal-search">
-                        <span class="searchbox-info">Начните набирать и нажмите Enter  для поиска или Esc для выхода.</span>
+                        <span class="searchbox-info">Начните набирать и нажмите Enter для поиска или Esc для
+                            выхода.</span>
                         <form action="#" class="hm-searchbox">
-                            <input type="text" name="Search..." value="Search..." onblur="if(this.value==''){this.value='Search...'}" onfocus="if(this.value=='Search...'){this.value=''}" autocomplete="off">
+                            <input type="text" name="Search..." value="Search..."
+                                onblur="if(this.value==''){this.value='Search...'}"
+                                onfocus="if(this.value=='Search...'){this.value=''}" autocomplete="off">
                             <button class="search-btn" type="submit" aria-label="searchbtn">
                                 <i class="pe-7s-search"></i>
                             </button>
@@ -419,59 +439,22 @@
         <div class="offcanvas-body">
             <div class="minicart-content">
                 <div class="minicart-heading">
-                    <h4 class="mb-0">Shopping Cart</h4>
-                    <a href="#" class="button-close"><i class="pe-7s-close" data-tippy="Close" data-tippy-inertia="true"
-                        data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true"
-                        data-tippy-theme="sharpborder"></i></a>
+                    <h4 class="mb-0">Корзина</h4>
+                    <a href="#" class="button-close"><i class="pe-7s-close" data-tippy="Close"
+                            data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50"
+                            data-tippy-arrow="true" data-tippy-theme="sharpborder"></i></a>
                 </div>
+                <div class="fs-5 d-none" id="notice-empty">Нет товаров</div>
                 <ul class="minicart-list">
-                    <li class="minicart-product">
-                        <a class="product-item_remove" href="#"><i class="pe-7s-close" data-tippy="Remove"
-                            data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50"
-                            data-tippy-arrow="true" data-tippy-theme="sharpborder"></i></a>
-                        <a href="single-product-variable.html" class="product-item_img">
-                            <img class="img-full" src="/pronia/assets/images/product/small-size/2-1-70x78.png" alt="Product Image">
-                        </a>
-                        <div class="product-item_content">
-                            <a class="product-item_title" href="single-product-variable.html">American Marigold</a>
-                            <span class="product-item_quantity">1 x $23.45</span>
-                        </div>
-                    </li>
-                    <li class="minicart-product">
-                        <a class="product-item_remove" href="#"><i class="pe-7s-close" data-tippy="Remove"
-                            data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50"
-                            data-tippy-arrow="true" data-tippy-theme="sharpborder"></i></a>
-                        <a href="single-product-variable.html" class="product-item_img">
-                            <img class="img-full" src="/pronia/assets/images/product/small-size/2-2-70x78.png" alt="Product Image">
-                        </a>
-                        <div class="product-item_content">
-                            <a class="product-item_title" href="single-product-variable.html">Black Eyed Susan</a>
-                            <span class="product-item_quantity">1 x $25.45</span>
-                        </div>
-                    </li>
-                    <li class="minicart-product">
-                        <a class="product-item_remove" href="#">
-                            <i class="pe-7s-close" data-tippy="Remove" data-tippy-inertia="true"
-                                data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true"
-                                data-tippy-theme="sharpborder"></i>
-                        </a>
-                        <a href="single-product-variable.html" class="product-item_img">
-                            <img class="img-full" src="/pronia/assets/images/product/small-size/2-3-70x78.png" alt="Product Image">
-                        </a>
-                        <div class="product-item_content">
-                            <a class="product-item_title" href="single-product-variable.html">Bleeding Heart</a>
-                            <span class="product-item_quantity">1 x $30.45</span>
-                        </div>
-                    </li>
+
                 </ul>
             </div>
             <div class="minicart-item_total">
-                <span>Subtotal</span>
-                <span class="ammount">$79.35</span>
+                <span>Итого</span>
+                <span class="ammount">0</span>
             </div>
             <div class="group-btn_wrap d-grid gap-2">
-                <a href="cart.html" class="btn btn-dark">View Cart</a>
-                <a href="checkout.html" class="btn btn-dark">Checkout</a>
+                <a href="{{ route('home.goods.order') }}" class="btn btn-dark">Оформить заказ</a>
             </div>
         </div>
     </div>

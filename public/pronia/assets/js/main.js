@@ -2,7 +2,7 @@
     ('use strict');
 
     /*----------------------------------------*/
-    /*  Preloader  
+    /*  Preloader
 /*----------------------------------------*/
     var windows = $(window);
     windows.on('load', function () {
@@ -676,6 +676,12 @@
         e.stopPropagation();
         var $this = $(this);
         var target = $this.attr('href');
+
+        // If opening the cart to creating content
+        if (target == '#miniCart') {
+            window.Cart.makeContent();
+        }
+
         var prevTarget = $this
             .parent()
             .siblings()
@@ -783,7 +789,7 @@
       $('.cart-plus-minus').append(
           '<div class="dec qtybutton"><i class="fa fa-minus"></i></div><div class="inc qtybutton"><i class="fa fa-plus"></i></div>'
       );
-      
+
       $('.qtybutton').on('click', function () {
           var $button = $(this);
           var oldValue = $button.parent().find('input').val();
@@ -800,9 +806,9 @@
           $button.parent().find('input').val(newVal);
       });
     }
-    
+
     addGoodsQuantityButtons();
-    
+
     window.addGoodsQuantityButtons = addGoodsQuantityButtons
     /*----------------------------------------*/
     /*  Nice Select
@@ -812,7 +818,7 @@
     }
 
     /*----------------------------------------*/
-    /*  ion Range Slider 
+    /*  ion Range Slider
 /*----------------------------------------*/
     $('.pronia-range-slider').ionRangeSlider({
         prefix: '$',

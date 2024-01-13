@@ -6,13 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Shop\Enums\FiletypeEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Storage;
 
 class BaseModel extends Model
 {
-  
+
   public $imagePreviewSizes = [
     'small' => [300,
       300],
@@ -29,14 +28,14 @@ class BaseModel extends Model
       GoodsCategory::MORPH => 'App\Models\GoodsCategory',
     ]);
   }
-  
+
   public function previewSizes(): Attribute {
     return new Attribute(
-      get: fn ($value) => 
+      get: fn ($value) =>
         $this->getImagePreviews($this->previews)
     );
   }
-  
+
   /**
    * using for Goods::getList()
    * */
@@ -46,7 +45,7 @@ class BaseModel extends Model
         get: fn ($value) => $this->preview_of_sizes->first()['small']['url']
       );
     }
-    
+
     return new Attribute(
       get: fn ($value) => null
     );
@@ -55,13 +54,13 @@ class BaseModel extends Model
   public function files() {
     return $this->morphMany(File::class, 'relate');
   }
-  
+
   public function previews() {
     return $this->morphMany(File::class, 'relate')
       ->whereType(FiletypeEnum::Img)
       ->orderBy('sortpos', 'asc');
   }
-  
+
   public function filesSorted() {
     return $this->morphMany(File::class, 'relate')->orderBy('sortpos', 'asc');
   }
@@ -76,7 +75,7 @@ class BaseModel extends Model
 
   /**
    * Getting all previews of sorted
-   * 
+   *
    * @return Illuminate\Support\Collection^ {
    * #items: array:3 [
    *   0 => array:3 [
@@ -104,7 +103,7 @@ class BaseModel extends Model
         ->orderBy('sortpos', 'asc')
         ->get();
     }
-    
+
     $previews = $collection
     ->map(function ($file) {
 
@@ -128,10 +127,10 @@ class BaseModel extends Model
           ];
         }
       }
-      
+
       return $images;
     });
-    
+
     return $previews;
   }
 

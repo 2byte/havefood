@@ -31,6 +31,9 @@ enum GoodsType: string
     **/
   case Pie = 'pie';
 
+  case KamchatkaCrab = 'kamchatka_crab';
+  case RedCaviar = 'red_caviar';
+
     public static function nameForHumans() {
       $namesRu = [];
       $namesRu = [
@@ -49,6 +52,8 @@ enum GoodsType: string
         'burger' => 'Бургер',
         'drink' => 'Напиток',
         'pie' => 'Пирог',
+        'kamchatka_crab' => 'Камчатский краб',
+        'red_caviar' => 'Красная икра',
       ];
 
       return array_map(function ($value) use ($names) {

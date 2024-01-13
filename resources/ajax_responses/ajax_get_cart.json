@@ -1,0 +1,57 @@
+{
+    "goods": [
+        {
+            "goodsData": {
+                "id": 15,
+                "user_id": 1,
+                "category_id": 1,
+                "name": "Бургер",
+                "description": "description",
+                "price": "100.00",
+                "sticker": null,
+                "count_photos": 0,
+                "goods_type": "burger",
+                "hidden": 0,
+                "created_at": "2024-01-01T18:29:52.000000Z",
+                "updated_at": "2024-01-01T18:29:52.000000Z",
+                "preview_of_sizes": [
+                    {
+                        "small": {
+                            "url": "/storage/static/uploads/goods/1/HMTpmBx5w0pOOUa1hHM67yF9vgUuwRSQCI5TExnj_300x300.webp",
+                            "id": 1
+                        },
+                        "big": {
+                            "url": "/storage/static/uploads/goods/1/HMTpmBx5w0pOOUa1hHM67yF9vgUuwRSQCI5TExnj_600x600.webp",
+                            "id": 1
+                        },
+                        "original": {
+                            "url": "/storage/static/uploads/goods/1/HMTpmBx5w0pOOUa1hHM67yF9vgUuwRSQCI5TExnj.webp",
+                            "id": 1
+                        }
+                    }
+                ],
+                "preview_small": "/storage/static/uploads/goods/1/HMTpmBx5w0pOOUa1hHM67yF9vgUuwRSQCI5TExnj_300x300.webp",
+                "total_amount": "100",
+                "count": "1",
+                "previews": [
+                    {
+                        "id": 1,
+                        "user_id": 1,
+                        "relate_id": 15,
+                        "relate_type": "goods",
+                        "filename": "HMTpmBx5w0pOOUa1hHM67yF9vgUuwRSQCI5TExnj.webp",
+                        "type": "img",
+                        "filesize": 706360,
+                        "sortpos": 1,
+                        "created_at": "2024-01-01T18:48:30.000000Z",
+                        "updated_at": "2024-01-01T18:48:30.000000Z"
+                    }
+                ]
+            },
+            "options": []
+        }
+    ],
+    "meta": {
+        "total_amount": 100
+    }
+}

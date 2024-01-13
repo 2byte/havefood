@@ -112,7 +112,7 @@
                 </div>
             </li>
             <li class="add-to-cart">
-                <a class="btn btn-custom-size lg-size btn-pronia-primary" href="cart.html">В корзину</a>
+                <a class="btn btn-custom-size lg-size btn-pronia-primary" id="btn-add-cart">В корзину</a>
             </li>
             <li class="wishlist-btn-wrap">
                 <a class="custom-circle-btn" href="wishlist.html">

@@ -24,13 +24,18 @@ Route::controller(HomeController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('goods-view', 'goodsView')->name('goods.view');
+        Route::get('goods-order', 'goodsOrder')->name('goods.order');
+        Route::post('goods-order-store', 'goodsOrderStore')->name('goods.order.store');
     });
-    
+
 Route::controller(AjaxController::class)
     ->prefix('ajax')
     ->name('ajax.')
     ->group(function () {
         Route::get('get-goods-html-body-modal', 'getGoodsHtmlBodyModal')->name('goods.modal.body');
+        Route::post('goods-add-cart', 'postGoodsAddCart')->name('goods.modal.addCart');
+        Route::get('get-cart', 'getCart')->name('goods.modal.getCart');
+        Route::post('remove-product-cart', 'postRemoveProductCart')->name('goods.modal.removeProductCart');
     });
 
 /*Route::get('/', function () {

@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/pronia/assets/css/ion.rangeSlider.min.css" />
 
     <!-- Style CSS -->
-    <link rel="stylesheet" href="/pronia/assets/css/style.css">
+    {{-- <link rel="stylesheet" href="/pronia/assets/css/style.css"> --}}
 
     <!-- Scripts -->
     @routes
@@ -42,7 +42,7 @@
     </div>
 
     <div class="main-wrapper">
-        
+
         @include('header')
         @inertia
 

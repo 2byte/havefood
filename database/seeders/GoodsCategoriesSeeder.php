@@ -7,41 +7,45 @@ use Illuminate\Database\Seeder;
 use App\Models\GoodsCategory;
 use App\Models\User;
 use App\Shop\Goods\Enums\GoodsType;
-use Illuminate\Database\Eloquent\Factories\Sequence; 
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class GoodsCategoriesSeeder extends Seeder
 {
     public const TEST_CATEGORIES = [
         [
-            'name' => 'Пицца', 
+            'name' => 'Пицца',
             'goods_type' => GoodsType::Pizza
         ],
         [
-            'name' => 'Бургер', 
+            'name' => 'Бургер',
             'goods_type' => GoodsType::Burger
         ],
         [
-            'name' => 'Суши', 
+            'name' => 'Суши',
             'goods_type' => GoodsType::Common
         ],
         [
-            'name' => 'Салаты', 
+            'name' => 'Салаты',
             'goods_type' => GoodsType::Common
         ],
         [
-            'name' => 'Роллы', 
+            'name' => 'Роллы',
             'goods_type' => GoodsType::Common
         ],
         [
-            'name' => 'Соусы', 
+            'name' => 'Соусы',
             'goods_type' => GoodsType::Common
         ],
         [
-            'name' => 'Напитки', 
+            'name' => 'Напитки',
             'goods_type' => GoodsType::Drink
         ],
+        [
+            'name' => 'Крабы',
+            'goods_type' => GoodsType::KamchatkaCrab
+        ],
     ];
-    
+
     /**
      * Run the database seeds.
      *
@@ -52,11 +56,11 @@ class GoodsCategoriesSeeder extends Seeder
         //
         $this->addCategories();
     }
-    
+
     public function addCategories()
     {
         $userId = User::first()->id;
-        
+
         GoodsCategory::factory()
             ->count(count(self::TEST_CATEGORIES))
             ->state(new Sequence(

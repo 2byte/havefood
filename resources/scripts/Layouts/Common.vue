@@ -8,9 +8,9 @@
 <template>
     <!-- Begin Main Content Area -->
     <main class="main-content">
-        <div v-if="title" class="breadcrumb-area breadcrumb-height" data-bg-image="/pronia/assets/images/breadcrumb/bg/1-1-1919x388.jpg">
-            <div class="container h-100">
-                <div class="row h-100">
+        <div v-if="title" class="breadcrumb-area" data-bg-image="/public/pronia/assets/images/breadcrumb/bg/1-1-1919x388.jpg">
+            <div class="container">
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="breadcrumb-item">
                             <h2 class="breadcrumb-heading">{{ title }}</h2>

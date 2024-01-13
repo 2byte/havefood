@@ -35,12 +35,12 @@
             </div>
         </div>
     </div>
-    
+
     <div class="main-wrapper">
         @include('header')
-        
+
         @yield('content')
-        
+
         <div class="section-space-bottom-100"></div>
         @include('footer')
 
@@ -51,7 +51,7 @@
         <!-- Scroll To Top End Here -->
 
     </div>
-    
+
     <!-- Global Vendor, plugins JS -->
     <!-- JS Files
     ============================================ -->
@@ -74,5 +74,18 @@
     <!--Main JS (Common Activation Codes)-->
     <script src="/pronia/assets/js/main.js"></script>
 
+    <!-- Cart -->
+    <script src="/assets/js/Cart.js"></script>
+
+    <script>
+    Cart = Cart.init();
+
+    window.Cart = Cart
+
+    document.addEventListener('DOMContentLoaded', () => {
+        Cart.update()
+    });
+    </script>
+    <!-- End Cart -->
 </body>
 </html>
